@@ -1,0 +1,46 @@
+/*
+ * Copyright 2026 Navix Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.navix.demo.data.telemetry
+
+import io.navix.contracts.NavEvent
+import io.navix.telemetry.NavEventExporter
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+/**
+ * [NavEventExporter] that retains the last [maxEvents] events in memory.
+ *
+ * Exposes a [StateFlow] so the UI can observe the full event history — unlike
+ * [io.navix.runtime.Navigator.events] (a hot SharedFlow), this preserves events
+ * emitted before the TelemetryViewer screen opens.
+ *
+ * Registered alongside [io.navix.telemetry.LogcatExporter] to demonstrate the
+ * [io.navix.telemetry.NavixTelemetryPipeline] fan-out model.
+ */
+class InMemoryEventExporter(private val maxEvents: Int = 100) : NavEventExporter {
+    private val _events = MutableStateFlow<List<NavEvent>>(emptyList())
+
+    /** Snapshot of all retained events, newest first. */
+    val events: StateFlow<List<NavEvent>> = _events.asStateFlow()
+
+    override fun export(event: NavEvent) {
+        _events.update { current ->
+            (listOf(event) + current).take(maxEvents)
+        }
+    }
+}

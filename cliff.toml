@@ -1,0 +1,61 @@
+# git-cliff configuration for Navix
+# Docs: https://git-cliff.org/docs/configuration
+#
+# Usage (before tagging a release):
+#   git cliff --unreleased --tag v0.2.0 --prepend CHANGELOG.md
+#
+# Usage (full regeneration):
+#   git cliff --output CHANGELOG.md
+
+[changelog]
+header = """
+# Changelog
+
+All notable changes to Navix are documented here.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+Navix follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+"""
+body = """
+## [{{ version | trim_start_matches(pat="v") }}]{% if title %} — {{ title }}{% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group }}
+{% for commit in commits %}\
+- {{ commit.message | upper_first }}\
+{% if commit.breaking %} (**breaking**){% endif %} \
+([`{{ commit.id | truncate(length=7, end="") }}`]({{ commit.id }}))
+{% endfor %}
+{% endfor %}\
+"""
+trim = true
+footer = ""
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+commit_preprocessors = [
+  # Strip issue/PR references from the end of commit messages
+  { pattern = '\s*\(#\d+\)\s*$', replace = "" },
+]
+commit_parsers = [
+  { message = "^feat",              group = "Added"         },
+  { message = "^fix",               group = "Fixed"         },
+  { message = "^perf",              group = "Performance"   },
+  { message = "^refactor",          group = "Changed"       },
+  { message = "^docs",              group = "Documentation" },
+  { message = "^test",              group = "Testing"       },
+  { message = "^chore\\(release\\)", skip = true            },
+  { message = "^chore",             group = "Chore"         },
+  { message = "^ci",                group = "CI"            },
+  { body = ".*security",            group = "Security"      },
+]
+protect_breaking_commits = false
+filter_commits = true
+tag_pattern = "v[0-9]*"
+skip_tags = ""
+ignore_tags = ""
+topo_order = false
+sort_commits = "oldest"

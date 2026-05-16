@@ -1,0 +1,163 @@
+public final class io/navix/contracts/BackstackSnapshot {
+	public static final field Companion Lio/navix/contracts/BackstackSnapshot$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/navix/contracts/BackstackSnapshot;
+	public static synthetic fun copy$default (Lio/navix/contracts/BackstackSnapshot;Ljava/util/List;ILjava/lang/Object;)Lio/navix/contracts/BackstackSnapshot;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActive ()Lio/navix/contracts/RouteEntry;
+	public final fun getCanPop ()Z
+	public final fun getDepth ()I
+	public final fun getEntries ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class io/navix/contracts/BackstackSnapshot$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/navix/contracts/BackstackSnapshot$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/navix/contracts/BackstackSnapshot;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/navix/contracts/BackstackSnapshot;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/navix/contracts/BackstackSnapshot$Companion {
+	public final fun getEmpty ()Lio/navix/contracts/BackstackSnapshot;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/navix/contracts/NavEvent {
+	public fun <init> (Lio/navix/contracts/NavEventType;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;JLjava/util/Map;)V
+	public synthetic fun <init> (Lio/navix/contracts/NavEventType;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;JLjava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/NavEventType;
+	public final fun component2 ()Lio/navix/contracts/RouteEntry;
+	public final fun component3 ()Lio/navix/contracts/RouteEntry;
+	public final fun component4 ()J
+	public final fun component5 ()Ljava/util/Map;
+	public final fun copy (Lio/navix/contracts/NavEventType;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;JLjava/util/Map;)Lio/navix/contracts/NavEvent;
+	public static synthetic fun copy$default (Lio/navix/contracts/NavEvent;Lio/navix/contracts/NavEventType;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;JLjava/util/Map;ILjava/lang/Object;)Lio/navix/contracts/NavEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom ()Lio/navix/contracts/RouteEntry;
+	public final fun getMetadata ()Ljava/util/Map;
+	public final fun getTimestampMs ()J
+	public final fun getTo ()Lio/navix/contracts/RouteEntry;
+	public final fun getType ()Lio/navix/contracts/NavEventType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/contracts/NavEventType : java/lang/Enum {
+	public static final field DEEP_LINK Lio/navix/contracts/NavEventType;
+	public static final field POP Lio/navix/contracts/NavEventType;
+	public static final field POP_TO Lio/navix/contracts/NavEventType;
+	public static final field PUSH Lio/navix/contracts/NavEventType;
+	public static final field REPLACE Lio/navix/contracts/NavEventType;
+	public static final field RESET Lio/navix/contracts/NavEventType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/navix/contracts/NavEventType;
+	public static fun values ()[Lio/navix/contracts/NavEventType;
+}
+
+public final class io/navix/contracts/NavLifecycleState : java/lang/Enum {
+	public static final field CREATED Lio/navix/contracts/NavLifecycleState;
+	public static final field Companion Lio/navix/contracts/NavLifecycleState$Companion;
+	public static final field DESTROYED Lio/navix/contracts/NavLifecycleState;
+	public static final field RESUMED Lio/navix/contracts/NavLifecycleState;
+	public static final field STARTED Lio/navix/contracts/NavLifecycleState;
+	public static final field STOPPED Lio/navix/contracts/NavLifecycleState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/navix/contracts/NavLifecycleState;
+	public static fun values ()[Lio/navix/contracts/NavLifecycleState;
+}
+
+public final class io/navix/contracts/NavLifecycleState$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/navix/contracts/NavTransitionKey {
+	public static final field Companion Lio/navix/contracts/NavTransitionKey$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/navix/contracts/NavTransitionKey;
+	public static synthetic fun copy$default (Lio/navix/contracts/NavTransitionKey;Ljava/lang/String;ILjava/lang/Object;)Lio/navix/contracts/NavTransitionKey;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class io/navix/contracts/NavTransitionKey$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/navix/contracts/NavTransitionKey$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/navix/contracts/NavTransitionKey;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/navix/contracts/NavTransitionKey$Companion {
+	public final fun getDefault ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getFade ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getNone ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getScale ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getSharedAxisX ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getSharedAxisY ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getSharedAxisZ ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getSlideLeft ()Lio/navix/contracts/NavTransitionKey;
+	public final fun getSlideRight ()Lio/navix/contracts/NavTransitionKey;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class io/navix/contracts/NavixTelemetry {
+	public static final field Companion Lio/navix/contracts/NavixTelemetry$Companion;
+	public abstract fun onEvent (Lio/navix/contracts/NavEvent;)V
+}
+
+public final class io/navix/contracts/NavixTelemetry$Companion {
+	public final fun getNoOp ()Lio/navix/contracts/NavixTelemetry;
+}
+
+public abstract interface class io/navix/contracts/Route {
+}
+
+public final class io/navix/contracts/RouteEntry {
+	public static final field Companion Lio/navix/contracts/RouteEntry$Companion;
+	public fun <init> (Ljava/lang/String;Lio/navix/contracts/Route;JLio/navix/contracts/NavLifecycleState;Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/navix/contracts/Route;JLio/navix/contracts/NavLifecycleState;Lio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/navix/contracts/Route;
+	public final fun component3 ()J
+	public final fun component4 ()Lio/navix/contracts/NavLifecycleState;
+	public final fun component5 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Ljava/lang/String;Lio/navix/contracts/Route;JLio/navix/contracts/NavLifecycleState;Lio/navix/contracts/NavTransitionKey;)Lio/navix/contracts/RouteEntry;
+	public static synthetic fun copy$default (Lio/navix/contracts/RouteEntry;Ljava/lang/String;Lio/navix/contracts/Route;JLio/navix/contracts/NavLifecycleState;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/contracts/RouteEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAt ()J
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLifecycleState ()Lio/navix/contracts/NavLifecycleState;
+	public final fun getRoute ()Lio/navix/contracts/Route;
+	public final fun getTransitionKey ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class io/navix/contracts/RouteEntry$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/navix/contracts/RouteEntry$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/navix/contracts/RouteEntry;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/navix/contracts/RouteEntry;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/navix/contracts/RouteEntry$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

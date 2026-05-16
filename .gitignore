@@ -29,6 +29,9 @@ bin/
 gen/
 out/
 release/
+# Keep Android build-variant source sets (release/ above must not swallow src/release)
+!**/src/release/
+!**/src/release/**
 
 # Android Studio / IntelliJ
 .idea/
@@ -56,6 +59,7 @@ release/
 # Android Studio generated
 captures/
 .navigation/
+.kotlin/
 
 # Native build
 .externalNativeBuild/

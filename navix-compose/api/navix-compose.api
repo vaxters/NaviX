@@ -1,0 +1,97 @@
+public final class io/navix/compose/CompositionLocalsKt {
+	public static final fun getLocalNavEntry ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalNavigator ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class io/navix/compose/DestinationKind : java/lang/Enum {
+	public static final field BottomSheet Lio/navix/compose/DestinationKind;
+	public static final field Dialog Lio/navix/compose/DestinationKind;
+	public static final field Screen Lio/navix/compose/DestinationKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/navix/compose/DestinationKind;
+	public static fun values ()[Lio/navix/compose/DestinationKind;
+}
+
+public abstract interface class io/navix/compose/NavGraphBuilder {
+	public abstract fun bottomSheet (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function4;)V
+	public abstract fun dialog (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function4;)V
+	public abstract fun screen (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function4;)V
+}
+
+public final class io/navix/compose/NavGraphValidationKt {
+	public static final fun validateAgainst (Lio/navix/compose/NavGraphBuilder;[Lio/navix/runtime/NavixRouteRegistry;)V
+}
+
+public final class io/navix/compose/NavStackSpec {
+	public static final field $stable I
+	public fun <init> (Lio/navix/contracts/Route;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/navix/contracts/Route;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/Route;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lio/navix/contracts/Route;Ljava/lang/String;)Lio/navix/compose/NavStackSpec;
+	public static synthetic fun copy$default (Lio/navix/compose/NavStackSpec;Lio/navix/contracts/Route;Ljava/lang/String;ILjava/lang/Object;)Lio/navix/compose/NavStackSpec;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getRoot ()Lio/navix/contracts/Route;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/navix/compose/NavTransitionSpec {
+	public static final field Companion Lio/navix/compose/NavTransitionSpec$Companion;
+	public static final field SWIPE_EDGE_LEFT I
+	public static final field SWIPE_EDGE_RIGHT I
+	public abstract fun enterTransition (Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/NavTransitionKey;)Landroidx/compose/animation/EnterTransition;
+	public abstract fun exitTransition (Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/NavTransitionKey;)Landroidx/compose/animation/ExitTransition;
+	public fun predictiveExit (Lio/navix/contracts/RouteEntry;Lio/navix/contracts/RouteEntry;Lio/navix/contracts/NavTransitionKey;FI)Landroidx/compose/ui/Modifier;
+}
+
+public final class io/navix/compose/NavTransitionSpec$Companion {
+	public static final field SWIPE_EDGE_LEFT I
+	public static final field SWIPE_EDGE_RIGHT I
+	public final fun getDefault ()Lio/navix/compose/NavTransitionSpec;
+	public final fun getNone ()Lio/navix/compose/NavTransitionSpec;
+}
+
+public final class io/navix/compose/NavTransitions {
+	public static final field $stable I
+	public static final field INSTANCE Lio/navix/compose/NavTransitions;
+}
+
+public final class io/navix/compose/NavixHostKt {
+	public static final fun NavixHost (Lio/navix/runtime/Navigator;Landroidx/compose/ui/Modifier;Lio/navix/compose/NavTransitionSpec;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/navix/compose/NavixMultiStack {
+	public static final field $stable I
+	public final fun getActiveNavigator ()Lio/navix/runtime/Navigator;
+	public final fun getActiveTabIndex ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getCanPop ()Z
+	public final fun getNavigators ()Ljava/util/List;
+	public final fun getSpecs ()Ljava/util/List;
+	public final fun getTabCount ()I
+	public final fun pop ()V
+	public final fun selectTab (I)V
+}
+
+public final class io/navix/compose/NavixMultiStackHostKt {
+	public static final fun NavixMultiStackHost (Lio/navix/compose/NavixMultiStack;Landroidx/compose/ui/Modifier;Lio/navix/compose/NavTransitionSpec;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/navix/compose/NavixMultiStackKt {
+	public static final fun rememberNavixMultiStack (Ljava/util/List;ILjava/util/List;Lio/navix/contracts/NavixTelemetry;Lio/navix/runtime/Reducer;Landroidx/compose/runtime/Composer;II)Lio/navix/compose/NavixMultiStack;
+	public static final fun rememberSaveableNavixMultiStack (Ljava/util/List;Lio/navix/runtime/NavigatorSaver;ILjava/util/List;Lio/navix/contracts/NavixTelemetry;Lio/navix/runtime/Reducer;Landroidx/compose/runtime/Composer;II)Lio/navix/compose/NavixMultiStack;
+}
+
+public final class io/navix/compose/PreviewNavixHostKt {
+	public static final fun PreviewNavixHost (Lio/navix/contracts/Route;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/navix/compose/RememberNavigatorKt {
+	public static final fun rememberNavigator (Lio/navix/contracts/Route;Ljava/util/List;Lio/navix/contracts/NavixTelemetry;Lio/navix/runtime/Reducer;Landroidx/compose/runtime/Composer;II)Lio/navix/runtime/Navigator;
+}
+
+public final class io/navix/compose/RememberSaveableNavigatorKt {
+	public static final fun rememberSaveableNavigator (Lio/navix/contracts/Route;Lio/navix/runtime/NavigatorSaver;Lio/navix/runtime/Reducer;Lio/navix/runtime/EntryFactory;Lio/navix/contracts/NavixTelemetry;Ljava/util/List;Landroidx/compose/runtime/Composer;II)Lio/navix/runtime/Navigator;
+}
+

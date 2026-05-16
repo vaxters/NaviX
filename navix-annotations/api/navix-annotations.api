@@ -1,0 +1,5 @@
+public abstract interface annotation class io/navix/annotations/RouteDestination : java/lang/annotation/Annotation {
+	public abstract fun deepLinks ()[Ljava/lang/String;
+	public abstract fun route ()Ljava/lang/String;
+}
+

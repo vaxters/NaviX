@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/debug/kotlin/io/navix/demo/DebugOnlySetup.kt">
+        <error line="29" column="14" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/DemoNavHost.kt">
+        <error line="134" column="5" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/DemoTheme.kt">
+        <error line="25" column="5" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/auth/AuthScreen.kt">
+        <error line="47" column="5" source="standard:function-naming" />
+        <error line="70" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/home/HomeScreen.kt">
+        <error line="67" column="5" source="standard:function-naming" />
+        <error line="98" column="13" source="standard:function-naming" />
+        <error line="160" column="13" source="standard:function-naming" />
+        <error line="173" column="1" source="standard:max-line-length" />
+        <error line="205" column="13" source="standard:function-naming" />
+        <error line="253" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/overlay/OverlayDemoScreen.kt">
+        <error line="56" column="5" source="standard:function-naming" />
+        <error line="107" column="5" source="standard:function-naming" />
+        <error line="157" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/playground/NavPlaygroundScreen.kt">
+        <error line="64" column="5" source="standard:function-naming" />
+        <error line="284" column="5" source="standard:function-naming" />
+        <error line="318" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/product/detail/ProductDetailScreen.kt">
+        <error line="55" column="5" source="standard:function-naming" />
+        <error line="82" column="13" source="standard:function-naming" />
+        <error line="135" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/product/reviews/ProductReviewsScreen.kt">
+        <error line="52" column="5" source="standard:function-naming" />
+        <error line="76" column="13" source="standard:function-naming" />
+        <error line="127" column="13" source="standard:function-naming" />
+        <error line="151" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/profile/ProfileScreen.kt">
+        <error line="56" column="5" source="standard:function-naming" />
+        <error line="84" column="13" source="standard:function-naming" />
+        <error line="143" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/register/RegisterScreen.kt">
+        <error line="49" column="5" source="standard:function-naming" />
+        <error line="73" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/result/ResultPassingDemoScreen.kt">
+        <error line="67" column="5" source="standard:function-naming" />
+        <error line="161" column="28" source="standard:discouraged-comment-location" />
+        <error line="162" column="28" source="standard:discouraged-comment-location" />
+        <error line="163" column="28" source="standard:discouraged-comment-location" />
+        <error line="164" column="28" source="standard:discouraged-comment-location" />
+        <error line="165" column="28" source="standard:discouraged-comment-location" />
+        <error line="166" column="28" source="standard:discouraged-comment-location" />
+        <error line="167" column="28" source="standard:discouraged-comment-location" />
+        <error line="168" column="28" source="standard:discouraged-comment-location" />
+        <error line="179" column="5" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/settings/SettingsScreen.kt">
+        <error line="47" column="5" source="standard:function-naming" />
+        <error line="72" column="13" source="standard:function-naming" />
+        <error line="133" column="13" source="standard:function-naming" />
+        <error line="152" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/tabs/TabsDemoScreen.kt">
+        <error line="81" column="5" source="standard:function-naming" />
+        <error line="153" column="13" source="standard:function-naming" />
+        <error line="202" column="13" source="standard:function-naming" />
+        <error line="235" column="13" source="standard:function-naming" />
+        <error line="265" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/main/kotlin/io/navix/demo/ui/telemetry/TelemetryViewerScreen.kt">
+        <error line="50" column="5" source="standard:function-naming" />
+        <error line="72" column="13" source="standard:function-naming" />
+        <error line="112" column="13" source="standard:function-naming" />
+    </file>
+    <file name="src/release/kotlin/io/navix/demo/DebugOnlySetup.kt">
+        <error line="28" column="14" source="standard:function-naming" />
+    </file>
+</baseline>
