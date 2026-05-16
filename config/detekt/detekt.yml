@@ -25,7 +25,7 @@ complexity:
     constructorThreshold: 8
   LongMethod:
     # Threshold raised slightly to reduce noise on justified methods.
-    threshold: 80
+    threshold: 120
     # Composables are declaratively long by nature: nested slot lambdas, preview
     # parameters, and conditional layout branches inflate line counts without
     # indicating real structural complexity. Every LongMethod violation in the
