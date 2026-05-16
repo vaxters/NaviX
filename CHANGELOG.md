@@ -27,7 +27,6 @@ Navix follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `navix-testing`: `FakeNavigator` with assertion helpers, `NavixTestRule` for Compose tests
 - `navix-devtools`: `NavixDevToolsOverlay`, `BackstackInspectorPanel`, `EventTimelinePanel`
 - `navix-demo-app`: Auth, Home, Product detail, Profile, Settings, Telemetry viewer screens
-- 10 Architecture Decision Records in `docs/adr/`
 - Apache 2.0 license
 
 ### Changed
