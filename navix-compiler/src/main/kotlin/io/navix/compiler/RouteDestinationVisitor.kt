@@ -39,17 +39,15 @@ internal class RouteDestinationVisitor(
         data: Unit,
     ) {
         val annotation =
-            classDeclaration.annotations
-                .firstOrNull { it.shortName.asString() == RouteDestination::class.simpleName }
+            classDeclaration.annotations.firstOrNull { it.shortName.asString() == RouteDestination::class.simpleName }
                 ?: return
 
         val packageName = classDeclaration.packageName.asString()
         val className = classDeclaration.simpleName.asString()
 
-        val isSerializable =
-            classDeclaration.annotations.any {
-                it.shortName.asString() == "Serializable"
-            }
+        val isSerializable = classDeclaration.annotations.any {
+            it.shortName.asString() == "Serializable"
+        }
         if (!isSerializable) {
             logger.error(
                 "@RouteDestination class '$className' must also be annotated with @Serializable.",
@@ -58,44 +56,29 @@ internal class RouteDestinationVisitor(
             return
         }
 
-        val routeValue =
-            annotation.arguments
-                .firstOrNull { it.name?.asString() == "route" }
-                ?.value as? String
-                ?: ""
+        val routeValue = annotation.arguments.firstOrNull { it.name?.asString() == "route" }?.value as? String ?: ""
         val canonicalRoute = routeValue.ifBlank { "$packageName.$className" }
 
         val deepLinkValues =
-            (
-                annotation.arguments
-                    .firstOrNull { it.name?.asString() == "deepLinks" }
-                    ?.value as? List<*>
-                )?.filterIsInstance<String>() ?: emptyList()
-
-        val parsedTemplates =
-            deepLinkValues.mapNotNull { template ->
-                DeepLinkTemplateParser.parse(template).fold(
-                    onSuccess = { it },
-                    onFailure = { err ->
-                        logger.error(
-                            "Invalid deep link template '$template' on '$className': ${err.message}",
-                            classDeclaration,
-                        )
-                        null
-                    },
-                )
-            }
-
-        val constructorParams =
-            classDeclaration.primaryConstructor
-                ?.parameters
-                ?.map { param ->
-                    ConstructorParam(
-                        name = param.name?.asString() ?: "_",
-                        typeName = param.type.resolve().toKotlinTypeName(),
-                    )
-                }
+            (annotation.arguments.firstOrNull { it.name?.asString() == "deepLinks" }?.value as? List<*>)?.filterIsInstance<String>()
                 ?: emptyList()
+
+        val parsedTemplates = deepLinkValues.mapNotNull { template ->
+            DeepLinkTemplateParser.parse(template).fold(
+                onSuccess = { it },
+                onFailure = { err ->
+                    logger.error(
+                        "Invalid deep link template '$template' on '$className': ${err.message}",
+                        classDeclaration,
+                    )
+                    null
+                },
+            )
+        }
+
+        val constructorParams = classDeclaration.primaryConstructor?.parameters?.map { param ->
+            ConstructorParam(name = param.name?.asString() ?: "_", typeName = param.type.resolve().toKotlinTypeName())
+        } ?: emptyList()
 
         descriptors.add(
             RouteDestinationDescriptor(
@@ -119,9 +102,7 @@ internal class RouteDestinationVisitor(
  * `kotlin.String`).
  */
 private fun KSType.toKotlinTypeName(): String {
-    val raw =
-        declaration.qualifiedName?.asString()
-            ?: declaration.simpleName.asString()
+    val raw = declaration.qualifiedName?.asString() ?: declaration.simpleName.asString()
     val simplified = raw.removePrefix("kotlin.")
     val args = arguments
     return if (args.isEmpty()) {
