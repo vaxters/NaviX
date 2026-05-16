@@ -40,14 +40,3 @@ Navix follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   an in-place app update mid-session.
 
 ---
-
-## Version Roadmap
-
-| Version | Milestone |
-|---|---|
-| 0.1.0 | Core runtime + Compose layer stable |
-| 0.2.0 | KSP compiler stable, deep links |
-| 0.3.0 | Telemetry + DevTools stable |
-| 0.4.0 | Testing DSL stable |
-| 0.5.0 | Transitions + predictive back |
-| 1.0.0 | Full API stability guarantee |
