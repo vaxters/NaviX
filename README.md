@@ -12,23 +12,6 @@ and a KMP-portable core.
 
 ---
 
-## Why Navix?
-
-| Feature | navigation-compose | Compose Destinations | Voyager | Decompose | **Navix** |
-|---|:---:|:---:|:---:|:---:|:---:|
-| Type-safe routes | Partial | ✅ | ✅ | ✅ | ✅ |
-| Zero NavController | ❌ | ❌ | ✅ | ✅ | ✅ |
-| KMP core | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Pure reducer backstack | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Built-in telemetry | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Built-in devtools | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Zero reflection | ❌ | ❌ | ❌ | ✅ | ✅ |
-| R8 full-mode safe | Partial | Partial | ✅ | ✅ | ✅ |
-| Testing DSL | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Observable state | Limited | Limited | ❌ | ✅ | ✅ |
-
----
-
 ## Quick Start
 
 ### 1. Add dependencies
@@ -496,34 +479,6 @@ providing a platform-specific `NavixHost` equivalent.
 
 ---
 
-## Architecture Decision Records
-
-The `docs/adr/` directory contains 10 ADRs explaining key design decisions:
-
-- [ADR-001: Route as Serializable interface](docs/adr/ADR-001-route-as-interface.md)
-- [ADR-002: Pure reducer backstack](docs/adr/ADR-002-pure-reducer.md)
-- [ADR-003: No NavController](docs/adr/ADR-003-no-navcontroller.md)
-- [ADR-004: KSP over reflection](docs/adr/ADR-004-ksp-over-reflection.md)
-- [ADR-005: RouteEntry UUID id](docs/adr/ADR-005-route-entry-uuid.md)
-- [ADR-006: Telemetry as separate module](docs/adr/ADR-006-telemetry-separate-module.md)
-- [ADR-007: contracts zero logic](docs/adr/ADR-007-contracts-zero-logic.md)
-- [ADR-008: AnimatedContent not NavHost](docs/adr/ADR-008-animated-content.md)
-- [ADR-009: DevTools as overlay](docs/adr/ADR-009-devtools-overlay.md)
-- [ADR-010: BackstackSnapshot wrapper](docs/adr/ADR-010-backstack-snapshot.md)
-
----
-
-## Roadmap
-
-- [ ] v0.1.0 — Core runtime stable
-- [ ] v0.2.0 — KSP compiler stable, deep links end-to-end
-- [ ] v0.3.0 — Telemetry + DevTools stable
-- [ ] v0.4.0 — Testing DSL stable
-- [ ] v0.5.0 — Predictive back gesture, shared element transitions
-- [ ] v1.0.0 — API stability guarantee, Maven Central publication
-- ~~`@NavGraph` annotation~~ — removed; use the `navix.moduleName` KSP argument instead (see [Multi-Module Projects](#multi-module-projects))
-
----
 
 ## Contributing
 
