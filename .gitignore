@@ -29,6 +29,9 @@ bin/
 gen/
 out/
 release/
+# Keep Android build-variant source sets (release/ above must not swallow src/release)
+!**/src/release/
+!**/src/release/**
 
 # Android Studio / IntelliJ
 .idea/

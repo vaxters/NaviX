@@ -1,6 +1,8 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -40,6 +42,18 @@ apiValidation {
 }
 
 // ---------------------------------------------------------------------------
+// Detekt SARIF aggregation
+// Detekt runs per-module (subprojects{} below); each module emits its own
+// build/reports/detekt/detekt.sarif. CI uploads ONE root SARIF, so merge every
+// module report into a single file at the repo root. Wired as a finalizer of
+// each Detekt task so it still produces output when a module's detekt run
+// fails (maxIssues: 0 -> build failure).
+// ---------------------------------------------------------------------------
+val reportMerge by tasks.registering(ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/detekt.sarif"))
+}
+
+// ---------------------------------------------------------------------------
 // Shared Maven Central publishing configuration
 // Applied automatically to every subproject that applies the vanniktech plugin.
 // Module-specific fields (name, description, coordinates override) are set
@@ -69,6 +83,18 @@ subprojects {
         baseline = file("${projectDir}/detekt-baseline.xml")
         buildUponDefaultConfig = true
         parallel = true
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        reports.sarif.required.set(true)
+        // finalizedBy (not dependsOn) so the merge runs even when this detekt
+        // task FAILS due to maxIssues: 0.
+        finalizedBy(reportMerge)
+    }
+    reportMerge.configure {
+        // Lazy provider: tolerates the file not existing at config time and
+        // establishes the producer -> consumer task dependency.
+        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
     }
 
     plugins.withId("com.vanniktech.maven.publish") {
