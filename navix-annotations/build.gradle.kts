@@ -25,14 +25,14 @@ mavenPublishing {
         KotlinMultiplatform(
             javadocJar = JavadocJar.Empty(),
             sourcesJar = true,
-        )
+        ),
     )
 
     pom {
         name.set("Navix Annotations")
         description.set(
             "Source-retention annotation for the Navix KSP compiler: " +
-                "@RouteDestination, used for route discovery and deep link generation."
+                "@RouteDestination, used for route discovery and deep link generation.",
         )
     }
 }

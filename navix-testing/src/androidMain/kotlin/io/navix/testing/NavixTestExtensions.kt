@@ -16,9 +16,9 @@
 package io.navix.testing
 
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import io.navix.contracts.Route
 import io.navix.compose.NavGraphBuilder
 import io.navix.compose.NavixHost
+import io.navix.contracts.Route
 
 /**
  * Sets [NavixHost] as the test content, driving it with the provided [FakeNavigator].

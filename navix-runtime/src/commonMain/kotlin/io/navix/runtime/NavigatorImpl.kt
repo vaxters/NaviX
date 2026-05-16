@@ -273,7 +273,7 @@ internal class NavigatorImpl(
         try {
             telemetry.onEvent(event)
         } catch (t: Throwable) {
-            println("Navix: telemetry.onEvent threw an exception — navigation continues. $t")
+            println("[NaviX][WARN] telemetry.onEvent threw — navigation continues. $t")
         }
     }
 

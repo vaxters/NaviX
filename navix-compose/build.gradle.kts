@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.JavadocJar
 
 plugins {
     alias(libs.plugins.android.library)
@@ -38,7 +37,7 @@ android {
 // when BackstackSnapshot, RouteEntry, NavEvent, or NavTransitionKey are unchanged.
 composeCompiler {
     stabilityConfigurationFiles.add(
-        rootProject.layout.projectDirectory.file("navix-runtime/compose_stability.conf")
+        rootProject.layout.projectDirectory.file("navix-runtime/compose_stability.conf"),
     )
 }
 
@@ -79,14 +78,14 @@ mavenPublishing {
             variant = "release",
             sourcesJar = true,
             publishJavadocJar = true,
-        )
+        ),
     )
 
     pom {
         name.set("Navix Compose")
         description.set(
             "Jetpack Compose host, DSL, and transitions for the Navix navigation platform. " +
-                "Provides NavixHost, rememberNavigator, NavTransitionSpec, and multi-stack support."
+                "Provides NavixHost, rememberNavigator, NavTransitionSpec, and multi-stack support.",
         )
     }
 }

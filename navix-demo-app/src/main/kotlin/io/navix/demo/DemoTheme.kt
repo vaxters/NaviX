@@ -22,7 +22,9 @@ import androidx.compose.runtime.Composable
 private val DemoColorScheme = darkColorScheme()
 
 @Composable
-fun NavixDemoTheme(content: @Composable () -> Unit) {
+fun NavixDemoTheme(
+    content: @Composable () -> Unit,
+) {
     MaterialTheme(
         colorScheme = DemoColorScheme,
         content = content,

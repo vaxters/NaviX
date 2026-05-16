@@ -112,11 +112,12 @@ fun NavixDevToolsOverlay(
     Box(modifier = modifier.fillMaxSize()) {
         FloatingActionButton(
             onClick = { panelVisible = !panelVisible },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .size(40.dp)
-                .zIndex(10f),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .size(40.dp)
+                    .zIndex(10f),
             containerColor = DevToolsColors.header,
             contentColor = DevToolsColors.background,
         ) {
@@ -132,25 +133,27 @@ fun NavixDevToolsOverlay(
             visible = panelVisible,
             enter = slideInVertically { it },
             exit = slideOutVertically { it },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .zIndex(9f),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .zIndex(9f),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 320.dp)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .background(DevToolsColors.background)
-                    .pointerInput(Unit) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                awaitPointerEvent(pass = PointerEventPass.Final).changes.forEach { it.consume() }
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 320.dp)
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .background(DevToolsColors.background)
+                        .pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitPointerEvent(pass = PointerEventPass.Final).changes.forEach { it.consume() }
+                                }
                             }
                         }
-                    }
-                    .padding(12.dp),
+                        .padding(12.dp),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -194,7 +197,7 @@ fun NavixDevToolsOverlay(
                             Icon(
                                 Icons.Default.Timeline,
                                 contentDescription = null,
-                                modifier = Modifier.size(14.dp)
+                                modifier = Modifier.size(14.dp),
                             )
                         },
                         text = { Text("Events", fontSize = 11.sp) },

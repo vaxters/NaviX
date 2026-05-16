@@ -38,7 +38,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
  * is safe even when multiple [NavixHost]s (e.g. multi-stack tabs) run under one Activity.
  */
 internal class NavixEntryViewModelStores : ViewModel() {
-
     private val stores = mutableMapOf<String, ViewModelStore>()
 
     fun storeFor(id: String): ViewModelStore = stores.getOrPut(id) { ViewModelStore() }

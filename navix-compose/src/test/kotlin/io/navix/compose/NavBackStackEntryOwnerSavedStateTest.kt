@@ -43,7 +43,6 @@ internal class CounterViewModel(val handle: SavedStateHandle) : ViewModel()
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class NavBackStackEntryOwnerSavedStateTest {
-
     private fun handleOf(owner: NavBackStackEntryOwner): SavedStateHandle =
         ViewModelProvider(owner)[CounterViewModel::class.java].handle
 

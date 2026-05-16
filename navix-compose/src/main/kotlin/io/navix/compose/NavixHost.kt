@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.SaveableStateHolder
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -122,11 +123,19 @@ fun NavixHost(
     // Keyed by entry.id — owns lifecycle + SavedState; ViewModelStore is injected.
     val ownerMap = remember { HashMap<String, NavBackStackEntryOwner>() }
 
-    fun ownerFor(id: String): NavBackStackEntryOwner = ownerMap.getOrPut(id) {
-        NavBackStackEntryOwner(
-            viewModelStore = ownerStore.storeFor(id),
-            restoredBundle = holder?.consumeRestoredState(id),
-        ).also { holder?.registerOwner(id, it) }
+    fun ownerFor(id: String): NavBackStackEntryOwner =
+        ownerMap.getOrPut(id) {
+            NavBackStackEntryOwner(
+                viewModelStore = ownerStore.storeFor(id),
+                restoredBundle = holder?.consumeRestoredState(id),
+            ).also { holder?.registerOwner(id, it) }
+        }
+
+    fun evict(id: String) {
+        ownerMap.remove(id)?.destroy()
+        ownerStore.evict(id)
+        saveableStateHolder.removeState(id)
+        holder?.evict(id)
     }
 
     val snapshot by navigator.backstack.collectAsState()
@@ -143,8 +152,12 @@ fun NavixHost(
         val hostState = hostLifecycle.currentState
         snapshot.entries.forEachIndexed { index, entry ->
             ownerMap[entry.id]?.moveTo(
-                targetState = if (index == snapshot.entries.lastIndex)
-                    Lifecycle.State.RESUMED else Lifecycle.State.STARTED,
+                targetState =
+                    if (index == snapshot.entries.lastIndex) {
+                        Lifecycle.State.RESUMED
+                    } else {
+                        Lifecycle.State.STARTED
+                    },
                 hostState = hostState,
             )
         }
@@ -152,16 +165,21 @@ fun NavixHost(
 
     // Propagate host lifecycle events to all active entry owners.
     DisposableEffect(hostLifecycleOwner) {
-        val observer = LifecycleEventObserver { _, _ ->
-            val hostState = hostLifecycle.currentState
-            snapshot.entries.forEachIndexed { index, entry ->
-                ownerMap[entry.id]?.moveTo(
-                    targetState = if (index == snapshot.entries.lastIndex)
-                        Lifecycle.State.RESUMED else Lifecycle.State.STARTED,
-                    hostState = hostState,
-                )
+        val observer =
+            LifecycleEventObserver { _, _ ->
+                val hostState = hostLifecycle.currentState
+                snapshot.entries.forEachIndexed { index, entry ->
+                    ownerMap[entry.id]?.moveTo(
+                        targetState =
+                            if (index == snapshot.entries.lastIndex) {
+                                Lifecycle.State.RESUMED
+                            } else {
+                                Lifecycle.State.STARTED
+                            },
+                        hostState = hostState,
+                    )
+                }
             }
-        }
         hostLifecycle.addObserver(observer)
         onDispose {
             hostLifecycle.removeObserver(observer)
@@ -190,11 +208,12 @@ fun NavixHost(
             val prevActiveId = prev.active?.id
             for (e in prev.entries) {
                 if (e.id in curIds) continue
-                holder?.evict(e.id)
-                if (e.id != prevActiveId) {
-                    ownerMap.remove(e.id)?.destroy()
-                    ownerStore.evict(e.id)
-                    saveableStateHolder.removeState(e.id)
+                if (e.id == prevActiveId) {
+                    // The active entry's composable cleans up via onDispose after its exit
+                    // animation, so only evict the holder eagerly to prevent stale restoration.
+                    holder?.evict(e.id)
+                } else {
+                    evict(e.id)
                 }
             }
             prev = cur
@@ -211,24 +230,27 @@ fun NavixHost(
 
     // Resolve the kind of the active entry (default to Screen for unregistered routes —
     // those produce a descriptive error inside the AnimatedContent content block).
-    val activeKind = activeEntry?.let {
-        graphBuilder.destinationKinds[it.route::class] ?: DestinationKind.Screen
-    }
+    val activeKind =
+        activeEntry?.let {
+            graphBuilder.destinationKinds[it.route::class] ?: DestinationKind.Screen
+        }
 
-    val isOverlayActive = activeKind == DestinationKind.Dialog ||
-        activeKind == DestinationKind.BottomSheet
+    val isOverlayActive =
+        activeKind == DestinationKind.Dialog ||
+            activeKind == DestinationKind.BottomSheet
 
     // Topmost Screen entry — the one AnimatedContent should show.
     // When the active entry is an overlay, this is the entry immediately below it.
-    val screenEntry: RouteEntry? = if (isOverlayActive) {
-        // Walk the stack from the top, skipping overlay entries, to find the topmost Screen.
-        snapshot.entries.lastOrNull { entry ->
-            val kind = graphBuilder.destinationKinds[entry.route::class] ?: DestinationKind.Screen
-            kind == DestinationKind.Screen
+    val screenEntry: RouteEntry? =
+        if (isOverlayActive) {
+            // Walk the stack from the top, skipping overlay entries, to find the topmost Screen.
+            snapshot.entries.lastOrNull { entry ->
+                val kind = graphBuilder.destinationKinds[entry.route::class] ?: DestinationKind.Screen
+                kind == DestinationKind.Screen
+            }
+        } else {
+            activeEntry
         }
-    } else {
-        activeEntry
-    }
 
     // ── Predictive back (screen-to-screen only) ─────────────────────────────
     // Disabled when an overlay is active — dialogs and bottom sheets use their own
@@ -238,11 +260,107 @@ fun NavixHost(
     val predictiveProgress = remember { Animatable(0f) }
     var swipeEdge by remember { mutableIntStateOf(NavTransitionSpec.SWIPE_EDGE_LEFT) }
 
-    PredictiveBackHandler(enabled = snapshot.canPop && !isOverlayActive) { backEvents: kotlinx.coroutines.flow.Flow<BackEventCompat> ->
+    NavixPredictiveBackHandler(
+        enabled = snapshot.canPop && !isOverlayActive,
+        navigator = navigator,
+        predictiveProgress = predictiveProgress,
+        onSwipeEdgeChange = { swipeEdge = it },
+    )
+
+    // ── Screen layer (AnimatedContent) ──────────────────────────────────────
+
+    Box(modifier = modifier) {
+        if (screenEntry != null) {
+            AnimatedContent(
+                targetState = screenEntry,
+                transitionSpec = {
+                    val key = targetState.transitionKey
+                    val enter =
+                        transitionSpec.enterTransition(
+                            from = initialState,
+                            to = targetState,
+                            key = key,
+                        )
+                    val exit =
+                        transitionSpec.exitTransition(
+                            from = initialState,
+                            to = targetState,
+                            key = key,
+                        )
+                    enter togetherWith exit
+                },
+                contentKey = { entry -> entry.id },
+                label = "NavixHost",
+            ) { entry ->
+                val owner = ownerFor(entry.id)
+
+                DisposableEffect(entry.id) {
+                    onDispose {
+                        if (navigator.backstack.value.entries.none { it.id == entry.id }) {
+                            evict(entry.id)
+                        }
+                    }
+                }
+
+                val gestureProgress = predictiveProgress.value
+                val gestureModifier =
+                    if (gestureProgress > 0f && entry.id == screenEntry.id) {
+                        val previousEntry = snapshot.entries.getOrNull(snapshot.entries.size - 2)
+                        transitionSpec.predictiveExit(
+                            from = entry,
+                            to = previousEntry,
+                            key = entry.transitionKey,
+                            progress = gestureProgress,
+                            swipeEdge = swipeEdge,
+                        )
+                    } else {
+                        Modifier
+                    }
+
+                Box(modifier = gestureModifier) {
+                    NavEntry(
+                        owner = owner,
+                        navigator = navigator,
+                        entry = entry,
+                        saveableStateHolder = saveableStateHolder,
+                    ) {
+                        val screenContent =
+                            graphBuilder.destinations[entry.route::class]
+                                ?: error(
+                                    "No screen registered for route ${entry.route::class.simpleName}. " +
+                                        "Add a screen<${entry.route::class.simpleName}> { } block inside NavixHost.",
+                                )
+                        screenContent(entry, entry.route)
+                    }
+                }
+            }
+        }
+
+        // ── Overlay layer (Dialog / BottomSheet) ────────────────────────────
+        NavixOverlayContent(
+            activeEntry = activeEntry,
+            activeKind = activeKind,
+            navigator = navigator,
+            graphBuilder = graphBuilder,
+            ownerFor = ::ownerFor,
+            evict = ::evict,
+            saveableStateHolder = saveableStateHolder,
+        )
+    }
+}
+
+@Composable
+private fun NavixPredictiveBackHandler(
+    enabled: Boolean,
+    navigator: Navigator,
+    predictiveProgress: Animatable<Float, androidx.compose.animation.core.AnimationVector1D>,
+    onSwipeEdgeChange: (Int) -> Unit,
+) {
+    PredictiveBackHandler(enabled = enabled) { backEvents: kotlinx.coroutines.flow.Flow<BackEventCompat> ->
         try {
             backEvents.collect { event ->
                 predictiveProgress.snapTo(event.progress)
-                swipeEdge = event.swipeEdge
+                onSwipeEdgeChange(event.swipeEdge)
             }
             // Flow completed normally → gesture committed.
             predictiveProgress.snapTo(0f)
@@ -255,134 +373,81 @@ fun NavixHost(
             throw e
         }
     }
+}
 
-    // ── Screen layer (AnimatedContent) ──────────────────────────────────────
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NavixOverlayContent(
+    activeEntry: RouteEntry?,
+    activeKind: DestinationKind?,
+    navigator: Navigator,
+    graphBuilder: NavGraphBuilderImpl,
+    ownerFor: (String) -> NavBackStackEntryOwner,
+    evict: (String) -> Unit,
+    saveableStateHolder: SaveableStateHolder,
+) {
+    val isOverlayActive = activeKind == DestinationKind.Dialog || activeKind == DestinationKind.BottomSheet
+    if (!isOverlayActive) return
 
-    Box(modifier = modifier) {
-        if (screenEntry != null) {
-            AnimatedContent(
-                targetState = screenEntry,
-                transitionSpec = {
-                    val key = targetState.transitionKey
-                    val enter = transitionSpec.enterTransition(
-                        from = initialState,
-                        to = targetState,
-                        key = key,
-                    )
-                    val exit = transitionSpec.exitTransition(
-                        from = initialState,
-                        to = targetState,
-                        key = key,
-                    )
-                    enter togetherWith exit
-                },
-                contentKey = { entry -> entry.id },
-                label = "NavixHost",
-            ) { entry ->
-                val owner = ownerFor(entry.id)
+    // isOverlayActive is only true when activeEntry != null (activeKind is derived from activeEntry).
+    val overlayEntry =
+        requireNotNull(activeEntry) {
+            "NavixHost: isOverlayActive is true but activeEntry is null — this is a bug in NavixHost lifecycle tracking"
+        }
+    val overlayOwner = ownerFor(overlayEntry.id)
 
-                DisposableEffect(entry.id) {
-                    onDispose {
-                        if (navigator.backstack.value.entries.none { it.id == entry.id }) {
-                            ownerMap.remove(entry.id)?.destroy()
-                            ownerStore.evict(entry.id)
-                            saveableStateHolder.removeState(entry.id)
-                            holder?.evict(entry.id)
-                        }
-                    }
-                }
+    DisposableEffect(overlayEntry.id) {
+        onDispose {
+            if (navigator.backstack.value.entries.none { it.id == overlayEntry.id }) {
+                evict(overlayEntry.id)
+            }
+        }
+    }
 
-                val gestureProgress = predictiveProgress.value
-                val gestureModifier = if (gestureProgress > 0f && entry.id == screenEntry.id) {
-                    val previousEntry = snapshot.entries.getOrNull(snapshot.entries.size - 2)
-                    transitionSpec.predictiveExit(
-                        from = entry,
-                        to = previousEntry,
-                        key = entry.transitionKey,
-                        progress = gestureProgress,
-                        swipeEdge = swipeEdge,
-                    )
-                } else Modifier
-
-                Box(modifier = gestureModifier) {
-                    NavEntry(
-                        owner = owner,
-                        navigator = navigator,
-                        entry = entry,
-                        saveableStateHolder = saveableStateHolder,
-                    ) {
-                        val screenContent = graphBuilder.destinations[entry.route::class]
+    when (activeKind) {
+        DestinationKind.Dialog -> {
+            Dialog(onDismissRequest = { navigator.pop() }) {
+                NavEntry(
+                    owner = overlayOwner,
+                    navigator = navigator,
+                    entry = overlayEntry,
+                    saveableStateHolder = saveableStateHolder,
+                ) {
+                    val dialogContent =
+                        graphBuilder.destinations[overlayEntry.route::class]
                             ?: error(
-                                "No screen registered for route ${entry.route::class.simpleName}. " +
-                                    "Add a screen<${entry.route::class.simpleName}> { } block inside NavixHost."
+                                "No dialog registered for route ${overlayEntry.route::class.simpleName}. " +
+                                    "Add a dialog<${overlayEntry.route::class.simpleName}> { } block inside NavixHost.",
                             )
-                        screenContent(entry, entry.route)
-                    }
+                    dialogContent(overlayEntry, overlayEntry.route)
                 }
             }
         }
-
-        // ── Overlay layer (Dialog / BottomSheet) ────────────────────────────
-
-        // isOverlayActive is only true when activeEntry != null (activeKind is derived from activeEntry).
-        if (isOverlayActive) {
-            val overlayEntry = activeEntry!! // guaranteed non-null: isOverlayActive implies activeEntry != null
-            val overlayOwner = ownerFor(overlayEntry.id)
-
-            DisposableEffect(overlayEntry.id) {
-                onDispose {
-                    if (navigator.backstack.value.entries.none { it.id == overlayEntry.id }) {
-                        ownerMap.remove(overlayEntry.id)?.destroy()
-                        ownerStore.evict(overlayEntry.id)
-                        saveableStateHolder.removeState(overlayEntry.id)
-                        holder?.evict(overlayEntry.id)
-                    }
+        DestinationKind.BottomSheet -> {
+            val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+            ModalBottomSheet(
+                onDismissRequest = { navigator.pop() },
+                sheetState = sheetState,
+            ) {
+                NavEntry(
+                    owner = overlayOwner,
+                    navigator = navigator,
+                    entry = overlayEntry,
+                    saveableStateHolder = saveableStateHolder,
+                ) {
+                    val routeName = overlayEntry.route::class.simpleName
+                    val sheetContent =
+                        graphBuilder.destinations[overlayEntry.route::class]
+                            ?: error(
+                                "No bottomSheet registered for route $routeName. " +
+                                    "Add a bottomSheet<$routeName> { } block inside NavixHost.",
+                            )
+                    sheetContent(overlayEntry, overlayEntry.route)
                 }
             }
-
-            when (activeKind) {
-                DestinationKind.Dialog -> {
-                    Dialog(onDismissRequest = { navigator.pop() }) {
-                        NavEntry(
-                            owner = overlayOwner,
-                            navigator = navigator,
-                            entry = overlayEntry,
-                            saveableStateHolder = saveableStateHolder,
-                        ) {
-                            val dialogContent = graphBuilder.destinations[overlayEntry.route::class]
-                                ?: error(
-                                    "No dialog registered for route ${overlayEntry.route::class.simpleName}. " +
-                                        "Add a dialog<${overlayEntry.route::class.simpleName}> { } block inside NavixHost."
-                                )
-                            dialogContent(overlayEntry, overlayEntry.route)
-                        }
-                    }
-                }
-                DestinationKind.BottomSheet -> {
-                    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-                    ModalBottomSheet(
-                        onDismissRequest = { navigator.pop() },
-                        sheetState = sheetState,
-                    ) {
-                        NavEntry(
-                            owner = overlayOwner,
-                            navigator = navigator,
-                            entry = overlayEntry,
-                            saveableStateHolder = saveableStateHolder,
-                        ) {
-                            val sheetContent = graphBuilder.destinations[overlayEntry.route::class]
-                                ?: error(
-                                    "No bottomSheet registered for route ${overlayEntry.route::class.simpleName}. " +
-                                        "Add a bottomSheet<${overlayEntry.route::class.simpleName}> { } block inside NavixHost."
-                                )
-                            sheetContent(overlayEntry, overlayEntry.route)
-                        }
-                    }
-                }
-                DestinationKind.Screen -> {
-                    // Already handled by AnimatedContent above; unreachable here.
-                }
-            }
+        }
+        DestinationKind.Screen, null -> {
+            // Already handled by AnimatedContent above; unreachable here.
         }
     }
 }

@@ -67,7 +67,6 @@ enum class DestinationKind { Screen, Dialog, BottomSheet }
  */
 @Stable
 interface NavGraphBuilder {
-
     /**
      * Registers [klass] as a standard screen destination rendered by [AnimatedContent].
      */
@@ -114,7 +113,6 @@ inline fun <reified T : Route> NavGraphBuilder.bottomSheet(
 ) = bottomSheet(T::class, content)
 
 internal class NavGraphBuilderImpl : NavGraphBuilder {
-
     val destinations = mutableMapOf<KClass<out Route>, @Composable (RouteEntry, Route) -> Unit>()
 
     /** Tracks the [DestinationKind] for each registered route class. */

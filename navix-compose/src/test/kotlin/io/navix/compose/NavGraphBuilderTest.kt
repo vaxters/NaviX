@@ -16,9 +16,6 @@
 package io.navix.compose
 
 import io.navix.contracts.Route
-import io.navix.contracts.RouteEntry
-import io.navix.contracts.NavTransitionKey
-import io.navix.contracts.NavLifecycleState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -27,8 +24,11 @@ import kotlin.test.assertTrue
 
 // Minimal route stubs for testing
 private data object HomeRoute : Route
+
 private data object DetailRoute : Route
+
 private data object ConfirmDialog : Route
+
 private data object FilterSheet : Route
 
 /**
@@ -39,9 +39,7 @@ private data object FilterSheet : Route
  * - Missing route returns null (no crash)
  */
 class NavGraphBuilderTest {
-
-    private fun builder(block: NavGraphBuilder.() -> Unit): NavGraphBuilderImpl =
-        NavGraphBuilderImpl().apply(block)
+    private fun builder(block: NavGraphBuilder.() -> Unit): NavGraphBuilderImpl = NavGraphBuilderImpl().apply(block)
 
     // ── screen registrations ───────────────────────────────────────────────
 
@@ -54,10 +52,11 @@ class NavGraphBuilderTest {
 
     @Test
     fun screen_multipleDistinctRoutes_allRegistered() {
-        val b = builder {
-            screen<HomeRoute> { _, _ -> }
-            screen<DetailRoute> { _, _ -> }
-        }
+        val b =
+            builder {
+                screen<HomeRoute> { _, _ -> }
+                screen<DetailRoute> { _, _ -> }
+            }
         assertEquals(2, b.destinations.size)
         assertEquals(DestinationKind.Screen, b.destinationKinds[HomeRoute::class])
         assertEquals(DestinationKind.Screen, b.destinationKinds[DetailRoute::class])
@@ -74,10 +73,11 @@ class NavGraphBuilderTest {
 
     @Test
     fun dialog_doesNotOverwriteScreenRegistrations() {
-        val b = builder {
-            screen<HomeRoute> { _, _ -> }
-            dialog<ConfirmDialog> { _, _ -> }
-        }
+        val b =
+            builder {
+                screen<HomeRoute> { _, _ -> }
+                dialog<ConfirmDialog> { _, _ -> }
+            }
         assertEquals(DestinationKind.Screen, b.destinationKinds[HomeRoute::class])
         assertEquals(DestinationKind.Dialog, b.destinationKinds[ConfirmDialog::class])
         assertEquals(2, b.destinations.size)
@@ -94,11 +94,12 @@ class NavGraphBuilderTest {
 
     @Test
     fun allThreeKinds_registeredTogether() {
-        val b = builder {
-            screen<HomeRoute> { _, _ -> }
-            dialog<ConfirmDialog> { _, _ -> }
-            bottomSheet<FilterSheet> { _, _ -> }
-        }
+        val b =
+            builder {
+                screen<HomeRoute> { _, _ -> }
+                dialog<ConfirmDialog> { _, _ -> }
+                bottomSheet<FilterSheet> { _, _ -> }
+            }
         assertEquals(3, b.destinations.size)
         assertEquals(3, b.destinationKinds.size)
         assertEquals(DestinationKind.Screen, b.destinationKinds[HomeRoute::class])
@@ -110,21 +111,26 @@ class NavGraphBuilderTest {
 
     @Test
     fun registerSameRouteAsScreenThenDialog_lastKindWins() {
-        val b = builder {
-            screen<ConfirmDialog> { _, _ -> }   // registered first as Screen
-            dialog<ConfirmDialog> { _, _ -> }   // overwritten as Dialog
-        }
-        assertEquals(DestinationKind.Dialog, b.destinationKinds[ConfirmDialog::class],
-            "Last registration should win — Dialog should overwrite Screen")
+        val b =
+            builder {
+                screen<ConfirmDialog> { _, _ -> } // registered first as Screen
+                dialog<ConfirmDialog> { _, _ -> } // overwritten as Dialog
+            }
+        assertEquals(
+            DestinationKind.Dialog,
+            b.destinationKinds[ConfirmDialog::class],
+            "Last registration should win — Dialog should overwrite Screen",
+        )
         assertEquals(1, b.destinations.size)
     }
 
     @Test
     fun registerSameRouteAsDialogThenBottomSheet_lastKindWins() {
-        val b = builder {
-            dialog<FilterSheet> { _, _ -> }
-            bottomSheet<FilterSheet> { _, _ -> }
-        }
+        val b =
+            builder {
+                dialog<FilterSheet> { _, _ -> }
+                bottomSheet<FilterSheet> { _, _ -> }
+            }
         assertEquals(DestinationKind.BottomSheet, b.destinationKinds[FilterSheet::class])
     }
 

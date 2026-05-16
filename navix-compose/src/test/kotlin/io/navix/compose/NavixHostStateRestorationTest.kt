@@ -45,7 +45,6 @@ import kotlin.test.assertEquals
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class NavixHostStateRestorationTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 

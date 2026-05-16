@@ -33,7 +33,6 @@ import kotlin.test.assertSame
  * transform is covered by the instrumented [NavixHostPredictiveBackTest].
  */
 class NavTransitionSpecPredictiveBackTest {
-
     // ── Edge constants ─────────────────────────────────────────────────────
 
     @Test
@@ -53,37 +52,40 @@ class NavTransitionSpecPredictiveBackTest {
     @Test
     fun predictiveExit_defaultImpl_returnsNonNullModifier() {
         val spec = NavTransitionSpec.Default
-        val result: Modifier = spec.predictiveExit(
-            from = fakeEntry("e1"),
-            to = fakeEntry("e2"),
-            key = NavTransitionKey.Default,
-            progress = 0.5f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
-        )
+        val result: Modifier =
+            spec.predictiveExit(
+                from = fakeEntry("e1"),
+                to = fakeEntry("e2"),
+                key = NavTransitionKey.Default,
+                progress = 0.5f,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+            )
         assertNotNull(result)
     }
 
     @Test
     fun predictiveExit_progressZero_returnsModifier() {
-        val result = NavTransitionSpec.Default.predictiveExit(
-            from = fakeEntry("e1"),
-            to = null,
-            key = NavTransitionKey.SlideLeft,
-            progress = 0f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
-        )
+        val result =
+            NavTransitionSpec.Default.predictiveExit(
+                from = fakeEntry("e1"),
+                to = null,
+                key = NavTransitionKey.SlideLeft,
+                progress = 0f,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+            )
         assertNotNull(result)
     }
 
     @Test
     fun predictiveExit_progressOne_returnsModifier() {
-        val result = NavTransitionSpec.Default.predictiveExit(
-            from = fakeEntry("e1"),
-            to = null,
-            key = NavTransitionKey.SlideRight,
-            progress = 1f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
-        )
+        val result =
+            NavTransitionSpec.Default.predictiveExit(
+                from = fakeEntry("e1"),
+                to = null,
+                key = NavTransitionKey.SlideRight,
+                progress = 1f,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+            )
         assertNotNull(result)
     }
 
@@ -91,13 +93,14 @@ class NavTransitionSpecPredictiveBackTest {
 
     @Test
     fun predictiveExit_noneSpec_returnsNonNullModifier() {
-        val result = NavTransitionSpec.None.predictiveExit(
-            from = fakeEntry("e1"),
-            to = null,
-            key = NavTransitionKey.None,
-            progress = 0.5f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
-        )
+        val result =
+            NavTransitionSpec.None.predictiveExit(
+                from = fakeEntry("e1"),
+                to = null,
+                key = NavTransitionKey.None,
+                progress = 0.5f,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+            )
         assertNotNull(result)
     }
 
@@ -108,25 +111,32 @@ class NavTransitionSpecPredictiveBackTest {
         var capturedProgress = -1f
         var capturedEdge = -1
 
-        val customSpec = object : NavTransitionSpec {
-            override fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey) =
-                EnterTransition.None
+        val customSpec =
+            object : NavTransitionSpec {
+                override fun enterTransition(
+                    from: RouteEntry?,
+                    to: RouteEntry,
+                    key: NavTransitionKey,
+                ) = EnterTransition.None
 
-            override fun exitTransition(from: RouteEntry, to: RouteEntry?, key: NavTransitionKey) =
-                ExitTransition.None
+                override fun exitTransition(
+                    from: RouteEntry,
+                    to: RouteEntry?,
+                    key: NavTransitionKey,
+                ) = ExitTransition.None
 
-            override fun predictiveExit(
-                from: RouteEntry,
-                to: RouteEntry?,
-                key: NavTransitionKey,
-                progress: Float,
-                swipeEdge: Int,
-            ): Modifier {
-                capturedProgress = progress
-                capturedEdge = swipeEdge
-                return Modifier
+                override fun predictiveExit(
+                    from: RouteEntry,
+                    to: RouteEntry?,
+                    key: NavTransitionKey,
+                    progress: Float,
+                    swipeEdge: Int,
+                ): Modifier {
+                    capturedProgress = progress
+                    capturedEdge = swipeEdge
+                    return Modifier
+                }
             }
-        }
 
         customSpec.predictiveExit(
             from = fakeEntry("e1"),
@@ -144,29 +154,37 @@ class NavTransitionSpecPredictiveBackTest {
     fun predictiveExit_customOverrideReturningModifierIdentity_returnsSameInstance() {
         val sentinel = Modifier
 
-        val customSpec = object : NavTransitionSpec {
-            override fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey) =
-                EnterTransition.None
+        val customSpec =
+            object : NavTransitionSpec {
+                override fun enterTransition(
+                    from: RouteEntry?,
+                    to: RouteEntry,
+                    key: NavTransitionKey,
+                ) = EnterTransition.None
 
-            override fun exitTransition(from: RouteEntry, to: RouteEntry?, key: NavTransitionKey) =
-                ExitTransition.None
+                override fun exitTransition(
+                    from: RouteEntry,
+                    to: RouteEntry?,
+                    key: NavTransitionKey,
+                ) = ExitTransition.None
 
-            override fun predictiveExit(
-                from: RouteEntry,
-                to: RouteEntry?,
-                key: NavTransitionKey,
-                progress: Float,
-                swipeEdge: Int,
-            ): Modifier = sentinel
-        }
+                override fun predictiveExit(
+                    from: RouteEntry,
+                    to: RouteEntry?,
+                    key: NavTransitionKey,
+                    progress: Float,
+                    swipeEdge: Int,
+                ): Modifier = sentinel
+            }
 
-        val result = customSpec.predictiveExit(
-            from = fakeEntry("e1"),
-            to = null,
-            key = NavTransitionKey.Default,
-            progress = 0.5f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
-        )
+        val result =
+            customSpec.predictiveExit(
+                from = fakeEntry("e1"),
+                to = null,
+                key = NavTransitionKey.Default,
+                progress = 0.5f,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+            )
 
         assertSame(sentinel, result)
     }
@@ -197,11 +215,12 @@ class NavTransitionSpecPredictiveBackTest {
 
     // ── Helpers ───────────────────────────────────────────────────────────
 
-    private fun fakeEntry(id: String) = RouteEntry(
-        id = id,
-        route = FakeRoute,
-        createdAt = 0L,
-    )
+    private fun fakeEntry(id: String) =
+        RouteEntry(
+            id = id,
+            route = FakeRoute,
+            createdAt = 0L,
+        )
 
     private object FakeRoute : io.navix.contracts.Route
 }

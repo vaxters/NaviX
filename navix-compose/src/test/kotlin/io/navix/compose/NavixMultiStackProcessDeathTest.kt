@@ -32,7 +32,6 @@ import kotlin.test.assertEquals
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class NavixMultiStackProcessDeathTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -41,13 +40,15 @@ class NavixMultiStackProcessDeathTest {
         val tester = StateRestorationTester(composeRule)
         lateinit var ms: NavixMultiStack
         tester.setContent {
-            ms = rememberSaveableNavixMultiStack(
-                specs = listOf(
-                    NavStackSpec(TabHomeR, key = "home"),
-                    NavStackSpec(TabSearchR, key = "search"),
-                ),
-                saver = TestSaver,
-            )
+            ms =
+                rememberSaveableNavixMultiStack(
+                    specs =
+                        listOf(
+                            NavStackSpec(TabHomeR, key = "home"),
+                            NavStackSpec(TabSearchR, key = "search"),
+                        ),
+                    saver = TestSaver,
+                )
             NavixMultiStackHost(ms) {
                 screen<TabHomeR> { _, _ -> Text("home") }
                 screen<TabSearchR> { _, _ -> Text("search") }

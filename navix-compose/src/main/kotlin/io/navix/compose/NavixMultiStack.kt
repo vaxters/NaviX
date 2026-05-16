@@ -16,19 +16,19 @@
 package io.navix.compose
 
 import android.os.Bundle
-import io.navix.contracts.NavixTelemetry
-import io.navix.runtime.Navigator
-import io.navix.runtime.DeepLinkHandler
-import io.navix.runtime.NavigatorSaver
-import io.navix.runtime.Reducer
-import io.navix.runtime.DefaultReducer
-import io.navix.runtime.createNavigator
-import io.navix.runtime.restoreNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.navix.contracts.NavixTelemetry
+import io.navix.runtime.DeepLinkHandler
+import io.navix.runtime.DefaultReducer
+import io.navix.runtime.Navigator
+import io.navix.runtime.NavigatorSaver
+import io.navix.runtime.Reducer
+import io.navix.runtime.createNavigator
+import io.navix.runtime.restoreNavigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -97,7 +97,9 @@ class NavixMultiStack internal constructor(
      * Delegates to [activeNavigator]`.pop()`. If the active tab has only one entry, the
      * reducer treats this as a no-op — check [canPop] before calling if branching is needed.
      */
-    fun pop() { activeNavigator.pop() }
+    fun pop() {
+        activeNavigator.pop()
+    }
 
     /**
      * `true` when the active tab's backstack has more than one entry.
@@ -138,15 +140,16 @@ fun rememberNavixMultiStack(
     return remember {
         NavixMultiStack(
             specs = specs,
-            navigators = specs.map { spec ->
-                createNavigator(
-                    root = spec.root,
-                    scope = scope,
-                    reducer = reducer,
-                    telemetry = telemetry,
-                    deepLinkHandlers = deepLinkHandlers,
-                )
-            },
+            navigators =
+                specs.map { spec ->
+                    createNavigator(
+                        root = spec.root,
+                        scope = scope,
+                        reducer = reducer,
+                        telemetry = telemetry,
+                        deepLinkHandlers = deepLinkHandlers,
+                    )
+                },
             initialTabIndex = initialTabIndex,
         )
     }
@@ -205,31 +208,36 @@ fun rememberSaveableNavixMultiStack(
     val scope = rememberCoroutineScope()
     val sharedHolder = remember { NavixSavedStateHolder() }
 
-    fun build(tabBytes: Map<String, ByteArray>, startTab: Int): NavixMultiStack {
-        val navigators = specs.map { spec ->
-            val bytes = tabBytes[spec.key]
-            val nav = if (bytes == null) {
-                createNavigator(
-                    root = spec.root,
-                    scope = scope,
-                    reducer = reducer,
-                    telemetry = telemetry,
-                    deepLinkHandlers = deepLinkHandlers,
-                )
-            } else {
-                restoreNavigator(
-                    root = spec.root,
-                    scope = scope,
-                    savedBytes = bytes,
-                    saver = saver,
-                    reducer = reducer,
-                    telemetry = telemetry,
-                    deepLinkHandlers = deepLinkHandlers,
-                )
+    fun build(
+        tabBytes: Map<String, ByteArray>,
+        startTab: Int,
+    ): NavixMultiStack {
+        val navigators =
+            specs.map { spec ->
+                val bytes = tabBytes[spec.key]
+                val nav =
+                    if (bytes == null) {
+                        createNavigator(
+                            root = spec.root,
+                            scope = scope,
+                            reducer = reducer,
+                            telemetry = telemetry,
+                            deepLinkHandlers = deepLinkHandlers,
+                        )
+                    } else {
+                        restoreNavigator(
+                            root = spec.root,
+                            scope = scope,
+                            savedBytes = bytes,
+                            saver = saver,
+                            reducer = reducer,
+                            telemetry = telemetry,
+                            deepLinkHandlers = deepLinkHandlers,
+                        )
+                    }
+                NavixHolderRegistry.put(nav, sharedHolder)
+                nav
             }
-            NavixHolderRegistry.put(nav, sharedHolder)
-            nav
-        }
         return NavixMultiStack(
             specs = specs,
             navigators = navigators,
@@ -238,33 +246,36 @@ fun rememberSaveableNavixMultiStack(
     }
 
     return rememberSaveable(
-        saver = Saver<NavixMultiStack, Any>(
-            save = { ms ->
-                val tabStacks = Bundle().apply {
-                    ms.specs.forEachIndexed { i, spec ->
-                        putByteArray(spec.key, saver.save(ms.navigators[i].backstack.value))
+        saver =
+            Saver<NavixMultiStack, Any>(
+                save = { ms ->
+                    val tabStacks =
+                        Bundle().apply {
+                            ms.specs.forEachIndexed { i, spec ->
+                                putByteArray(spec.key, saver.save(ms.navigators[i].backstack.value))
+                            }
+                        }
+                    NavixPersistedState.packMultiStack(
+                        activeTabIndex = ms.activeTabIndex.value,
+                        tabBackstacks = tabStacks,
+                        entryStates = sharedHolder.performSave(),
+                    )
+                },
+                restore = { saved ->
+                    val blob = saved as? Bundle
+                    if (blob == null) {
+                        build(emptyMap(), initialTabIndex)
+                    } else {
+                        sharedHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
+                        val tabStacks = NavixPersistedState.unpackTabBackstacks(blob)
+                        val bytesByKey =
+                            specs.mapNotNull { spec ->
+                                tabStacks.getByteArray(spec.key)?.let { spec.key to it }
+                            }.toMap()
+                        build(bytesByKey, NavixPersistedState.unpackTabIndex(blob, initialTabIndex))
                     }
-                }
-                NavixPersistedState.packMultiStack(
-                    activeTabIndex = ms.activeTabIndex.value,
-                    tabBackstacks = tabStacks,
-                    entryStates = sharedHolder.performSave(),
-                )
-            },
-            restore = { saved ->
-                val blob = saved as? Bundle
-                if (blob == null) {
-                    build(emptyMap(), initialTabIndex)
-                } else {
-                    sharedHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
-                    val tabStacks = NavixPersistedState.unpackTabBackstacks(blob)
-                    val bytesByKey = specs.mapNotNull { spec ->
-                        tabStacks.getByteArray(spec.key)?.let { spec.key to it }
-                    }.toMap()
-                    build(bytesByKey, NavixPersistedState.unpackTabIndex(blob, initialTabIndex))
-                }
-            },
-        ),
+                },
+            ),
     ) {
         build(emptyMap(), initialTabIndex)
     }

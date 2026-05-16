@@ -91,43 +91,45 @@ fun rememberSaveableNavigator(
     val scope = rememberCoroutineScope()
     val savedStateHolder = remember { NavixSavedStateHolder() }
 
-    val navigator = rememberSaveable(
-        saver = Saver<Navigator, Any>(
-            save = { nav ->
-                NavixPersistedState.pack(
-                    backstackBytes = saver.save(nav.backstack.value),
-                    entryStates = savedStateHolder.performSave(),
-                )
-            },
-            restore = { saved ->
-                val blob = saved as? Bundle
-                val bytes = blob?.let { NavixPersistedState.unpackBackstack(it) }
-                if (blob == null || bytes == null) {
-                    createNavigator(root, scope, reducer, entryFactory, telemetry, deepLinkHandlers)
-                } else {
-                    savedStateHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
-                    restoreNavigator(
-                        root = root,
-                        scope = scope,
-                        savedBytes = bytes,
-                        saver = saver,
-                        reducer = reducer,
-                        telemetry = telemetry,
-                        deepLinkHandlers = deepLinkHandlers,
-                    )
-                }
-            },
-        ),
-    ) {
-        createNavigator(
-            root = root,
-            scope = scope,
-            reducer = reducer,
-            entryFactory = entryFactory,
-            telemetry = telemetry,
-            deepLinkHandlers = deepLinkHandlers,
-        )
-    }
+    val navigator =
+        rememberSaveable(
+            saver =
+                Saver<Navigator, Any>(
+                    save = { nav ->
+                        NavixPersistedState.pack(
+                            backstackBytes = saver.save(nav.backstack.value),
+                            entryStates = savedStateHolder.performSave(),
+                        )
+                    },
+                    restore = { saved ->
+                        val blob = saved as? Bundle
+                        val bytes = blob?.let { NavixPersistedState.unpackBackstack(it) }
+                        if (blob == null || bytes == null) {
+                            createNavigator(root, scope, reducer, entryFactory, telemetry, deepLinkHandlers)
+                        } else {
+                            savedStateHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
+                            restoreNavigator(
+                                root = root,
+                                scope = scope,
+                                savedBytes = bytes,
+                                saver = saver,
+                                reducer = reducer,
+                                telemetry = telemetry,
+                                deepLinkHandlers = deepLinkHandlers,
+                            )
+                        }
+                    },
+                ),
+        ) {
+            createNavigator(
+                root = root,
+                scope = scope,
+                reducer = reducer,
+                entryFactory = entryFactory,
+                telemetry = telemetry,
+                deepLinkHandlers = deepLinkHandlers,
+            )
+        }
 
     // Associate the holder with this navigator so NavixHost can wire per-entry
     // persistence. Idempotent; runs before NavixHost composes.

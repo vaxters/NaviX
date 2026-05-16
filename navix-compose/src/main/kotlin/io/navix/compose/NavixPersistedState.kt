@@ -32,17 +32,20 @@ import android.os.Bundle
  * [io.navix.runtime.NavigatorSaver] to a `ByteArray` and carried as one key.
  */
 internal object NavixPersistedState {
-
     private const val KEY_BACKSTACK = "navix:backstack"
     private const val KEY_ENTRY_STATES = "navix:entryStates"
     private const val KEY_TAB_INDEX = "navix:activeTab"
     private const val KEY_TAB_BACKSTACKS = "navix:tabStacks"
 
     /** Single-navigator blob: backstack bytes + per-entry registry bundles. */
-    fun pack(backstackBytes: ByteArray, entryStates: Bundle): Bundle = Bundle().apply {
-        putByteArray(KEY_BACKSTACK, backstackBytes)
-        putBundle(KEY_ENTRY_STATES, entryStates)
-    }
+    fun pack(
+        backstackBytes: ByteArray,
+        entryStates: Bundle,
+    ): Bundle =
+        Bundle().apply {
+            putByteArray(KEY_BACKSTACK, backstackBytes)
+            putBundle(KEY_ENTRY_STATES, entryStates)
+        }
 
     fun unpackBackstack(blob: Bundle): ByteArray? = blob.getByteArray(KEY_BACKSTACK)
 
@@ -57,13 +60,17 @@ internal object NavixPersistedState {
         activeTabIndex: Int,
         tabBackstacks: Bundle,
         entryStates: Bundle,
-    ): Bundle = Bundle().apply {
-        putInt(KEY_TAB_INDEX, activeTabIndex)
-        putBundle(KEY_TAB_BACKSTACKS, tabBackstacks)
-        putBundle(KEY_ENTRY_STATES, entryStates)
-    }
+    ): Bundle =
+        Bundle().apply {
+            putInt(KEY_TAB_INDEX, activeTabIndex)
+            putBundle(KEY_TAB_BACKSTACKS, tabBackstacks)
+            putBundle(KEY_ENTRY_STATES, entryStates)
+        }
 
-    fun unpackTabIndex(blob: Bundle, fallback: Int): Int = blob.getInt(KEY_TAB_INDEX, fallback)
+    fun unpackTabIndex(
+        blob: Bundle,
+        fallback: Int,
+    ): Int = blob.getInt(KEY_TAB_INDEX, fallback)
 
     fun unpackTabBackstacks(blob: Bundle): Bundle = blob.getBundle(KEY_TAB_BACKSTACKS) ?: Bundle()
 }

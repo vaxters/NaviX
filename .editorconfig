@@ -10,6 +10,11 @@ trim_trailing_whitespace = true
 [*.{kt,kts}]
 indent_size = 4
 max_line_length = 120
+# ktlint's function-naming rule applies camelCase by default. Jetpack Compose
+# requires PascalCase for @Composable functions that emit UI (official API guideline).
+# This property tells ktlint to skip the naming check for any function carrying
+# the @Composable annotation, which is the narrowest correct override available.
+ktlint_function_naming_ignore_when_annotated_with = Composable
 
 [*.{gradle,gradle.kts,toml,yml,yaml}]
 indent_size = 4

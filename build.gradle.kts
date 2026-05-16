@@ -61,26 +61,13 @@ val reportMerge by tasks.registering(ReportMergeTask::class) {
 // ---------------------------------------------------------------------------
 subprojects {
     // ── ktlint ───────────────────────────────────────────────────────────────
-    // Applied unconditionally — every subproject is a Kotlin project. The shared
-    // root baseline at config/ktlint/baseline.xml covers existing style violations
-    // so the build stays green; only newly touched/added code must comply fully.
+    // Applied unconditionally — every subproject is a Kotlin project.
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    configure<KtlintExtension> {
-        // Per-project baseline: avoids parallel write races that would occur if all
-        // modules shared a single root-level file. Each module's violations are
-        // baselined independently; only newly touched code in this module must comply.
-        baseline.set(file("${projectDir}/ktlint-baseline.xml"))
-    }
 
     // ── detekt ───────────────────────────────────────────────────────────────
-    // Static analysis with the same baseline strategy: existing violations are
-    // baselined; new code introduced by this hardening pass (and going forward)
-    // must not introduce new issues.
     apply(plugin = "io.gitlab.arturbosch.detekt")
     configure<DetektExtension> {
-        // Shared rule config; per-project baseline avoids parallel write races.
         config.setFrom(file("${rootProject.projectDir}/config/detekt/detekt.yml"))
-        baseline = file("${projectDir}/detekt-baseline.xml")
         buildUponDefaultConfig = true
         parallel = true
     }

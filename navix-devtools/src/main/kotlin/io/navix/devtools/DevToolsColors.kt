@@ -25,7 +25,7 @@ internal object DevToolsColors {
     val activeEntry = Color(0x2264FFDA)
     val resumed = Color(0xFF69F0AE)
     val started = Color(0xFFFFD740)
-    val push = Color(0xFF1DE9B6)    // teal — distinct from resumed green
+    val push = Color(0xFF1DE9B6) // teal — distinct from resumed green
     val pop = Color(0xFFFF5252)
     val replace = Color(0xFFE040FB) // purple — distinct from started amber
     val reset = Color(0xFFFF6D00)

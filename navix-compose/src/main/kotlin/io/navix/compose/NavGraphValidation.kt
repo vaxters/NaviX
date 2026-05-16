@@ -62,10 +62,11 @@ fun NavGraphBuilder.validateAgainst(vararg registries: NavixRouteRegistry) {
     for (registry in registries) {
         val missing = mutableListOf<String>()
         for (fqn in registry.destinations) {
-            val klass = runCatching {
-                @Suppress("UNCHECKED_CAST")
-                Class.forName(fqn).kotlin as kotlin.reflect.KClass<out Route>
-            }.getOrNull() ?: continue  // skip if class can't be loaded (e.g., stripped by R8)
+            val klass =
+                runCatching {
+                    @Suppress("UNCHECKED_CAST")
+                    Class.forName(fqn).kotlin as kotlin.reflect.KClass<out Route>
+                }.getOrNull() ?: continue // skip if class can't be loaded (e.g., stripped by R8)
 
             if (klass !in registeredClasses) {
                 missing += fqn
@@ -79,7 +80,7 @@ fun NavGraphBuilder.validateAgainst(vararg registries: NavixRouteRegistry) {
                 append(
                     "Add a screen<RouteName> { }, dialog<RouteName> { }, or bottomSheet<RouteName> { } " +
                         "block for each missing route, or remove @RouteDestination if the route " +
-                        "is intentionally excluded from this NavixHost (e.g., tab-internal routes)."
+                        "is intentionally excluded from this NavixHost (e.g., tab-internal routes).",
                 )
             }
         }
