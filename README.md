@@ -6,6 +6,7 @@ Navix is not a wrapper around `NavController`. It is a standalone navigation run
 a deterministic state machine, with zero reflection, first-class telemetry, built-in devtools,
 and a KMP-portable core.
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.vaxters/navix-runtime?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.vaxters/navix-runtime)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.1.20-blueviolet.svg)](https://kotlinlang.org)
 [![KMP](https://img.shields.io/badge/KMP-Android%20%7C%20JVM%20%7C%20iOS-orange.svg)]()
@@ -27,23 +28,23 @@ ksp {
 
 dependencies {
     // Required — backstack engine, NavixHost, Navigator, and all core APIs.
-    implementation("io.navix:navix-runtime:0.1.0")
+    implementation("io.github.vaxters:navix-runtime:$navixVersion")
 
     // Required — KSP processor. Generates NavixRouteRegistry and DeepLinkHandler
     // implementations from your @RouteDestination-annotated routes at build time.
-    ksp("io.navix:navix-compiler:0.1.0")
+    ksp("io.github.vaxters:navix-compiler:$navixVersion")
 
     // Optional — navigation event pipeline with pluggable exporters (Logcat, Firebase, …).
     // Omit if you don't need analytics or in-app event history.
-    implementation("io.navix:navix-telemetry:0.1.0")
+    implementation("io.github.vaxters:navix-telemetry:$navixVersion")
 
     // Optional — in-app debug overlay: live backstack inspector + event timeline.
     // Safe to ship; the overlay is a no-op when enabled = false (default).
     // debugImplementation keeps it out of release APKs entirely.
-    debugImplementation("io.navix:navix-devtools:0.1.0")
+    debugImplementation("io.github.vaxters:navix-devtools:$navixVersion")
 
     // Optional — FakeNavigator and Compose test helpers for unit and UI tests.
-    testImplementation("io.navix:navix-testing:0.1.0")
+    testImplementation("io.github.vaxters:navix-testing:$navixVersion")
 }
 ```
 
