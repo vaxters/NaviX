@@ -78,6 +78,14 @@ naming:
     ignoreAnnotated:
       - 'Composable'
       - 'androidx.compose.runtime.Composable'
+    # DemoTheme.kt: NavixDemoTheme is a @Composable theme wrapper. Detekt 1.23.x
+    # has a known gap where ignoreAnnotated is not applied when a parameter type
+    # also carries @Composable (e.g. `content: @Composable () -> Unit`). Excluding
+    # this single demo-app file is the targeted workaround.
+    # Test source sets also excluded: JUnit test functions conventionally use
+    # underscores (methodName_condition_outcome) which violates the default
+    # camelCase pattern. This is an accepted testing idiom.
+    excludes: ['**/test/**', '**/navix-demo-app/**/DemoTheme.kt']
 
 # ── Exceptions ───────────────────────────────────────────────────────────────
 exceptions:
