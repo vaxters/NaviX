@@ -1,7 +1,7 @@
 name: Publish to Maven Central
 
 # Triggers:
-#   • Pushing a version tag (e.g. v1.0.0) kicks off an automatic release.
+#   • Pushing a version tag (e.g. v0.1.0) kicks off an automatic release.
 #   • workflow_dispatch lets you trigger a release manually from the Actions UI.
 on:
   push:
@@ -14,10 +14,6 @@ on:
         description: 'Publish to local Maven (~/.m2) instead of Maven Central'
         type: boolean
         default: false
-      version:
-        description: 'Version to release (e.g. 1.0.0) — leave empty to use gradle.properties'
-        type: string
-        required: false
 
 # Only one publish job may run at a time for a given ref.
 concurrency:
@@ -25,53 +21,19 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
-  # ---------------------------------------------------------------------------
-  # Fast pre-flight check. Runs even on feature-branch tags so we get a clear
-  # signal, but always exits 0 — so a tag pushed from a PR branch results in a
-  # SKIPPED publish job (grey dot) rather than a FAILED check (red ✗).
-  # ---------------------------------------------------------------------------
-  guard:
-    name: Validate release conditions
-    runs-on: ubuntu-latest
-    outputs:
-      on_master: ${{ steps.check.outputs.on_master }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Verify tag is on master
-        id: check
-        run: |
-          git fetch origin master
-          if git merge-base --is-ancestor HEAD origin/master; then
-            echo "on_master=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Tag '${GITHUB_REF_NAME}' is not reachable from master — publish will be skipped."
-            echo "on_master=false" >> "$GITHUB_OUTPUT"
-          fi
-
-  # ---------------------------------------------------------------------------
-  # Main publish job — only runs when the tag is confirmed to be on master.
-  # ---------------------------------------------------------------------------
   publish:
     name: Publish all modules
-    needs: guard
-    if: needs.guard.outputs.on_master == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
 
     permissions:
-      contents: write   # needed to create GitHub Releases and push to master
+      contents: write   # needed to create GitHub Releases
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history required by git-cliff
+          fetch-depth: 0   # full history needed for version inference
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -85,75 +47,17 @@ jobs:
           gradle-home-cache-cleanup: true
 
       # -----------------------------------------------------------------------
-      # Derive the release version from the pushed tag so gradle.properties
-      # never needs to be manually bumped before tagging.
-      #
-      # Priority:
-      #   1. Tag name (v1.0.0 → 1.0.0)          — normal tag-push release
-      #   2. workflow_dispatch `version` input   — manual override
-      #   3. Current gradle.properties value     — workflow_dispatch fallback
+      # Guard: fail fast if the version still carries a -SNAPSHOT suffix.
+      # Also exports VERSION to the environment for all subsequent steps.
       # -----------------------------------------------------------------------
-      - name: Derive version
+      - name: Validate release version
         run: |
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            VERSION="${GITHUB_REF_NAME#v}"
-          elif [[ -n "${{ inputs.version }}" ]]; then
-            VERSION="${{ inputs.version }}"
-          else
-            VERSION=$(grep "^VERSION_NAME=" gradle.properties | cut -d'=' -f2)
-          fi
+          VERSION=$(grep "^VERSION_NAME=" gradle.properties | cut -d'=' -f2)
           if [[ "$VERSION" == *"-SNAPSHOT"* ]]; then
-            echo "::error::Version '$VERSION' is a SNAPSHOT — not a valid release version."
+            echo "::error::VERSION_NAME is '$VERSION' — remove the -SNAPSHOT suffix before tagging."
             exit 1
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-
-      # -----------------------------------------------------------------------
-      # Overwrite VERSION_NAME in gradle.properties with the tag-derived version
-      # so all Gradle publish tasks use the correct coordinate without any
-      # manual file edits before tagging.
-      # -----------------------------------------------------------------------
-      - name: Sync VERSION_NAME in gradle.properties
-        run: |
-          sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${VERSION}/" gradle.properties
-          grep "^VERSION_NAME=" gradle.properties
-
-      # -----------------------------------------------------------------------
-      # Install git-cliff from a pinned binary release (statically linked musl
-      # build — no libc dependency, works on any ubuntu-latest runner).
-      # -----------------------------------------------------------------------
-      - name: Install git-cliff v2.8.0
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          CLIFF_VERSION="2.8.0"
-          curl -fsSL \
-            "https://github.com/orhun/git-cliff/releases/download/v${CLIFF_VERSION}/git-cliff-${CLIFF_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-            -o git-cliff.tar.gz
-          tar -xzf git-cliff.tar.gz
-          CLIFF_BIN=$(find . -maxdepth 3 -name "git-cliff" -type f | head -1)
-          chmod +x "$CLIFF_BIN"
-          sudo mv "$CLIFF_BIN" /usr/local/bin/git-cliff
-          git-cliff --version
-
-      # -----------------------------------------------------------------------
-      # Generate the changelog entry for this release from conventional commits.
-      #
-      # Run 1 — body only (--strip all removes header/footer) → release-notes.md
-      #          used as the GitHub Release body.
-      # Run 2 — full entry prepended into CHANGELOG.md so the file stays current.
-      # -----------------------------------------------------------------------
-      - name: Generate release notes with git-cliff
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          git cliff --unreleased --tag "v${VERSION}" --strip all \
-            --output release-notes.md
-
-          if [ ! -s release-notes.md ]; then
-            echo "::warning::git-cliff produced an empty changelog — no conventional commits found since last tag."
-            echo "_No conventional commits found for v${VERSION}._" > release-notes.md
-          fi
-
-          git cliff --unreleased --tag "v${VERSION}" --prepend CHANGELOG.md
 
       # -----------------------------------------------------------------------
       # Local dry-run: publish to ~/.m2 so the artifacts can be inspected
@@ -191,52 +95,31 @@ jobs:
           echo "## Published artifacts" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           for artifact in navix-contracts navix-annotations navix-runtime navix-compiler navix-telemetry navix-devtools navix-testing; do
-            echo "- \`io.github.vaxters:${artifact}:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`io.navix:${artifact}:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
           done
 
       # -----------------------------------------------------------------------
-      # Commit gradle.properties (bumped version) and CHANGELOG.md together
-      # in one atomic commit to master — only after a successful publish so
-      # master never gets a stale update if publishing fails mid-way.
-      # [skip ci] prevents the CI workflow from looping on this commit.
+      # Extract the changelog section for this version from CHANGELOG.md.
+      # Falls back to a placeholder if the section hasn't been written yet.
       # -----------------------------------------------------------------------
-      - name: Commit version bump and changelog to master
+      - name: Extract release notes from CHANGELOG.md
         if: ${{ inputs.dry_run != true }}
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add gradle.properties CHANGELOG.md
-          if git diff --cached --quiet; then
-            echo "Nothing to commit."
-          else
-            git commit -m "chore(release): bump to v${VERSION} and update CHANGELOG.md [skip ci]"
-            git push origin HEAD:master
+          chmod +x .github/scripts/extract-changelog.sh
+          .github/scripts/extract-changelog.sh "$VERSION" > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "_No changelog entry found for v${VERSION}. See CHANGELOG.md._" > release-notes.md
           fi
 
       # -----------------------------------------------------------------------
-      # Build the demo app APK (debug — uses default Android debug keystore,
-      # no signing secrets required). Rename to include the version number.
-      # -----------------------------------------------------------------------
-      - name: Build demo APK
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          ./gradlew :navix-demo-app:assembleDebug
-          APK_SRC="navix-demo-app/build/outputs/apk/debug/navix-demo-app-debug.apk"
-          APK_DST="navix-demo-v${VERSION}.apk"
-          cp "$APK_SRC" "$APK_DST"
-          echo "APK_PATH=$APK_DST" >> "$GITHUB_ENV"
-
-      # -----------------------------------------------------------------------
-      # Create a GitHub Release tagged at the current commit, with the
-      # git-cliff-generated changelog as the release body and the demo APK
-      # as a downloadable asset.
+      # Create a GitHub Release tagged at the current commit, attaching the
+      # extracted changelog section as the release body.
       # -----------------------------------------------------------------------
       - name: Create GitHub Release
         if: ${{ inputs.dry_run != true }}
         run: |
           gh release create "v${VERSION}" \
             --title "Navix v${VERSION}" \
-            --notes-file release-notes.md \
-            "${APK_PATH}#Demo App (debug APK)"
+            --notes-file release-notes.md
         env:
           GH_TOKEN: ${{ github.token }}
