@@ -45,7 +45,4 @@ package io.navix.annotations
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class RouteDestination(
-    val route: String = "",
-    val deepLinks: Array<String> = [],
-)
+annotation class RouteDestination(val route: String = "", val deepLinks: Array<String> = [])
