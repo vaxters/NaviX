@@ -1,4 +1,3 @@
-# WIP
 # Navix
 
 **A production-grade, Compose-first navigation platform for Android and Kotlin Multiplatform.**
