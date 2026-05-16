@@ -1,0 +1,26 @@
+public final class io/navix/telemetry/LogcatExporter : io/navix/telemetry/NavEventExporter {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun export (Lio/navix/contracts/NavEvent;)V
+}
+
+public abstract interface class io/navix/telemetry/NavEventExporter {
+	public abstract fun export (Lio/navix/contracts/NavEvent;)V
+}
+
+public final class io/navix/telemetry/NavixTelemetryPipeline : io/navix/contracts/NavixTelemetry {
+	public static final field MAX_CHANNEL_CAPACITY I
+	public static final field MAX_REPLAY_BUFFER I
+	public fun <init> (Ljava/util/List;Lkotlinx/coroutines/CoroutineDispatcher;)V
+	public synthetic fun <init> (Ljava/util/List;Lkotlinx/coroutines/CoroutineDispatcher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDroppedEventCount ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getReplayBuffer ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun onEvent (Lio/navix/contracts/NavEvent;)V
+}
+
+public final class io/navix/telemetry/NoOpExporter : io/navix/telemetry/NavEventExporter {
+	public fun <init> ()V
+	public fun export (Lio/navix/contracts/NavEvent;)V
+}
+

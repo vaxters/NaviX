@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNaming:AuthScreen.kt$@Composable fun AuthScreen( navigator: Navigator, viewModel: AuthViewModel, )</ID>
+    <ID>FunctionNaming:AuthScreen.kt$@Composable private fun AuthContent( state: AuthUiState, onSignIn: () -&gt; Unit, onCreateAccount: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:DemoNavHost.kt$@Composable fun DemoNavHost(deepLinkUri: String? = null)</ID>
+    <ID>FunctionNaming:DemoTheme.kt$@Composable fun NavixDemoTheme(content: @Composable () -&gt; Unit)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen( navigator: Navigator, viewModel: HomeViewModel, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable private fun BackstackInfoBar(backstack: BackstackSnapshot)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable private fun ProductCard( product: Product, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable private fun ProductList( products: List&lt;Product&gt;, onProductClicked: (String) -&gt; Unit, onDeepLink: (String) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun HomeContent( state: HomeUiState, backstack: BackstackSnapshot, onProductClicked: (String) -&gt; Unit, onOpenProfile: () -&gt; Unit, onOpenTelemetry: () -&gt; Unit, onDeepLink: (String) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NavPlaygroundScreen.kt$@Composable fun NavPlaygroundScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:NavPlaygroundScreen.kt$@Composable fun NavPlaygroundStepScreen( navigator: Navigator, stepNumber: Int, )</ID>
+    <ID>FunctionNaming:NavPlaygroundScreen.kt$@Composable private fun SectionHeader(title: String)</ID>
+    <ID>FunctionNaming:OverlayDemoScreen.kt$@Composable fun ConfirmDialogContent( onConfirm: () -&gt; Unit, onCancel: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:OverlayDemoScreen.kt$@Composable fun OverlayDemoScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:OverlayDemoScreen.kt$@Composable private fun StatusRow( label: String, value: String, )</ID>
+    <ID>FunctionNaming:ProductDetailScreen.kt$@Composable fun ProductDetailScreen( navigator: Navigator, viewModel: ProductDetailViewModel, )</ID>
+    <ID>FunctionNaming:ProductDetailScreen.kt$@Composable private fun ProductDetailBody( product: Product, onReadReviews: () -&gt; Unit, onBackToHome: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProductDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ProductDetailContent( state: ProductDetailUiState, onReadReviews: () -&gt; Unit, onBack: () -&gt; Unit, onBackToHome: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProductReviewsScreen.kt$@Composable fun ProductReviewsScreen( navigator: Navigator, viewModel: ProductReviewsViewModel, )</ID>
+    <ID>FunctionNaming:ProductReviewsScreen.kt$@Composable private fun ReviewItem(review: Review)</ID>
+    <ID>FunctionNaming:ProductReviewsScreen.kt$@Composable private fun ReviewList( reviews: List&lt;Review&gt;, onJumpToHome: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProductReviewsScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ProductReviewsContent( state: ProductReviewsUiState, onBack: () -&gt; Unit, onJumpToHome: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreen.kt$@Composable fun ProfileScreen( navigator: Navigator, viewModel: ProfileViewModel, )</ID>
+    <ID>FunctionNaming:ProfileScreen.kt$@Composable private fun ProfileBody( user: User?, onSignOut: () -&gt; Unit, onResetToHome: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>FunctionNaming:ProfileScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ProfileContent( state: ProfileUiState, onOpenSettings: () -&gt; Unit, onSignOut: () -&gt; Unit, onResetToHome: () -&gt; Unit, onBack: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:RegisterScreen.kt$@Composable fun RegisterScreen( navigator: Navigator, viewModel: RegisterViewModel, )</ID>
+    <ID>FunctionNaming:RegisterScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun RegisterContent( state: RegisterUiState, onRegister: () -&gt; Unit, onBack: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ResultPassingDemoScreen.kt$@Composable fun ColorPickerScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:ResultPassingDemoScreen.kt$@Composable fun ResultPassingDemoScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable fun SettingsScreen( navigator: Navigator, viewModel: SettingsViewModel, )</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable private fun SettingsToggleItem( title: String, subtitle: String, checked: Boolean, onCheckedChange: (Boolean) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable private fun TransitionStyleItem( selected: TransitionStyle, onSelect: (TransitionStyle) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun SettingsContent( state: SettingsUiState, onToggleNotifications: (Boolean) -&gt; Unit, onToggleAnalytics: (Boolean) -&gt; Unit, onTransitionStyleChange: (TransitionStyle) -&gt; Unit, onBack: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:TabsDemoScreen.kt$@Composable private fun CounterTabScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:TabsDemoScreen.kt$@Composable private fun InfoTabScreen()</ID>
+    <ID>FunctionNaming:TabsDemoScreen.kt$@Composable private fun ListTabDetailScreen( navigator: Navigator, item: String, )</ID>
+    <ID>FunctionNaming:TabsDemoScreen.kt$@Composable private fun ListTabScreen(navigator: Navigator)</ID>
+    <ID>FunctionNaming:TabsDemoScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TabsDemoScreen(outerNavigator: Navigator)</ID>
+    <ID>FunctionNaming:TelemetryViewerScreen.kt$@Composable fun TelemetryViewerScreen( navigator: Navigator, viewModel: TelemetryViewModel, )</ID>
+    <ID>FunctionNaming:TelemetryViewerScreen.kt$@Composable private fun NavEventItem(event: NavEvent)</ID>
+    <ID>FunctionNaming:TelemetryViewerScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun TelemetryContent( events: List&lt;NavEvent&gt;, onBack: () -&gt; Unit, )</ID>
+    <ID>LongMethod:DemoNavHost.kt$@Composable fun DemoNavHost(deepLinkUri: String? = null)</ID>
+    <ID>LongMethod:NavPlaygroundScreen.kt$@Composable fun NavPlaygroundScreen(navigator: Navigator)</ID>
+    <ID>LongMethod:ResultPassingDemoScreen.kt$@Composable fun ResultPassingDemoScreen(navigator: Navigator)</ID>
+    <ID>MaxLineLength:HomeScreen.kt$text = "Depth: ${backstack.depth} | canPop: ${backstack.canPop} | Active: ${backstack.active?.route?.let { it::class.simpleName } ?: "—"}"</ID>
+  </CurrentIssues>
+</SmellBaseline>

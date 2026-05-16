@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="build.gradle.kts">
+        <error line="58" column="10" source="standard:trailing-comma-on-call-site" />
+        <error line="65" column="89" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/androidMain/kotlin/io/navix/telemetry/LogcatExporter.kt">
+        <error line="31" column="1" source="standard:no-empty-first-line-in-class-body" />
+    </file>
+    <file name="src/commonMain/kotlin/io/navix/telemetry/NavixTelemetryPipeline.kt">
+        <error line="73" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="75" column="27" source="standard:multiline-expression-wrapping" />
+        <error line="131" column="65" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/commonTest/kotlin/io/navix/telemetry/NavixTelemetryPipelineTest.kt">
+        <error line="32" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="33" column="69" source="standard:multiline-expression-wrapping" />
+        <error line="33" column="69" source="standard:function-signature" />
+        <error line="41" column="69" source="standard:multiline-expression-wrapping" />
+        <error line="41" column="69" source="standard:function-signature" />
+        <error line="45" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="46" column="25" source="standard:multiline-expression-wrapping" />
+        <error line="47" column="45" source="standard:statement-wrapping" />
+        <error line="47" column="84" source="standard:statement-wrapping" />
+        <error line="47" column="105" source="standard:statement-wrapping" />
+        <error line="47" column="107" source="standard:statement-wrapping" />
+        <error line="48" column="45" source="standard:statement-wrapping" />
+        <error line="48" column="84" source="standard:statement-wrapping" />
+        <error line="48" column="105" source="standard:statement-wrapping" />
+        <error line="48" column="107" source="standard:statement-wrapping" />
+        <error line="63" column="73" source="standard:multiline-expression-wrapping" />
+        <error line="63" column="73" source="standard:function-signature" />
+        <error line="66" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="67" column="25" source="standard:multiline-expression-wrapping" />
+        <error line="68" column="45" source="standard:statement-wrapping" />
+        <error line="68" column="84" source="standard:statement-wrapping" />
+        <error line="68" column="115" source="standard:statement-wrapping" />
+        <error line="68" column="117" source="standard:statement-wrapping" />
+        <error line="69" column="45" source="standard:statement-wrapping" />
+        <error line="69" column="84" source="standard:statement-wrapping" />
+        <error line="69" column="104" source="standard:statement-wrapping" />
+        <error line="69" column="106" source="standard:statement-wrapping" />
+        <error line="81" column="46" source="standard:multiline-expression-wrapping" />
+        <error line="81" column="46" source="standard:function-signature" />
+        <error line="89" column="53" source="standard:multiline-expression-wrapping" />
+        <error line="89" column="53" source="standard:function-signature" />
+        <error line="91" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="92" column="25" source="standard:multiline-expression-wrapping" />
+        <error line="93" column="45" source="standard:statement-wrapping" />
+        <error line="93" column="84" source="standard:statement-wrapping" />
+        <error line="93" column="106" source="standard:statement-wrapping" />
+        <error line="93" column="108" source="standard:statement-wrapping" />
+        <error line="93" column="109" source="standard:trailing-comma-on-call-site" />
+        <error line="107" column="64" source="standard:multiline-expression-wrapping" />
+        <error line="107" column="64" source="standard:function-signature" />
+        <error line="108" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="124" column="67" source="standard:multiline-expression-wrapping" />
+        <error line="124" column="67" source="standard:function-signature" />
+        <error line="125" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="141" column="58" source="standard:multiline-expression-wrapping" />
+        <error line="141" column="58" source="standard:function-signature" />
+        <error line="147" column="64" source="standard:multiline-expression-wrapping" />
+        <error line="147" column="64" source="standard:function-signature" />
+        <error line="151" column="24" source="standard:multiline-expression-wrapping" />
+        <error line="157" column="20" source="standard:multiline-expression-wrapping" />
+    </file>
+</baseline>

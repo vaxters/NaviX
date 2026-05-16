@@ -56,6 +56,7 @@ release/
 # Android Studio generated
 captures/
 .navigation/
+.kotlin/
 
 # Native build
 .externalNativeBuild/

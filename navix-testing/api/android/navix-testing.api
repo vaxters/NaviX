@@ -1,0 +1,59 @@
+public final class io/navix/testing/DeterministicEntryFactory : io/navix/runtime/EntryFactory {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/contracts/RouteEntry;
+}
+
+public final class io/navix/testing/FakeNavigator : io/navix/runtime/Navigator {
+	public static final field Companion Lio/navix/testing/FakeNavigator$Companion;
+	public fun <init> (Lio/navix/contracts/Route;Lio/navix/runtime/EntryFactory;Lio/navix/runtime/Reducer;)V
+	public synthetic fun <init> (Lio/navix/contracts/Route;Lio/navix/runtime/EntryFactory;Lio/navix/runtime/Reducer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun assertBackstackSize (I)V
+	public final fun assertCanPop (Z)V
+	public final fun assertCurrentRoute (Lio/navix/contracts/Route;)V
+	public final fun assertDeepLinkHandled (Ljava/lang/String;)V
+	public final fun assertEventEmitted (Lio/navix/contracts/NavEventType;)V
+	public final fun assertLastPushed (Lio/navix/contracts/Route;)V
+	public final fun assertNoDeepLinks ()V
+	public final fun assertNoEventEmitted (Lio/navix/contracts/NavEventType;)V
+	public final fun assertNoPops ()V
+	public final fun assertNoPushes ()V
+	public final fun assertNoReplaces ()V
+	public final fun assertNoResets ()V
+	public final fun assertPopCount (I)V
+	public final fun assertPushCount (I)V
+	public final fun assertReplaceCount (I)V
+	public final fun assertResetCount (I)V
+	public fun getBackstack ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getDeepLinkResult ()Z
+	public final fun getEmittedEventTypes ()Ljava/util/List;
+	public fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getHandledDeepLinks ()Ljava/util/List;
+	public final fun getPoppedCount ()I
+	public fun getPreviousEntry ()Lio/navix/contracts/RouteEntry;
+	public final fun getPushedRoutes ()Ljava/util/List;
+	public final fun getReplacedRoutes ()Ljava/util/List;
+	public final fun getResetCount ()I
+	public fun handleDeepLink (Ljava/lang/String;)Z
+	public fun pop (Lio/navix/contracts/NavTransitionKey;)V
+	public final fun popCancelled ()V
+	public fun popTo (Lkotlin/reflect/KClass;Z)V
+	public final fun popWithResult (Ljava/lang/Object;)V
+	public fun push (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public fun pushForResult (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun replace (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public fun reset (Lio/navix/contracts/Route;)V
+	public final fun setDeepLinkResult (Z)V
+	public fun setResult (Ljava/lang/Object;)V
+}
+
+public final class io/navix/testing/FakeNavigator$Companion {
+	public final fun preview (Lio/navix/contracts/Route;)Lio/navix/testing/FakeNavigator;
+}
+
+public final class io/navix/testing/NavixTestExtensionsKt {
+	public static final fun setNavixContent (Landroidx/compose/ui/test/junit4/ComposeContentTestRule;Lio/navix/contracts/Route;Lkotlin/jvm/functions/Function1;)Lio/navix/testing/FakeNavigator;
+	public static final fun setNavixContent (Landroidx/compose/ui/test/junit4/ComposeContentTestRule;Lio/navix/testing/FakeNavigator;Lkotlin/jvm/functions/Function1;)V
+}
+

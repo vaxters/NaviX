@@ -1,0 +1,13 @@
+public final class io/navix/devtools/ComposableSingletons$NavixDevToolsOverlayKt {
+	public static final field INSTANCE Lio/navix/devtools/ComposableSingletons$NavixDevToolsOverlayKt;
+	public fun <init> ()V
+	public final fun getLambda-1$navix_devtools_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-2$navix_devtools_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-3$navix_devtools_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-4$navix_devtools_release ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class io/navix/devtools/NavixDevToolsOverlayKt {
+	public static final fun NavixDevToolsOverlay (Lio/navix/runtime/Navigator;Landroidx/compose/ui/Modifier;ZLkotlinx/coroutines/flow/StateFlow;Landroidx/compose/runtime/Composer;II)V
+}
+

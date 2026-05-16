@@ -1,0 +1,171 @@
+public abstract class io/navix/runtime/BackstackAction {
+}
+
+public final class io/navix/runtime/BackstackAction$Pop : io/navix/runtime/BackstackAction {
+	public fun <init> ()V
+	public fun <init> (Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Lio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Lio/navix/contracts/NavTransitionKey;)Lio/navix/runtime/BackstackAction$Pop;
+	public static synthetic fun copy$default (Lio/navix/runtime/BackstackAction$Pop;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/runtime/BackstackAction$Pop;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransition ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/BackstackAction$PopTo : io/navix/runtime/BackstackAction {
+	public fun <init> (Lkotlin/reflect/KClass;ZLio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Lkotlin/reflect/KClass;ZLio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlin/reflect/KClass;
+	public final fun component2 ()Z
+	public final fun component3 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Lkotlin/reflect/KClass;ZLio/navix/contracts/NavTransitionKey;)Lio/navix/runtime/BackstackAction$PopTo;
+	public static synthetic fun copy$default (Lio/navix/runtime/BackstackAction$PopTo;Lkotlin/reflect/KClass;ZLio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/runtime/BackstackAction$PopTo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInclusive ()Z
+	public final fun getRouteClass ()Lkotlin/reflect/KClass;
+	public final fun getTransition ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/BackstackAction$Push : io/navix/runtime/BackstackAction {
+	public fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/Route;
+	public final fun component2 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/runtime/BackstackAction$Push;
+	public static synthetic fun copy$default (Lio/navix/runtime/BackstackAction$Push;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/runtime/BackstackAction$Push;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRoute ()Lio/navix/contracts/Route;
+	public final fun getTransition ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/BackstackAction$Replace : io/navix/runtime/BackstackAction {
+	public fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/Route;
+	public final fun component2 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/runtime/BackstackAction$Replace;
+	public static synthetic fun copy$default (Lio/navix/runtime/BackstackAction$Replace;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/runtime/BackstackAction$Replace;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRoute ()Lio/navix/contracts/Route;
+	public final fun getTransition ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/BackstackAction$Reset : io/navix/runtime/BackstackAction {
+	public fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public synthetic fun <init> (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/navix/contracts/Route;
+	public final fun component2 ()Lio/navix/contracts/NavTransitionKey;
+	public final fun copy (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/runtime/BackstackAction$Reset;
+	public static synthetic fun copy$default (Lio/navix/runtime/BackstackAction$Reset;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)Lio/navix/runtime/BackstackAction$Reset;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRoot ()Lio/navix/contracts/Route;
+	public final fun getTransition ()Lio/navix/contracts/NavTransitionKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/navix/runtime/DeepLinkHandler {
+	public abstract fun canHandle (Ljava/lang/String;)Z
+	public abstract fun resolve (Ljava/lang/String;)Lio/navix/contracts/Route;
+}
+
+public final class io/navix/runtime/DefaultEntryFactory : io/navix/runtime/EntryFactory {
+	public static final field INSTANCE Lio/navix/runtime/DefaultEntryFactory;
+	public fun create (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/contracts/RouteEntry;
+}
+
+public final class io/navix/runtime/DefaultReducer : io/navix/runtime/Reducer {
+	public fun <init> ()V
+	public fun <init> (Lio/navix/runtime/EntryFactory;)V
+	public synthetic fun <init> (Lio/navix/runtime/EntryFactory;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun reduce (Lio/navix/contracts/BackstackSnapshot;Lio/navix/runtime/BackstackAction;)Lio/navix/contracts/BackstackSnapshot;
+}
+
+public abstract interface class io/navix/runtime/EntryFactory {
+	public abstract fun create (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)Lio/navix/contracts/RouteEntry;
+}
+
+public final class io/navix/runtime/JsonNavigatorSaver : io/navix/runtime/NavigatorSaver {
+	public fun <init> (Lkotlinx/serialization/modules/SerializersModule;Z)V
+	public synthetic fun <init> (Lkotlinx/serialization/modules/SerializersModule;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun restore ([B)Lio/navix/contracts/BackstackSnapshot;
+	public fun save (Lio/navix/contracts/BackstackSnapshot;)[B
+}
+
+public abstract class io/navix/runtime/NavResult {
+}
+
+public final class io/navix/runtime/NavResult$Cancelled : io/navix/runtime/NavResult {
+	public static final field INSTANCE Lio/navix/runtime/NavResult$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/NavResult$Success : io/navix/runtime/NavResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/navix/runtime/NavResult$Success;
+	public static synthetic fun copy$default (Lio/navix/runtime/NavResult$Success;Ljava/lang/Object;ILjava/lang/Object;)Lio/navix/runtime/NavResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/navix/runtime/NavResultKt {
+	public static final fun getOrDefault (Lio/navix/runtime/NavResult;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getOrNull (Lio/navix/runtime/NavResult;)Ljava/lang/Object;
+}
+
+public abstract interface class io/navix/runtime/Navigator {
+	public abstract fun getBackstack ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getPreviousEntry ()Lio/navix/contracts/RouteEntry;
+	public abstract fun handleDeepLink (Ljava/lang/String;)Z
+	public abstract fun pop (Lio/navix/contracts/NavTransitionKey;)V
+	public abstract fun popTo (Lkotlin/reflect/KClass;Z)V
+	public abstract fun push (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public abstract fun pushForResult (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun replace (Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;)V
+	public abstract fun reset (Lio/navix/contracts/Route;)V
+	public abstract fun setResult (Ljava/lang/Object;)V
+}
+
+public final class io/navix/runtime/Navigator$DefaultImpls {
+	public static fun getPreviousEntry (Lio/navix/runtime/Navigator;)Lio/navix/contracts/RouteEntry;
+	public static synthetic fun pop$default (Lio/navix/runtime/Navigator;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)V
+	public static synthetic fun popTo$default (Lio/navix/runtime/Navigator;Lkotlin/reflect/KClass;ZILjava/lang/Object;)V
+	public static synthetic fun push$default (Lio/navix/runtime/Navigator;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)V
+	public static synthetic fun pushForResult$default (Lio/navix/runtime/Navigator;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun replace$default (Lio/navix/runtime/Navigator;Lio/navix/contracts/Route;Lio/navix/contracts/NavTransitionKey;ILjava/lang/Object;)V
+}
+
+public final class io/navix/runtime/NavigatorFactoryKt {
+	public static final fun createNavigator (Lio/navix/contracts/Route;Lkotlinx/coroutines/CoroutineScope;Lio/navix/runtime/Reducer;Lio/navix/runtime/EntryFactory;Lio/navix/contracts/NavixTelemetry;Ljava/util/List;)Lio/navix/runtime/Navigator;
+	public static synthetic fun createNavigator$default (Lio/navix/contracts/Route;Lkotlinx/coroutines/CoroutineScope;Lio/navix/runtime/Reducer;Lio/navix/runtime/EntryFactory;Lio/navix/contracts/NavixTelemetry;Ljava/util/List;ILjava/lang/Object;)Lio/navix/runtime/Navigator;
+	public static final fun restoreNavigator (Lio/navix/contracts/Route;Lkotlinx/coroutines/CoroutineScope;[BLio/navix/runtime/NavigatorSaver;Lio/navix/runtime/Reducer;Lio/navix/contracts/NavixTelemetry;Ljava/util/List;)Lio/navix/runtime/Navigator;
+	public static synthetic fun restoreNavigator$default (Lio/navix/contracts/Route;Lkotlinx/coroutines/CoroutineScope;[BLio/navix/runtime/NavigatorSaver;Lio/navix/runtime/Reducer;Lio/navix/contracts/NavixTelemetry;Ljava/util/List;ILjava/lang/Object;)Lio/navix/runtime/Navigator;
+}
+
+public abstract interface class io/navix/runtime/NavigatorSaver {
+	public abstract fun restore ([B)Lio/navix/contracts/BackstackSnapshot;
+	public abstract fun save (Lio/navix/contracts/BackstackSnapshot;)[B
+}
+
+public abstract interface class io/navix/runtime/NavixRouteRegistry {
+	public abstract fun getDestinations ()Ljava/util/List;
+}
+
+public abstract interface class io/navix/runtime/Reducer {
+	public abstract fun reduce (Lio/navix/contracts/BackstackSnapshot;Lio/navix/runtime/BackstackAction;)Lio/navix/contracts/BackstackSnapshot;
+}
+

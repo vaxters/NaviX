@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNaming:BackstackInspectorPanel.kt$@Composable internal fun BackstackInspectorPanel(navigator: Navigator)</ID>
+    <ID>FunctionNaming:BackstackInspectorPanel.kt$@Composable private fun BackstackEntryRow(entry: RouteEntry, isActive: Boolean)</ID>
+    <ID>FunctionNaming:EventTimelinePanel.kt$@Composable internal fun EventTimelinePanel( navigator: Navigator, eventHistory: StateFlow&lt;List&lt;NavEvent&gt;&gt;? = null, )</ID>
+    <ID>FunctionNaming:EventTimelinePanel.kt$@Composable private fun EventRow(event: NavEvent)</ID>
+    <ID>FunctionNaming:EventTimelinePanel.kt$@Composable private fun EventTimelineHeader()</ID>
+    <ID>FunctionNaming:NavixDevToolsOverlay.kt$@Composable fun NavixDevToolsOverlay( navigator: Navigator, modifier: Modifier = Modifier, enabled: Boolean = false, eventHistory: StateFlow&lt;List&lt;NavEvent&gt;&gt;? = null, )</ID>
+    <ID>LongMethod:NavixDevToolsOverlay.kt$@Composable fun NavixDevToolsOverlay( navigator: Navigator, modifier: Modifier = Modifier, enabled: Boolean = false, eventHistory: StateFlow&lt;List&lt;NavEvent&gt;&gt;? = null, )</ID>
+  </CurrentIssues>
+</SmellBaseline>
