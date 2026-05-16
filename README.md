@@ -107,24 +107,6 @@ navigator.handleDeepLink("myapp://product/123")
 
 ---
 
-## Architecture
-
-```
-navix-runtime (core)
-├── BackstackStore              ← StateFlow<BackstackSnapshot>
-│   └── BackstackReducer        ← pure function: no side effects
-├── NavigatorImpl               ← wires store + events + telemetry
-└── NavixHost (Compose)         ← AnimatedContent, BackHandler
-```
-
-The backstack is a **pure state machine**. Every navigation action produces a new immutable
-`BackstackSnapshot` via a side-effect-free `BackstackReducer`. This makes the runtime trivially
-testable — just call the function with a snapshot and an action, assert the result.
-
-For a full architecture overview, see [docs/architecture.md](docs/architecture.md).
-
----
-
 ## Module Overview
 
 | Module | Description | KMP |
