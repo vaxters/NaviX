@@ -25,8 +25,42 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+
+  # ---------------------------------------------------------------------------
+  # Fast pre-flight check. Runs even on feature-branch tags so we get a clear
+  # signal, but always exits 0 — so a tag pushed from a PR branch results in a
+  # SKIPPED publish job (grey dot) rather than a FAILED check (red ✗).
+  # ---------------------------------------------------------------------------
+  guard:
+    name: Validate release conditions
+    runs-on: ubuntu-latest
+    outputs:
+      on_master: ${{ steps.check.outputs.on_master }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag is on master
+        id: check
+        run: |
+          git fetch origin master
+          if git merge-base --is-ancestor HEAD origin/master; then
+            echo "on_master=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Tag '${GITHUB_REF_NAME}' is not reachable from master — publish will be skipped."
+            echo "on_master=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Main publish job — only runs when the tag is confirmed to be on master.
+  # ---------------------------------------------------------------------------
   publish:
     name: Publish all modules
+    needs: guard
+    if: needs.guard.outputs.on_master == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -49,18 +83,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-home-cache-cleanup: true
-
-      # -----------------------------------------------------------------------
-      # Guard: fail fast if the tag does not point to a commit that is part of
-      # master. Prevents accidental (or malicious) releases from feature branches.
-      # -----------------------------------------------------------------------
-      - name: Verify tag is on master
-        run: |
-          git fetch origin master
-          if ! git merge-base --is-ancestor HEAD origin/master; then
-            echo "::error::Tag must point to a commit that is reachable from master."
-            exit 1
-          fi
 
       # -----------------------------------------------------------------------
       # Derive the release version from the pushed tag so gradle.properties
@@ -176,7 +198,6 @@ jobs:
       # Commit gradle.properties (bumped version) and CHANGELOG.md together
       # in one atomic commit to master — only after a successful publish so
       # master never gets a stale update if publishing fails mid-way.
-      # Workflow checks out a detached HEAD (tag), so push explicitly to master.
       # [skip ci] prevents the CI workflow from looping on this commit.
       # -----------------------------------------------------------------------
       - name: Commit version bump and changelog to master
