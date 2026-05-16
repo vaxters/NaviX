@@ -100,14 +100,10 @@ subprojects {
     plugins.withId("com.vanniktech.maven.publish") {
         extensions.configure<MavenPublishBaseExtension> {
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-            // signAllPublications() is a no-op when signing properties are absent,
-            // so local builds without GPG keys still work fine.
             signAllPublications()
 
             pom {
-                // TODO: replace with actual GitHub URL once the repo is created
-                url.set("https://github.com/TODO/navix")
+                url.set("https://github.com/vaxters/navix")
 
                 licenses {
                     license {
@@ -119,18 +115,16 @@ subprojects {
 
                 developers {
                     developer {
-                        // TODO: fill in your real details before publishing
-                        id.set("TODO")
-                        name.set("TODO Your Name")
-                        email.set("TODO your@email.com")
+                        id.set("vaxters")
+                        name.set("Ilya Amialiuk")
+                        email.set("vaxters@gmail.com")
                     }
                 }
 
                 scm {
-                    // TODO: replace with actual URLs once the repo is created
-                    url.set("https://github.com/TODO/navix")
-                    connection.set("scm:git:git://github.com/TODO/navix.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/TODO/navix.git")
+                    url.set("https://github.com/vaxters/navix")
+                    connection.set("scm:git:git://github.com/vaxters/navix.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/vaxters/navix.git")
                 }
             }
         }
