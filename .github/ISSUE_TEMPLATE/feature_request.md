@@ -25,6 +25,7 @@ What other approaches did you consider? Why are they inferior?
 ## Module Impact
 
 Which module(s) would need to change?
+
 - [ ] `contracts` (ABI impact — requires full analysis)
 - [ ] `navix-runtime`
 - [ ] `navix-compiler`

@@ -3,7 +3,6 @@ import com.vanniktech.maven.publish.SonatypeHost
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
     alias(libs.plugins.android.application) apply false

@@ -78,6 +78,7 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
                 pickedColor = Color(result.value)
                 lastOutcome = "Success — color selected"
             }
+
             NavResult.Cancelled -> {
                 lastOutcome = "Cancelled — no color selected"
             }

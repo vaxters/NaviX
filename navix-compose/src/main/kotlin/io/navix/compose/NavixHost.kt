@@ -423,6 +423,7 @@ private fun NavixOverlayContent(
                 }
             }
         }
+
         DestinationKind.BottomSheet -> {
             val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
             ModalBottomSheet(
@@ -446,6 +447,7 @@ private fun NavixOverlayContent(
                 }
             }
         }
+
         DestinationKind.Screen, null -> {
             // Already handled by AnimatedContent above; unreachable here.
         }

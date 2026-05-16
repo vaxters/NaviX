@@ -51,6 +51,7 @@ object NavTransitions {
                     NavTransitionKey.Scale ->
                         scaleIn(tween(DURATION_MS), initialScale = 0.9f) +
                             fadeIn(tween(DURATION_MS))
+
                     NavTransitionKey.None -> EnterTransition.None
                     else -> fadeIn(tween(DURATION_MS))
                 }
@@ -66,6 +67,7 @@ object NavTransitions {
                     NavTransitionKey.Scale ->
                         scaleOut(tween(DURATION_MS), targetScale = 1.1f) +
                             fadeOut(tween(DURATION_MS))
+
                     NavTransitionKey.None -> ExitTransition.None
                     else -> fadeOut(tween(DURATION_MS))
                 }

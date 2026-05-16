@@ -70,7 +70,7 @@ internal class RouteDestinationVisitor(
                 annotation.arguments
                     .firstOrNull { it.name?.asString() == "deepLinks" }
                     ?.value as? List<*>
-            )?.filterIsInstance<String>() ?: emptyList()
+                )?.filterIsInstance<String>() ?: emptyList()
 
         val parsedTemplates =
             deepLinkValues.mapNotNull { template ->

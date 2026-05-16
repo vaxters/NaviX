@@ -16,7 +16,6 @@
 package io.navix.lint
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest
-import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 

@@ -116,6 +116,7 @@ private fun ProfileContent(
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center),
                     )
+
                 state.error != null ->
                     Text(
                         text = state.error,
@@ -127,6 +128,7 @@ private fun ProfileContent(
                                 .align(Alignment.Center)
                                 .padding(horizontal = 32.dp),
                     )
+
                 else ->
                     ProfileBody(
                         user = state.user,

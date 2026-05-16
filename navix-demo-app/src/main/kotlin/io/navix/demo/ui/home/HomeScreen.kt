@@ -76,6 +76,7 @@ fun HomeScreen(
             when (effect) {
                 is HomeNavEffect.OpenProductDetail ->
                     navigator.push(ProductDetail(effect.productId), NavTransitionKey.SlideLeft)
+
                 HomeNavEffect.OpenProfile -> navigator.push(Profile)
                 HomeNavEffect.OpenTelemetry -> navigator.push(TelemetryViewer)
                 is HomeNavEffect.HandleDeepLink -> navigator.handleDeepLink(effect.uri)

@@ -82,13 +82,17 @@ data object TabsDemo : Route
 
 // Tab-internal routes — no @RouteDestination because they are only reachable
 // within the NavixMultiStackHost, not through the outer NavixHost graph.
-@Serializable data object CounterTab : Route
+@Serializable
+data object CounterTab : Route
 
-@Serializable data object ListTab : Route
+@Serializable
+data object ListTab : Route
 
-@Serializable data object InfoTab : Route
+@Serializable
+data object InfoTab : Route
 
-@Serializable data class ListTabDetail(val item: String) : Route
+@Serializable
+data class ListTabDetail(val item: String) : Route
 
 // ── Result passing demo (Phase 9) ────────────────────────────────────────────
 

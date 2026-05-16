@@ -17,6 +17,8 @@ package io.navix.telemetry
 
 import io.navix.contracts.NavEvent
 import io.navix.contracts.NavixTelemetry
+import io.navix.telemetry.NavixTelemetryPipeline.Companion.MAX_CHANNEL_CAPACITY
+import io.navix.telemetry.NavixTelemetryPipeline.Companion.MAX_REPLAY_BUFFER
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -13,10 +13,12 @@ A clear and concise description of the bug.
 ## To Reproduce
 
 Minimal steps to reproduce:
+
 1. ...
 2. ...
 
 **Minimal reproducible code snippet:**
+
 ```kotlin
 // paste here
 ```

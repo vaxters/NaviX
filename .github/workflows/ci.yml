@@ -1,148 +1,148 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-  workflow_dispatch:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+    workflow_dispatch:
 
 permissions:
-  contents: read
-  security-events: write
+    contents: read
+    security-events: write
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  # ── Stage 1: static analysis (parallel, fast gate) ────────────────────────
-  ktlint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ── Stage 1: static analysis (parallel, fast gate) ────────────────────────
+    ktlint:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: temurin
+                    java-version: 17
+                    cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            -   name: Grant execute permission
+                run: chmod +x gradlew
 
-      - name: Run ktlint
-        run: ./gradlew ktlintCheck
+            -   name: Run ktlint
+                run: ./gradlew ktlintCheck
 
-  detekt:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    detekt:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: temurin
+                    java-version: 17
+                    cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            -   name: Grant execute permission
+                run: chmod +x gradlew
 
-      - name: Run Detekt
-        run: ./gradlew detekt reportMerge --continue
+            -   name: Run Detekt
+                run: ./gradlew detekt reportMerge --continue
 
-      - name: Upload Detekt SARIF
-        uses: github/codeql-action/upload-sarif@v4
-        if: always()
-        with:
-          sarif_file: build/reports/detekt/detekt.sarif
+            -   name: Upload Detekt SARIF
+                uses: github/codeql-action/upload-sarif@v4
+                if: always()
+                with:
+                    sarif_file: build/reports/detekt/detekt.sarif
 
-  android-lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    android-lint:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: temurin
+                    java-version: 17
+                    cache: gradle
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+            -   name: Setup Android SDK
+                uses: android-actions/setup-android@v3
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            -   name: Grant execute permission
+                run: chmod +x gradlew
 
-      - name: Run Android Lint
-        run: ./gradlew lint
+            -   name: Run Android Lint
+                run: ./gradlew lint
 
-  # ── Stage 2: unit tests (only if static analysis passed) ──────────────────
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: [ktlint, detekt, android-lint]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ── Stage 2: unit tests (only if static analysis passed) ──────────────────
+    test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        needs: [ ktlint, detekt, android-lint ]
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: temurin
+                    java-version: 17
+                    cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            -   name: Grant execute permission
+                run: chmod +x gradlew
 
-      - name: Run Unit Tests
-        run: ./gradlew test
+            -   name: Run Unit Tests
+                run: ./gradlew test
 
-  # ── Stage 3: build (only if unit tests passed) ────────────────────────────
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: [test]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ── Stage 3: build (only if unit tests passed) ────────────────────────────
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        needs: [ test ]
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: temurin
+                    java-version: 17
+                    cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            -   name: Grant execute permission
+                run: chmod +x gradlew
 
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
+            -   name: Assemble Debug
+                run: ./gradlew assembleDebug
