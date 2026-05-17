@@ -452,7 +452,7 @@ private fun NavixOverlayContent(
             }
         }
 
-        DestinationKind.Screen, null -> {
+        else -> {
             // Already handled by AnimatedContent above; unreachable here.
         }
     }
