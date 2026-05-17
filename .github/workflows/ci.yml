@@ -18,26 +18,6 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    # ── Stage 1: static analysis (parallel, fast gate) ────────────────────────
-    ktlint:
-        runs-on: ubuntu-latest
-        timeout-minutes: 20
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-
-            -   name: Setup JDK
-                uses: actions/setup-java@v4
-                with:
-                    distribution: temurin
-                    java-version: 17
-                    cache: gradle
-
-            -   name: Setup Gradle
-                uses: gradle/actions/setup-gradle@v4
-
-            -   name: Grant execute permission
-                run: chmod +x gradlew
     android-lint:
         runs-on: ubuntu-latest
         timeout-minutes: 30
@@ -63,8 +43,6 @@ jobs:
 
             -   name: Run Android Lint
                 run: ./gradlew lint
-
-    # ── Stage 2: unit tests (only if static analysis passed) ──────────────────
     test:
         runs-on: ubuntu-latest
         timeout-minutes: 30
@@ -89,7 +67,6 @@ jobs:
             -   name: Run Unit Tests
                 run: ./gradlew test
 
-    # ── Stage 3: build (only if unit tests passed) ────────────────────────────
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
