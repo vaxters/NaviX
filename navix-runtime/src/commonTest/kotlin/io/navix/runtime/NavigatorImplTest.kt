@@ -50,7 +50,7 @@ class NavigatorImplTest {
             // long-lived "infrastructure" coroutine, not a test assertion coroutine.
             scope = testScope.backgroundScope,
             telemetry = NavixTelemetry.NoOp,
-            deepLinkHandlers = deepLinkHandlers,
+            deepLinkHandlers = deepLinkHandlers
         )
 
     // ── Backstack initial state ────────────────────────────────────────────
@@ -61,7 +61,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<HomeRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -74,7 +74,7 @@ class NavigatorImplTest {
         assertEquals(2, nav.backstack.value.depth)
         assertIs<DetailRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -99,7 +99,7 @@ class NavigatorImplTest {
         assertEquals(
             NavTransitionKey.SlideLeft,
             nav.backstack.value.active
-                ?.transitionKey,
+                ?.transitionKey
         )
     }
 
@@ -112,7 +112,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<HomeRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -124,7 +124,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<HomeRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -150,7 +150,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<SettingsRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -177,7 +177,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<ProfileRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -206,7 +206,7 @@ class NavigatorImplTest {
         assertEquals(2, nav.backstack.value.depth)
         assertIs<DetailRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -230,14 +230,14 @@ class NavigatorImplTest {
         assertTrue(nav.handleDeepLink("myapp://detail/99"))
         assertIs<DetailRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
         assertEquals(
             "99",
             (
                 nav.backstack.value.active
                     ?.route as DetailRoute
-            ).id,
+            ).id
         )
     }
 
@@ -285,12 +285,7 @@ class NavigatorImplTest {
                 if (event.type == NavEventType.PUSH) throw RuntimeException("simulated bad telemetry")
                 received.add(event)
             }
-        val nav =
-            NavigatorImpl(
-                root = HomeRoute,
-                scope = testScope.backgroundScope,
-                telemetry = throwingTelemetry,
-            )
+        val nav = NavigatorImpl(root = HomeRoute, scope = testScope.backgroundScope, telemetry = throwingTelemetry)
         nav.push(DetailRoute("1")) // telemetry throws — must not stall the actor
         nav.pop() // must still be processed after the throw
 
@@ -298,7 +293,7 @@ class NavigatorImplTest {
         assertEquals(1, nav.backstack.value.depth)
         assertIs<HomeRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
 
         // POP telemetry callback did NOT throw, so it was delivered
@@ -329,14 +324,14 @@ class NavigatorImplTest {
         assertTrue(nav.handleDeepLink("myapp://detail/42"))
         assertIs<DetailRoute>(
             nav.backstack.value.active
-                ?.route,
+                ?.route
         )
         assertEquals(
             "42",
             (
                 nav.backstack.value.active
                     ?.route as DetailRoute
-            ).id,
+            ).id
         )
     }
 
@@ -351,17 +346,12 @@ class NavigatorImplTest {
         val bytes = saver.save(original.backstack.value)
 
         val restored =
-            restoreNavigator(
-                root = HomeRoute,
-                scope = testScope.backgroundScope,
-                savedBytes = bytes,
-                saver = saver,
-            )
+            restoreNavigator(root = HomeRoute, scope = testScope.backgroundScope, savedBytes = bytes, saver = saver)
 
         assertEquals(3, restored.backstack.value.depth)
         assertIs<SettingsRoute>(
             restored.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -374,13 +364,13 @@ class NavigatorImplTest {
                 root = HomeRoute,
                 scope = testScope.backgroundScope,
                 savedBytes = "corrupt".encodeToByteArray(),
-                saver = saver,
+                saver = saver
             )
 
         assertEquals(1, restored.backstack.value.depth)
         assertIs<HomeRoute>(
             restored.backstack.value.active
-                ?.route,
+                ?.route
         )
     }
 
@@ -392,12 +382,7 @@ class NavigatorImplTest {
         val bytes = saver.save(original.backstack.value)
 
         val restored =
-            restoreNavigator(
-                root = HomeRoute,
-                scope = testScope.backgroundScope,
-                savedBytes = bytes,
-                saver = saver,
-            )
+            restoreNavigator(root = HomeRoute, scope = testScope.backgroundScope, savedBytes = bytes, saver = saver)
 
         val restoredRoute =
             restored.backstack.value.active
@@ -421,7 +406,7 @@ class NavigatorImplTest {
             (
                 nav.backstack.value.active
                     ?.route as DetailRoute
-            ).id,
+            ).id
         )
     }
 

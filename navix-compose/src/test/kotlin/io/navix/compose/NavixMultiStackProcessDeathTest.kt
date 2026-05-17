@@ -45,9 +45,9 @@ class NavixMultiStackProcessDeathTest {
                     specs =
                         listOf(
                             NavStackSpec(TabHomeR, key = "home"),
-                            NavStackSpec(TabSearchR, key = "search"),
+                            NavStackSpec(TabSearchR, key = "search")
                         ),
-                    saver = TestSaver,
+                    saver = TestSaver
                 )
             NavixMultiStackHost(ms) {
                 screen<TabHomeR> { _, _ -> Text("home") }
@@ -61,24 +61,12 @@ class NavixMultiStackProcessDeathTest {
         composeRule.runOnIdle { ms.navigators[1].push(TabDetailR) }
         composeRule.waitForIdle()
         assertEquals(1, ms.activeTabIndex.value)
-        assertEquals(
-            2,
-            ms.navigators[1]
-                .backstack.value.depth,
-        )
+        assertEquals(2, ms.navigators[1].backstack.value.depth)
 
         tester.emulateSavedInstanceStateRestore()
 
         assertEquals(1, ms.activeTabIndex.value)
-        assertEquals(
-            2,
-            ms.navigators[1]
-                .backstack.value.depth,
-        )
-        assertEquals(
-            1,
-            ms.navigators[0]
-                .backstack.value.depth,
-        )
+        assertEquals(2, ms.navigators[1].backstack.value.depth)
+        assertEquals(1, ms.navigators[0].backstack.value.depth)
     }
 }

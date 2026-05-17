@@ -80,7 +80,7 @@ import kotlin.test.assertTrue
 class FakeNavigator(
     root: Route,
     entryFactory: EntryFactory = DeterministicEntryFactory(),
-    private val reducer: Reducer = DefaultReducer(entryFactory),
+    private val reducer: Reducer = DefaultReducer(entryFactory)
 ) : Navigator {
     companion object {
         /**
@@ -108,7 +108,7 @@ class FakeNavigator(
 
     private val _backstack =
         MutableStateFlow(
-            BackstackSnapshot(listOf(entryFactory.create(root, NavTransitionKey.Default))),
+            BackstackSnapshot(listOf(entryFactory.create(root, NavTransitionKey.Default)))
         )
     override val backstack: StateFlow<BackstackSnapshot> = _backstack.asStateFlow()
 
@@ -129,10 +129,7 @@ class FakeNavigator(
 
     // ── Navigation actions ───────────────────────────────────────────────────
 
-    override fun push(
-        route: Route,
-        transition: NavTransitionKey,
-    ) {
+    override fun push(route: Route, transition: NavTransitionKey) {
         pushedRoutes.add(route)
         val prev = _backstack.value.active
         _backstack.value = reducer.reduce(_backstack.value, BackstackAction.Push(route, transition))
@@ -155,10 +152,7 @@ class FakeNavigator(
         }
     }
 
-    override fun replace(
-        route: Route,
-        transition: NavTransitionKey,
-    ) {
+    override fun replace(route: Route, transition: NavTransitionKey) {
         replacedRoutes.add(route)
         val prev = _backstack.value.active
         _backstack.value = reducer.reduce(_backstack.value, BackstackAction.Replace(route, transition))
@@ -185,15 +179,12 @@ class FakeNavigator(
         }
     }
 
-    override fun popTo(
-        routeClass: KClass<out Route>,
-        inclusive: Boolean,
-    ) {
+    override fun popTo(routeClass: KClass<out Route>, inclusive: Boolean) {
         val prev = _backstack.value.active
         _backstack.value =
             reducer.reduce(
                 _backstack.value,
-                BackstackAction.PopTo(routeClass, inclusive),
+                BackstackAction.PopTo(routeClass, inclusive)
             )
         _emittedEventTypes.add(NavEventType.POP_TO)
         _events.tryEmit(NavEvent(NavEventType.POP_TO, prev, _backstack.value.active, 0L))
@@ -208,10 +199,7 @@ class FakeNavigator(
     private val pendingResultValues = HashMap<String, Any?>()
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun <R : Any> pushForResult(
-        route: Route,
-        transition: NavTransitionKey,
-    ): NavResult<R> {
+    override suspend fun <R : Any> pushForResult(route: Route, transition: NavTransitionKey): NavResult<R> {
         val snapshotBefore = _backstack.value
         push(route, transition)
         val pushedEntry =
@@ -292,7 +280,7 @@ class FakeNavigator(
         assertEquals(
             expected,
             _backstack.value.active?.route,
-            "Expected current route to be $expected but was ${_backstack.value.active?.route}",
+            "Expected current route to be $expected but was ${_backstack.value.active?.route}"
         )
     }
 
@@ -300,7 +288,7 @@ class FakeNavigator(
         assertEquals(
             expected,
             _backstack.value.depth,
-            "Expected backstack size $expected but was ${_backstack.value.depth}",
+            "Expected backstack size $expected but was ${_backstack.value.depth}"
         )
     }
 
@@ -308,7 +296,7 @@ class FakeNavigator(
         assertEquals(
             expected,
             pushedRoutes.lastOrNull(),
-            "Expected last pushed route to be $expected but was ${pushedRoutes.lastOrNull()}",
+            "Expected last pushed route to be $expected but was ${pushedRoutes.lastOrNull()}"
         )
     }
 
@@ -316,12 +304,12 @@ class FakeNavigator(
         if (expected) {
             assertTrue(
                 _backstack.value.canPop,
-                "Expected canPop=true but stack has only ${_backstack.value.depth} entry",
+                "Expected canPop=true but stack has only ${_backstack.value.depth} entry"
             )
         } else {
             assertFalse(
                 _backstack.value.canPop,
-                "Expected canPop=false but stack has ${_backstack.value.depth} entries",
+                "Expected canPop=false but stack has ${_backstack.value.depth} entries"
             )
         }
     }
@@ -334,7 +322,7 @@ class FakeNavigator(
         assertEquals(
             expected,
             pushedRoutes.size,
-            "Expected $expected pushes but got ${pushedRoutes.size}",
+            "Expected $expected pushes but got ${pushedRoutes.size}"
         )
     }
 
@@ -346,7 +334,7 @@ class FakeNavigator(
         assertEquals(
             expected,
             replacedRoutes.size,
-            "Expected $expected replaces but got ${replacedRoutes.size}",
+            "Expected $expected replaces but got ${replacedRoutes.size}"
         )
     }
 
@@ -369,28 +357,28 @@ class FakeNavigator(
     fun assertEventEmitted(type: NavEventType) {
         assertTrue(
             _emittedEventTypes.contains(type),
-            "Expected event of type $type to be emitted but only saw: $_emittedEventTypes",
+            "Expected event of type $type to be emitted but only saw: $_emittedEventTypes"
         )
     }
 
     fun assertNoEventEmitted(type: NavEventType) {
         assertFalse(
             _emittedEventTypes.contains(type),
-            "Expected no event of type $type but it was emitted. All events: $_emittedEventTypes",
+            "Expected no event of type $type but it was emitted. All events: $_emittedEventTypes"
         )
     }
 
     fun assertDeepLinkHandled(uri: String) {
         assertTrue(
             _handledDeepLinks.contains(uri),
-            "Expected deep link '$uri' to be handled but handledDeepLinks=$_handledDeepLinks",
+            "Expected deep link '$uri' to be handled but handledDeepLinks=$_handledDeepLinks"
         )
     }
 
     fun assertNoDeepLinks() {
         assertTrue(
             _handledDeepLinks.isEmpty(),
-            "Expected no deep links to be handled but got: $_handledDeepLinks",
+            "Expected no deep links to be handled but got: $_handledDeepLinks"
         )
     }
 }

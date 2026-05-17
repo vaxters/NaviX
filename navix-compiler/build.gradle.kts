@@ -26,15 +26,15 @@ mavenPublishing {
     configure(
         JavaLibrary(
             javadocJar = JavadocJar.Empty(),
-            sourcesJar = true,
-        ),
+            sourcesJar = true
+        )
     )
 
     pom {
         name.set("Navix Compiler")
         description.set(
             "KSP symbol processor for Navix: generates route registries and deep link " +
-                "handler implementations from @RouteDestination annotations at build time.",
+                "handler implementations from @RouteDestination annotations at build time."
         )
     }
 }

@@ -21,7 +21,7 @@ data class ProfileUiState(
     val user: User? = null,
     val isLoading: Boolean = true,
     /** Non-null when loading the user profile fails. */
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface ProfileNavEffect {

@@ -40,12 +40,8 @@ object NavTransitions {
 
     internal val DefaultSpec: NavTransitionSpec =
         object : NavTransitionSpec {
-            override fun enterTransition(
-                from: RouteEntry?,
-                to: RouteEntry,
-                key: NavTransitionKey,
-            ): EnterTransition =
-                when (key) {
+            override fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey): EnterTransition {
+                return when (key) {
                     NavTransitionKey.SlideLeft -> slideInHorizontally(tween(DURATION_MS)) { it }
                     NavTransitionKey.SlideRight -> slideInHorizontally(tween(DURATION_MS)) { -it }
                     NavTransitionKey.Scale ->
@@ -55,13 +51,10 @@ object NavTransitions {
                     NavTransitionKey.None -> EnterTransition.None
                     else -> fadeIn(tween(DURATION_MS))
                 }
+            }
 
-            override fun exitTransition(
-                from: RouteEntry,
-                to: RouteEntry?,
-                key: NavTransitionKey,
-            ): ExitTransition =
-                when (key) {
+            override fun exitTransition(from: RouteEntry, to: RouteEntry?, key: NavTransitionKey): ExitTransition {
+                return when (key) {
                     NavTransitionKey.SlideLeft -> slideOutHorizontally(tween(DURATION_MS)) { -it }
                     NavTransitionKey.SlideRight -> slideOutHorizontally(tween(DURATION_MS)) { it }
                     NavTransitionKey.Scale ->
@@ -71,20 +64,13 @@ object NavTransitions {
                     NavTransitionKey.None -> ExitTransition.None
                     else -> fadeOut(tween(DURATION_MS))
                 }
+            }
         }
 
     internal val NoneSpec: NavTransitionSpec =
         object : NavTransitionSpec {
-            override fun enterTransition(
-                from: RouteEntry?,
-                to: RouteEntry,
-                key: NavTransitionKey,
-            ) = EnterTransition.None
+            override fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey) = EnterTransition.None
 
-            override fun exitTransition(
-                from: RouteEntry,
-                to: RouteEntry?,
-                key: NavTransitionKey,
-            ) = ExitTransition.None
+            override fun exitTransition(from: RouteEntry, to: RouteEntry?, key: NavTransitionKey) = ExitTransition.None
         }
 }

@@ -72,7 +72,7 @@ interface NavGraphBuilder {
      */
     fun <T : Route> screen(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     )
 
     /**
@@ -84,7 +84,7 @@ interface NavGraphBuilder {
      */
     fun <T : Route> dialog(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     )
 
     /**
@@ -96,20 +96,20 @@ interface NavGraphBuilder {
      */
     fun <T : Route> bottomSheet(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     )
 }
 
 inline fun <reified T : Route> NavGraphBuilder.screen(
-    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit,
+    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit
 ) = screen(T::class, content)
 
 inline fun <reified T : Route> NavGraphBuilder.dialog(
-    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit,
+    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit
 ) = dialog(T::class, content)
 
 inline fun <reified T : Route> NavGraphBuilder.bottomSheet(
-    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit,
+    noinline content: @Composable (entry: RouteEntry, route: T) -> Unit
 ) = bottomSheet(T::class, content)
 
 internal class NavGraphBuilderImpl : NavGraphBuilder {
@@ -120,23 +120,23 @@ internal class NavGraphBuilderImpl : NavGraphBuilder {
 
     override fun <T : Route> screen(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     ) = register(klass, DestinationKind.Screen, content)
 
     override fun <T : Route> dialog(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     ) = register(klass, DestinationKind.Dialog, content)
 
     override fun <T : Route> bottomSheet(
         klass: KClass<T>,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     ) = register(klass, DestinationKind.BottomSheet, content)
 
     private fun <T : Route> register(
         klass: KClass<T>,
         kind: DestinationKind,
-        content: @Composable (entry: RouteEntry, route: T) -> Unit,
+        content: @Composable (entry: RouteEntry, route: T) -> Unit
     ) {
         destinations[klass] = { entry, route ->
             @Suppress("UNCHECKED_CAST")

@@ -46,7 +46,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun SettingsScreen(
     navigator: Navigator,
-    viewModel: SettingsViewModel,
+    viewModel: SettingsViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -63,7 +63,7 @@ fun SettingsScreen(
         onToggleNotifications = viewModel::onToggleNotifications,
         onToggleAnalytics = viewModel::onToggleAnalytics,
         onTransitionStyleChange = viewModel::onTransitionStyleChange,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -74,7 +74,7 @@ private fun SettingsContent(
     onToggleNotifications: (Boolean) -> Unit,
     onToggleAnalytics: (Boolean) -> Unit,
     onTransitionStyleChange: (TransitionStyle) -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -84,22 +84,22 @@ private fun SettingsContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
-        },
+        }
     ) { padding ->
         LazyColumn(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             item {
                 SettingsToggleItem(
                     title = "Notifications",
                     subtitle = "Enable push notifications",
                     checked = state.notificationsEnabled,
-                    onCheckedChange = onToggleNotifications,
+                    onCheckedChange = onToggleNotifications
                 )
                 HorizontalDivider()
             }
@@ -108,21 +108,21 @@ private fun SettingsContent(
                     title = "Analytics",
                     subtitle = "Off = NavixTelemetry.NoOp — no events emitted",
                     checked = state.analyticsEnabled,
-                    onCheckedChange = onToggleAnalytics,
+                    onCheckedChange = onToggleAnalytics
                 )
                 HorizontalDivider()
             }
             item {
                 TransitionStyleItem(
                     selected = state.transitionStyle,
-                    onSelect = onTransitionStyleChange,
+                    onSelect = onTransitionStyleChange
                 )
                 HorizontalDivider()
             }
             item {
                 ListItem(
                     headlineContent = { Text("Version") },
-                    trailingContent = { Text(state.appVersion) },
+                    trailingContent = { Text(state.appVersion) }
                 )
             }
         }
@@ -134,7 +134,7 @@ private fun SettingsToggleItem(
     title: String,
     subtitle: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
         headlineContent = { Text(title) },
@@ -142,16 +142,16 @@ private fun SettingsToggleItem(
         trailingContent = {
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = onCheckedChange
             )
-        },
+        }
     )
 }
 
 @Composable
 private fun TransitionStyleItem(
     selected: TransitionStyle,
-    onSelect: (TransitionStyle) -> Unit,
+    onSelect: (TransitionStyle) -> Unit
 ) {
     ListItem(
         headlineContent = { Text("Transition Style") },
@@ -161,7 +161,7 @@ private fun TransitionStyleItem(
                     Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TransitionStyle.entries.forEach { style ->
                     FilterChip(
@@ -170,12 +170,12 @@ private fun TransitionStyleItem(
                         label = {
                             Text(
                                 text = style.name,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall
                             )
-                        },
+                        }
                     )
                 }
             }
-        },
+        }
     )
 }

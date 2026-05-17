@@ -34,9 +34,9 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = true)
                     }
-                    """,
+                    """
                 ).indented(),
-                navixDevToolsStub(),
+                navixDevToolsStub()
             ).allowMissingSdk()
             .run()
             .expect(
@@ -45,7 +45,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     NavixDevToolsOverlay(navigator = navigator, enabled = true)
                                                                           ~~~~
                 0 errors, 1 warnings
-                """.trimIndent(),
+                """.trimIndent()
             )
     }
 
@@ -60,9 +60,9 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = BuildConfig.DEBUG)
                     }
-                    """,
+                    """
                 ).indented(),
-                navixDevToolsStub(),
+                navixDevToolsStub()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -78,9 +78,9 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = false)
                     }
-                    """,
+                    """
                 ).indented(),
-                navixDevToolsStub(),
+                navixDevToolsStub()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -96,9 +96,9 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator)
                     }
-                    """,
+                    """
                 ).indented(),
-                navixDevToolsStub(),
+                navixDevToolsStub()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -109,6 +109,6 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
             """
         package io.navix.devtools
         fun NavixDevToolsOverlay(navigator: Any, enabled: Boolean = false) {}
-        """,
+        """
         ).indented()
 }

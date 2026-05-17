@@ -56,7 +56,7 @@ class DeepLinkTemplateParserTest {
     fun parse_duplicateParams_returnsFailure() {
         val result = DeepLinkTemplateParser.parse("myapp://item/{id}/detail/{id}")
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull()!!.message!!.contains("duplicate"))
+        assertEquals(result.exceptionOrNull()?.message?.contains("duplicate"), true)
     }
 
     @Test

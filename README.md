@@ -338,9 +338,9 @@ val multiStack = rememberSaveableNavixMultiStack(
     specs = listOf(
         NavStackSpec(HomeRoot, key = "home"),
         NavStackSpec(SearchRoot, key = "search"),
-        NavStackSpec(ProfileRoot, key = "profile"),
+        NavStackSpec(ProfileRoot, key = "profile")
     ),
-    saver = JsonNavigatorSaver(AppNavixSerializersModule),
+    saver = JsonNavigatorSaver(AppNavixSerializersModule)
 )
 NavixMultiStackHost(multiStack) { /* screen<…> { } shared across tabs */ }
 ```
@@ -413,7 +413,7 @@ Pass `NavixTelemetry.NoOp` to produce zero overhead when telemetry is off:
 ```kotlin
 val navigator = rememberNavigator(
     root = Home,
-    telemetry = if (analyticsEnabled) myPipeline else NavixTelemetry.NoOp,
+    telemetry = if (analyticsEnabled) myPipeline else NavixTelemetry.NoOp
 )
 ```
 
@@ -440,7 +440,7 @@ val navigator = rememberNavigator(
     deepLinkHandlers = listOf(
         ProductDeepLinkHandler(),   // navix://product/{id}
         ProfileDeepLinkHandler(),   // navix://profile
-    ),
+    )
 )
 ```
 

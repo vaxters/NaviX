@@ -55,7 +55,7 @@ import io.navix.demo.routes.Settings as SettingsRoute
 @Composable
 fun ProfileScreen(
     navigator: Navigator,
-    viewModel: ProfileViewModel,
+    viewModel: ProfileViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -75,7 +75,7 @@ fun ProfileScreen(
         onOpenSettings = viewModel::onOpenSettings,
         onSignOut = viewModel::onSignOut,
         onResetToHome = viewModel::onResetToHome,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -86,7 +86,7 @@ private fun ProfileContent(
     onOpenSettings: () -> Unit,
     onSignOut: () -> Unit,
     onResetToHome: () -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -101,20 +101,20 @@ private fun ProfileContent(
                     IconButton(onClick = onOpenSettings) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
-                },
+                }
             )
-        },
+        }
     ) { padding ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             when {
                 state.isLoading ->
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
+                        modifier = Modifier.align(Alignment.Center)
                     )
 
                 state.error != null ->
@@ -126,7 +126,7 @@ private fun ProfileContent(
                         modifier =
                             Modifier
                                 .align(Alignment.Center)
-                                .padding(horizontal = 32.dp),
+                                .padding(horizontal = 32.dp)
                     )
 
                 else ->
@@ -134,7 +134,7 @@ private fun ProfileContent(
                         user = state.user,
                         onSignOut = onSignOut,
                         onResetToHome = onResetToHome,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
                     )
             }
         }
@@ -146,24 +146,24 @@ private fun ProfileBody(
     user: User?,
     onSignOut: () -> Unit,
     onResetToHome: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
         Surface(
             modifier = Modifier.size(96.dp),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Icon(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
                 modifier = Modifier.padding(24.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
 
@@ -171,12 +171,12 @@ private fun ProfileBody(
 
         Text(
             text = user?.name ?: "",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineSmall
         )
         Text(
             text = user?.email ?: "",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(48.dp))

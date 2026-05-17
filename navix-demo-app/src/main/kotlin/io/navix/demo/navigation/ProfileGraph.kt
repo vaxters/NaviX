@@ -31,7 +31,7 @@ import io.navix.runtime.Navigator
 
 fun NavGraphBuilder.profileGraph(
     navigator: Navigator,
-    app: DemoApp,
+    app: DemoApp
 ) {
     screen<Profile> { _, _ ->
         val vm: ProfileViewModel =

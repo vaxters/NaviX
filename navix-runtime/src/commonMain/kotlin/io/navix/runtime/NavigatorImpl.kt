@@ -65,7 +65,7 @@ internal class NavigatorImpl(
     private val store: BackstackStore,
     private val telemetry: NavixTelemetry,
     private val deepLinkHandlers: List<DeepLinkHandler>,
-    scope: CoroutineScope,
+    scope: CoroutineScope
 ) : Navigator {
     internal constructor(
         root: Route,
@@ -75,20 +75,20 @@ internal class NavigatorImpl(
         telemetry: NavixTelemetry = NavixTelemetry.NoOp,
         deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
         /** When non-null, the navigator resumes from this snapshot instead of a fresh root entry. */
-        initialSnapshot: BackstackSnapshot? = null,
+        initialSnapshot: BackstackSnapshot? = null
     ) : this(
         root = root,
         store =
             BackstackStoreImpl(
                 initial =
                     initialSnapshot ?: BackstackSnapshot(
-                        entries = listOf(entryFactory.create(root, NavTransitionKey.Default)),
+                        entries = listOf(entryFactory.create(root, NavTransitionKey.Default))
                     ),
-                reducer = reducer,
+                reducer = reducer
             ),
         telemetry = telemetry,
         deepLinkHandlers = deepLinkHandlers,
-        scope = scope,
+        scope = scope
     )
 
     override val backstack: StateFlow<BackstackSnapshot> = store.state
@@ -123,36 +123,25 @@ internal class NavigatorImpl(
         scope.coroutineContext[Job]?.invokeOnCompletion { actionChannel.close() }
     }
 
-    override fun push(
-        route: Route,
-        transition: NavTransitionKey,
-    ) {
+    override fun push(route: Route, transition: NavTransitionKey) {
         actionChannel.trySend(
             ActorMessage(
                 action = BackstackAction.Push(route = route, transition = transition),
-                eventType = NavEventType.PUSH,
-            ),
+                eventType = NavEventType.PUSH
+            )
         )
     }
 
     override fun pop(transition: NavTransitionKey) {
-        actionChannel.trySend(
-            ActorMessage(
-                action = BackstackAction.Pop(transition),
-                eventType = NavEventType.POP,
-            ),
-        )
+        actionChannel.trySend(ActorMessage(action = BackstackAction.Pop(transition), eventType = NavEventType.POP))
     }
 
-    override fun replace(
-        route: Route,
-        transition: NavTransitionKey,
-    ) {
+    override fun replace(route: Route, transition: NavTransitionKey) {
         actionChannel.trySend(
             ActorMessage(
                 action = BackstackAction.Replace(route = route, transition = transition),
-                eventType = NavEventType.REPLACE,
-            ),
+                eventType = NavEventType.REPLACE
+            )
         )
     }
 
@@ -160,33 +149,27 @@ internal class NavigatorImpl(
         actionChannel.trySend(
             ActorMessage(
                 action = BackstackAction.Reset(root = root, transition = NavTransitionKey.Fade),
-                eventType = NavEventType.RESET,
-            ),
+                eventType = NavEventType.RESET
+            )
         )
     }
 
-    override fun popTo(
-        routeClass: KClass<out Route>,
-        inclusive: Boolean,
-    ) {
+    override fun popTo(routeClass: KClass<out Route>, inclusive: Boolean) {
         actionChannel.trySend(
             ActorMessage(
                 action =
                     BackstackAction.PopTo(
                         routeClass = routeClass,
                         inclusive = inclusive,
-                        transition = NavTransitionKey.SlideRight,
+                        transition = NavTransitionKey.SlideRight
                     ),
-                eventType = NavEventType.POP_TO,
-            ),
+                eventType = NavEventType.POP_TO
+            )
         )
     }
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun <R : Any> pushForResult(
-        route: Route,
-        transition: NavTransitionKey,
-    ): NavResult<R> {
+    override suspend fun <R : Any> pushForResult(route: Route, transition: NavTransitionKey): NavResult<R> {
         // We need the entry ID of the entry that will be created by the Push action.
         // Capture the snapshot BEFORE the push so we can detect the new entry after.
         val snapshotBeforePush = store.state.value
@@ -231,14 +214,10 @@ internal class NavigatorImpl(
                 val route = handler.resolve(uri) ?: continue
                 actionChannel.trySend(
                     ActorMessage(
-                        action =
-                            BackstackAction.Push(
-                                route = route,
-                                transition = NavTransitionKey.Fade,
-                            ),
+                        action = BackstackAction.Push(route = route, transition = NavTransitionKey.Fade),
                         eventType = NavEventType.DEEP_LINK,
-                        metadata = mapOf("uri" to uri),
-                    ),
+                        metadata = mapOf("uri" to uri)
+                    )
                 )
                 return true
             }
@@ -283,6 +262,6 @@ internal class NavigatorImpl(
     private data class ActorMessage(
         val action: BackstackAction,
         val eventType: NavEventType,
-        val metadata: Map<String, String> = emptyMap(),
+        val metadata: Map<String, String> = emptyMap()
     )
 }

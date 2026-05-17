@@ -70,15 +70,15 @@ mavenPublishing {
         KotlinMultiplatform(
             javadocJar = JavadocJar.Empty(),
             sourcesJar = true,
-            androidVariantsToPublish = listOf("release"),
-        ),
+            androidVariantsToPublish = listOf("release")
+        )
     )
 
     pom {
         name.set("Navix Runtime")
         description.set(
             "The core Navix navigation engine: pure-reducer backstack state machine, " +
-                "Navigator interface, Reducer, EntryFactory, and DeepLinkHandler.",
+                "Navigator interface, Reducer, EntryFactory, and DeepLinkHandler."
         )
     }
 }

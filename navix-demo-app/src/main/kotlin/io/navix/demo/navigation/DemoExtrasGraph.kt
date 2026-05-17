@@ -42,7 +42,7 @@ import io.navix.runtime.Navigator
 
 fun NavGraphBuilder.demoExtrasGraph(
     navigator: Navigator,
-    app: DemoApp,
+    app: DemoApp
 ) {
     screen<NavPlayground> { _, _ ->
         NavPlaygroundScreen(navigator = navigator)
@@ -74,7 +74,7 @@ fun NavGraphBuilder.demoExtrasGraph(
     dialog<ConfirmActionDialog> { _, _ ->
         ConfirmDialogContent(
             onConfirm = { navigator.pop() },
-            onCancel = { navigator.pop() },
+            onCancel = { navigator.pop() }
         )
     }
 

@@ -55,9 +55,9 @@ class JsonNavigatorSaverTest {
                             route = HomeRoute,
                             createdAt = 1_000L,
                             lifecycleState = NavLifecycleState.RESUMED,
-                            transitionKey = NavTransitionKey.Default,
-                        ),
-                    ),
+                            transitionKey = NavTransitionKey.Default
+                        )
+                    )
             )
 
         val restored = saver.restore(saver.save(original))
@@ -74,8 +74,8 @@ class JsonNavigatorSaverTest {
                     listOf(
                         RouteEntry(id = "e1", route = HomeRoute, createdAt = 1_000L),
                         RouteEntry(id = "e2", route = DetailRoute("42"), createdAt = 2_000L),
-                        RouteEntry(id = "e3", route = SettingsRoute, createdAt = 3_000L),
-                    ),
+                        RouteEntry(id = "e3", route = SettingsRoute, createdAt = 3_000L)
+                    )
             )
 
         val restored = saver.restore(saver.save(original))
@@ -94,8 +94,8 @@ class JsonNavigatorSaverTest {
             BackstackSnapshot(
                 entries =
                     listOf(
-                        RouteEntry(id = "e1", route = DetailRoute(id = "product-99"), createdAt = 0L),
-                    ),
+                        RouteEntry(id = "e1", route = DetailRoute(id = "product-99"), createdAt = 0L)
+                    )
             )
 
         val restored = saver.restore(saver.save(snapshot))
@@ -115,9 +115,9 @@ class JsonNavigatorSaverTest {
                             id = "e1",
                             route = HomeRoute,
                             createdAt = 0L,
-                            transitionKey = NavTransitionKey.SlideLeft,
-                        ),
-                    ),
+                            transitionKey = NavTransitionKey.SlideLeft
+                        )
+                    )
             )
 
         val restored = saver.restore(saver.save(snapshot))
@@ -159,8 +159,8 @@ class JsonNavigatorSaverTest {
             BackstackSnapshot(
                 entries =
                     listOf(
-                        RouteEntry(id = "e1", route = HomeRoute, createdAt = 0L),
-                    ),
+                        RouteEntry(id = "e1", route = HomeRoute, createdAt = 0L)
+                    )
             )
 
         val restored = prettySaver.restore(prettySaver.save(original))

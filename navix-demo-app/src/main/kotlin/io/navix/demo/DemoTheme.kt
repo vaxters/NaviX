@@ -25,6 +25,6 @@ private val DemoColorScheme = darkColorScheme()
 fun NavixDemoTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = DemoColorScheme,
-        content = content,
+        content = content
     )
 }

@@ -47,10 +47,7 @@ internal class NavixSavedStateHolder {
      */
     fun consumeRestoredState(id: String): Bundle? = restoredStates.remove(id)
 
-    fun registerOwner(
-        id: String,
-        owner: NavBackStackEntryOwner,
-    ) {
+    fun registerOwner(id: String, owner: NavBackStackEntryOwner) {
         liveOwners[id] = owner
     }
 
@@ -96,10 +93,7 @@ internal class NavixSavedStateHolder {
 internal object NavixHolderRegistry {
     private val holders = WeakHashMap<Navigator, NavixSavedStateHolder>()
 
-    fun put(
-        navigator: Navigator,
-        holder: NavixSavedStateHolder,
-    ) {
+    fun put(navigator: Navigator, holder: NavixSavedStateHolder) {
         holders[navigator] = holder
     }
 

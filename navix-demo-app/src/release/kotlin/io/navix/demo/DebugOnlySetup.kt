@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 internal fun NavixDebugOverlay(
     navigator: Navigator,
-    eventHistory: StateFlow<List<NavEvent>>?,
+    eventHistory: StateFlow<List<NavEvent>>?
 ) {
     // No-op in release builds.
 }

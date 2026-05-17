@@ -49,7 +49,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun TelemetryViewerScreen(
     navigator: Navigator,
-    viewModel: TelemetryViewModel,
+    viewModel: TelemetryViewModel
 ) {
     val events by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -63,7 +63,7 @@ fun TelemetryViewerScreen(
 
     TelemetryContent(
         events = events,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -71,7 +71,7 @@ fun TelemetryViewerScreen(
 @Composable
 private fun TelemetryContent(
     events: List<NavEvent>,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -81,9 +81,9 @@ private fun TelemetryContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
-        },
+        }
     ) { padding ->
         LazyColumn(
             modifier =
@@ -91,14 +91,14 @@ private fun TelemetryContent(
                     .fillMaxSize()
                     .padding(padding),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
                 Text(
                     text = "Navigation Events (newest first, up to 100)",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
             items(events, key = { it.timestampMs }) { event ->
@@ -116,17 +116,17 @@ private fun NavEventItem(event: NavEvent) {
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(8.dp)
                 ).padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = event.type.name,
             fontFamily = FontFamily.Monospace,
             fontSize = 11.sp,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(0.3f),
+            modifier = Modifier.weight(0.3f)
         )
         Text(
             text =
@@ -137,7 +137,7 @@ private fun NavEventItem(event: NavEvent) {
                 },
             fontFamily = FontFamily.Monospace,
             fontSize = 11.sp,
-            modifier = Modifier.weight(0.7f),
+            modifier = Modifier.weight(0.7f)
         )
     }
 }

@@ -39,7 +39,7 @@ internal data class RouteDestinationDescriptor(
      * The KSP source file containing this class, used for incremental dependency tracking.
      * Null in unit-test contexts that construct descriptors directly.
      */
-    val containingFile: KSFile? = null,
+    val containingFile: KSFile? = null
 ) {
     val fullyQualifiedName: String get() = "$packageName.$className"
 }
@@ -48,5 +48,5 @@ internal data class RouteDestinationDescriptor(
 internal data class ConstructorParam(
     val name: String,
     /** Kotlin type name (e.g. `String`, `Int`, `kotlin.collections.List<String>`). */
-    val typeName: String,
+    val typeName: String
 )

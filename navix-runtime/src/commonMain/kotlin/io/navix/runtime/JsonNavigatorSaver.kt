@@ -46,10 +46,7 @@ import kotlinx.serialization.modules.polymorphic
  * @param prettyPrint When `true`, the saved JSON is human-readable (useful during development).
  *   Defaults to `false` for compact on-disk size.
  */
-class JsonNavigatorSaver(
-    routesModule: SerializersModule,
-    prettyPrint: Boolean = false,
-) : NavigatorSaver {
+class JsonNavigatorSaver(routesModule: SerializersModule, prettyPrint: Boolean = false) : NavigatorSaver {
     private val json =
         Json {
             this.serializersModule =

@@ -48,7 +48,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun RegisterScreen(
     navigator: Navigator,
-    viewModel: RegisterViewModel,
+    viewModel: RegisterViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -64,7 +64,7 @@ fun RegisterScreen(
     RegisterContent(
         state = state,
         onRegister = viewModel::onRegister,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -73,7 +73,7 @@ fun RegisterScreen(
 private fun RegisterContent(
     state: RegisterUiState,
     onRegister: () -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -83,9 +83,9 @@ private fun RegisterContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
-        },
+        }
     ) { padding ->
         Column(
             modifier =
@@ -93,23 +93,23 @@ private fun RegisterContent(
                     .fillMaxSize()
                     .padding(padding)
                     .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Register",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onRegister,
                 enabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(18.dp),
                         strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
                     Text("Complete Registration")
@@ -122,7 +122,7 @@ private fun RegisterContent(
                     Text(
                         text = errorMessage,
                         color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

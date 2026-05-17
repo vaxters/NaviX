@@ -21,7 +21,7 @@ data class ProductReviewsUiState(
     val reviews: List<Review> = emptyList(),
     val productId: String = "",
     val isLoading: Boolean = true,
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface ProductReviewsNavEffect {

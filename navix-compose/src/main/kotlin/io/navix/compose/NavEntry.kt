@@ -55,13 +55,13 @@ internal fun NavEntry(
     navigator: Navigator,
     entry: RouteEntry,
     saveableStateHolder: SaveableStateHolder,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(
         LocalLifecycleOwner provides owner,
         LocalViewModelStoreOwner provides owner,
         LocalNavEntry provides entry,
-        LocalNavigator provides navigator,
+        LocalNavigator provides navigator
     ) {
         saveableStateHolder.SaveableStateProvider(entry.id) {
             content()

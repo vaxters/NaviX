@@ -71,7 +71,7 @@ internal fun rememberNavixOwnerStore(): NavixEntryViewModelStores {
         Log.w(
             "Navix",
             "NavixHost is not hosted under a ViewModelStoreOwner; entry-scoped ViewModels " +
-                "will not survive configuration changes. Host NavixHost inside a ComponentActivity.",
+                "will not survive configuration changes. Host NavixHost inside a ComponentActivity."
         )
         remember { NavixEntryViewModelStores() }
     }

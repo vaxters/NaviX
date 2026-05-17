@@ -26,7 +26,7 @@ class FakeProductRepository : ProductRepository {
             Product(id = "p-002", name = "Compose Animation Cookbook", rating = 4.6f, reviewCount = 95),
             Product(id = "p-003", name = "Architecture Deep Dive", rating = 4.9f, reviewCount = 214),
             Product(id = "p-004", name = "KSP Internals", rating = 4.5f, reviewCount = 63),
-            Product(id = "p-005", name = "State Management Patterns", rating = 4.7f, reviewCount = 177),
+            Product(id = "p-005", name = "State Management Patterns", rating = 4.7f, reviewCount = 177)
         )
 
     override suspend fun getProducts(): List<Product> {
@@ -46,7 +46,7 @@ class FakeProductRepository : ProductRepository {
                 id = "$productId-review-${index + 1}",
                 author = "User ${index + 1}",
                 body = "Great product! Navix navigation feels very clean.",
-                rating = if (index % 5 == 0) 4 else 5,
+                rating = if (index % 5 == 0) 4 else 5
             )
         }
     }

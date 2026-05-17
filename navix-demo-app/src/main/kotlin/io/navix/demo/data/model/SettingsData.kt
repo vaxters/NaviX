@@ -23,5 +23,5 @@ enum class TransitionStyle { Default, Slide, Scale, Fade }
 data class SettingsData(
     val notificationsEnabled: Boolean = true,
     val analyticsEnabled: Boolean = false,
-    val transitionStyle: TransitionStyle = TransitionStyle.Default,
+    val transitionStyle: TransitionStyle = TransitionStyle.Default
 )

@@ -54,12 +54,9 @@ import com.google.devtools.ksp.processing.Dependencies
  * ```
  */
 internal class SerializersModuleGenerator(
-    private val codeGenerator: CodeGenerator,
+    private val codeGenerator: CodeGenerator
 ) {
-    fun generate(
-        descriptors: List<RouteDestinationDescriptor>,
-        moduleName: String,
-    ) {
+    fun generate(descriptors: List<RouteDestinationDescriptor>, moduleName: String) {
         if (descriptors.isEmpty()) return
 
         val (valName, source) = buildSerializersModuleSource(descriptors, moduleName)
@@ -69,7 +66,7 @@ internal class SerializersModuleGenerator(
             .createNewFile(
                 dependencies = Dependencies(aggregating = true),
                 packageName = packageName,
-                fileName = valName,
+                fileName = valName
             ).use { stream ->
                 stream.write(source.toByteArray())
             }
@@ -83,7 +80,7 @@ internal class SerializersModuleGenerator(
  */
 internal fun buildSerializersModuleSource(
     descriptors: List<RouteDestinationDescriptor>,
-    moduleName: String,
+    moduleName: String
 ): Pair<String, String> {
     val sanitized =
         moduleName

@@ -54,7 +54,7 @@ import io.navix.runtime.popTo
 @Composable
 fun ProductDetailScreen(
     navigator: Navigator,
-    viewModel: ProductDetailViewModel,
+    viewModel: ProductDetailViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -74,7 +74,7 @@ fun ProductDetailScreen(
         state = state,
         onReadReviews = viewModel::onReadReviews,
         onBack = viewModel::onBack,
-        onBackToHome = viewModel::onBackToHome,
+        onBackToHome = viewModel::onBackToHome
     )
 }
 
@@ -84,7 +84,7 @@ private fun ProductDetailContent(
     state: ProductDetailUiState,
     onReadReviews: () -> Unit,
     onBack: () -> Unit,
-    onBackToHome: () -> Unit,
+    onBackToHome: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -94,15 +94,15 @@ private fun ProductDetailContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
-        },
+        }
     ) { padding ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             when {
                 state.isLoading -> {
@@ -116,7 +116,7 @@ private fun ProductDetailContent(
                         modifier =
                             Modifier
                                 .align(Alignment.Center)
-                                .padding(24.dp),
+                                .padding(24.dp)
                     )
                 }
 
@@ -124,7 +124,7 @@ private fun ProductDetailContent(
                     ProductDetailBody(
                         product = state.product,
                         onReadReviews = onReadReviews,
-                        onBackToHome = onBackToHome,
+                        onBackToHome = onBackToHome
                     )
                 }
             }
@@ -136,24 +136,24 @@ private fun ProductDetailContent(
 private fun ProductDetailBody(
     product: Product,
     onReadReviews: () -> Unit,
-    onBackToHome: () -> Unit,
+    onBackToHome: () -> Unit
 ) {
     Column(
         modifier =
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = product.name,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineMedium
         )
 
         Text(
             text = "Deep link: navix://product/${product.id}",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -161,12 +161,12 @@ private fun ProductDetailBody(
                 Icon(
                     Icons.Default.Star,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiary,
+                    tint = MaterialTheme.colorScheme.tertiary
                 )
             }
             Text(
                 text = "  ${product.rating} (${product.reviewCount} reviews)",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -174,14 +174,14 @@ private fun ProductDetailBody(
 
         Button(
             onClick = onReadReviews,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Read Reviews")
         }
 
         OutlinedButton(
             onClick = onBackToHome,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Back to Home (popTo)")
         }

@@ -19,5 +19,5 @@ data class Review(
     val id: String,
     val author: String,
     val body: String,
-    val rating: Int,
+    val rating: Int
 )

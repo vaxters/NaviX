@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
     private val productId: String,
-    private val getProductById: GetProductByIdUseCase,
+    private val getProductById: GetProductByIdUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailUiState())
     val uiState: StateFlow<ProductDetailUiState> = _uiState.asStateFlow()

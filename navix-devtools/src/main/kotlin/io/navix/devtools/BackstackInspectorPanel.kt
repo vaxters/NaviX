@@ -59,17 +59,15 @@ internal fun BackstackInspectorPanel(navigator: Navigator) {
             style =
                 MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Bold,
-                    color = DevToolsColors.header,
+                    color = DevToolsColors.header
                 ),
-            modifier = Modifier.padding(bottom = 4.dp),
+            modifier = Modifier.padding(bottom = 4.dp)
         )
 
         LazyColumn {
             itemsIndexed(
                 items = snapshot.entries.reversed(),
-                key = { _, item ->
-                    item.id
-                },
+                key = { _, item -> item.id }
             ) { index, entry ->
                 val isActive = index == 0
                 BackstackEntryRow(entry = entry, isActive = isActive)
@@ -79,10 +77,7 @@ internal fun BackstackInspectorPanel(navigator: Navigator) {
 }
 
 @Composable
-private fun BackstackEntryRow(
-    entry: RouteEntry,
-    isActive: Boolean,
-) {
+private fun BackstackEntryRow(entry: RouteEntry, isActive: Boolean) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
@@ -90,8 +85,8 @@ private fun BackstackEntryRow(
                 .fillMaxWidth()
                 .background(
                     if (isActive) DevToolsColors.activeEntry else Color.Transparent,
-                    shape = MaterialTheme.shapes.small,
-                ).padding(horizontal = 8.dp, vertical = 3.dp),
+                    shape = MaterialTheme.shapes.small
+                ).padding(horizontal = 8.dp, vertical = 3.dp)
     ) {
         val dotColor =
             when (entry.lifecycleState) {
@@ -104,7 +99,7 @@ private fun BackstackEntryRow(
                 Modifier
                     .size(8.dp)
                     .clip(CircleShape)
-                    .background(dotColor),
+                    .background(dotColor)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
@@ -113,13 +108,13 @@ private fun BackstackEntryRow(
                 fontFamily = FontFamily.Monospace,
                 fontSize = 11.sp,
                 fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
-                color = DevToolsColors.text,
+                color = DevToolsColors.text
             )
             Text(
                 text = "id: ${entry.id.takeLast(8)}",
                 fontFamily = FontFamily.Monospace,
                 fontSize = 9.sp,
-                color = DevToolsColors.dimmed,
+                color = DevToolsColors.dimmed
             )
         }
     }

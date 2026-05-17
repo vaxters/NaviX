@@ -54,7 +54,7 @@ fun rememberNavigator(
     root: Route,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer(),
+    reducer: Reducer = DefaultReducer()
 ): Navigator {
     val scope = rememberCoroutineScope()
     // No key — root changes after first composition are ignored intentionally.
@@ -65,7 +65,7 @@ fun rememberNavigator(
             scope = scope,
             reducer = reducer,
             telemetry = telemetry,
-            deepLinkHandlers = deepLinkHandlers,
+            deepLinkHandlers = deepLinkHandlers
         )
     }
 }

@@ -69,12 +69,12 @@ fun NavPlaygroundScreen(navigator: Navigator) {
             Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(16.dp)
     ) {
         Text(
             text = "Navigation Playground",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
 
         Spacer(Modifier.height(4.dp))
@@ -83,13 +83,13 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Surface(
             shape = RoundedCornerShape(8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = "Backstack  [depth: ${snapshot.depth}]",
                     style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(4.dp))
                 snapshot.entries.reversed().forEachIndexed { index, entry ->
@@ -111,7 +111,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                                 MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
-                            },
+                            }
                     )
                 }
             }
@@ -129,12 +129,12 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                 ) + 1
             Button(
                 onClick = { navigator.push(NavPlaygroundStep(nextStep), NavTransitionKey.SlideLeft) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             ) { Text("Push Step $nextStep") }
             OutlinedButton(
                 onClick = { navigator.pop() },
                 enabled = snapshot.canPop,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             ) { Text("Pop") }
         }
 
@@ -151,7 +151,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                     ) + 1
                 navigator.replace(NavPlaygroundStep(nextStep), NavTransitionKey.Fade)
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Replace top with next Step") }
 
         Spacer(Modifier.height(12.dp))
@@ -160,7 +160,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Button(
             onClick = { navigator.reset(NavPlayground) },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
         ) { Text("Reset → Playground") }
 
         Spacer(Modifier.height(12.dp))
@@ -169,13 +169,13 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Button(
             onClick = { navigator.popTo<NavPlaygroundStep>(inclusive = false) },
             enabled = snapshot.entries.any { it.route is NavPlaygroundStep },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("popTo<Step>(inclusive=false)") }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Pops until the last Step entry is on top (Step is kept).",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(8.dp))
@@ -184,13 +184,13 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Button(
             onClick = { navigator.popTo<NavPlaygroundStep>(inclusive = true) },
             enabled = snapshot.entries.any { it.route is NavPlaygroundStep },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("popTo<Step>(inclusive=true)") }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Pops through and including the last Step entry.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(12.dp))
@@ -198,7 +198,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
 
         Button(
             onClick = { navigator.handleDeepLink("navix://product/playground-42") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("handleDeepLink(\"navix://product/playground-42\")") }
 
         Spacer(Modifier.height(12.dp))
@@ -211,12 +211,12 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                 "Fade" to NavTransitionKey.Fade,
                 "Scale" to NavTransitionKey.Scale,
                 "SharedAxisX" to NavTransitionKey.SharedAxisX,
-                "None" to NavTransitionKey.None,
+                "None" to NavTransitionKey.None
             )
         transitions.chunked(3).forEach { row ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 row.forEach { (label, key) ->
                     OutlinedButton(
@@ -229,7 +229,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                                 ) + 1
                             navigator.push(NavPlaygroundStep(nextStep), key)
                         },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
                     ) { Text(label, fontSize = 10.sp, maxLines = 1) }
                 }
             }
@@ -241,39 +241,39 @@ fun NavPlaygroundScreen(navigator: Navigator) {
 
         Button(
             onClick = { navigator.push(TabsDemo) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Multi-Stack Navigation Demo →") }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Independent per-tab backstacks with NavixMultiStack.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(8.dp))
 
         Button(
             onClick = { navigator.push(OverlayDemo) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Dialog Destinations Demo →") }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "First-class dialog/bottom-sheet entries via dialog<T> { } in NavixHost.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(8.dp))
 
         Button(
             onClick = { navigator.push(ResultPassingDemo) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Result Passing Demo →") }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "pushForResult<R> + setResult: coroutine-await result passing between screens.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(24.dp))
@@ -286,24 +286,24 @@ fun NavPlaygroundScreen(navigator: Navigator) {
 @Composable
 fun NavPlaygroundStepScreen(
     navigator: Navigator,
-    stepNumber: Int,
+    stepNumber: Int
 ) {
     Column(
         modifier =
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Step #$stepNumber",
             style = MaterialTheme.typography.displayMedium,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Spacer(Modifier.height(8.dp))
         Text(
             text = "You pushed this step. Use the playground controls to navigate.",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(24.dp))
 
@@ -323,7 +323,7 @@ private fun SectionHeader(title: String) {
         text = title,
         style = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.primary
     )
     Spacer(Modifier.height(6.dp))
 }

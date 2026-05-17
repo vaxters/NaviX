@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NavixDemoTheme {
                 DemoNavHost(
-                    deepLinkUri = intent?.data?.toString(),
+                    deepLinkUri = intent?.data?.toString()
                 )
             }
         }

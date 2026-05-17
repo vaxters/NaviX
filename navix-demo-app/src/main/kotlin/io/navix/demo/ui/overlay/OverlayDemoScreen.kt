@@ -61,12 +61,12 @@ fun OverlayDemoScreen(navigator: Navigator) {
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Dialog Destinations Demo",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Text(
             text =
@@ -74,13 +74,13 @@ fun OverlayDemoScreen(navigator: Navigator) {
                     "dialog<T> { } in NavixHost. The screen below stays composed. Pressing back " +
                     "or dismissing calls navigator.pop().",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(8.dp))
 
         Button(
             onClick = { navigator.push(ConfirmActionDialog) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Show Confirmation Dialog") }
 
         Spacer(Modifier.height(8.dp))
@@ -90,7 +90,7 @@ fun OverlayDemoScreen(navigator: Navigator) {
 
         OutlinedButton(
             onClick = { navigator.pop() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("← Back") }
     }
 }
@@ -106,7 +106,7 @@ fun OverlayDemoScreen(navigator: Navigator) {
 @Composable
 fun ConfirmDialogContent(
     onConfirm: () -> Unit,
-    onCancel: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
@@ -115,16 +115,16 @@ fun ConfirmDialogContent(
         modifier =
             Modifier
                 .fillMaxWidth(0.85f)
-                .padding(8.dp),
+                .padding(8.dp)
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Confirm Action",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(12.dp))
             Text(
@@ -132,21 +132,21 @@ fun ConfirmDialogContent(
                     "This dialog is a first-class backstack entry. The screen behind it " +
                         "stays fully composed. Back press calls navigator.pop().",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(24.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(
                     onClick = onCancel,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
                 ) { Text("Cancel") }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                        ),
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                 ) { Text("Confirm") }
             }
         }
@@ -156,18 +156,18 @@ fun ConfirmDialogContent(
 @Composable
 private fun StatusRow(
     label: String,
-    value: String,
+    value: String
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = label, style = MaterialTheme.typography.bodyMedium)
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Medium
         )
     }
 }
