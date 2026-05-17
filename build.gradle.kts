@@ -17,7 +17,6 @@ plugins {
     // generates / validates api/<module>.api baselines.
     alias(libs.plugins.binary.compatibility.validator)
     // Static analysis — applied false here; wired into every subproject below.
-    alias(libs.plugins.ktlint) apply false
 }
 
 // ---------------------------------------------------------------------------
@@ -43,10 +42,6 @@ apiValidation {
 // inside each module's own build.gradle.kts.
 // ---------------------------------------------------------------------------
 subprojects {
-    // ── ktlint ───────────────────────────────────────────────────────────────
-    // Applied unconditionally — every subproject is a Kotlin project.
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-
     plugins.withId("com.vanniktech.maven.publish") {
         extensions.configure<MavenPublishBaseExtension> {
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)

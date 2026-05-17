@@ -61,7 +61,6 @@ Run all tests locally before submitting:
 
 ## Code Style
 
-- Kotlin standard style (ktlint enforced in CI)
 - No comments unless the WHY is non-obvious
 - No `TODO`/`FIXME` without an associated GitHub issue link
 - No reflection — zero `Class.forName`, no `kotlin.reflect` in `commonMain`

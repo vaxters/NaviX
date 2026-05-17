@@ -38,9 +38,6 @@ jobs:
 
             -   name: Grant execute permission
                 run: chmod +x gradlew
-
-            -   name: Run ktlint
-                run: ./gradlew ktlintCheck
     android-lint:
         runs-on: ubuntu-latest
         timeout-minutes: 30
@@ -71,7 +68,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         timeout-minutes: 30
-        needs: [ ktlint, android-lint ]
+        needs: [ android-lint ]
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4

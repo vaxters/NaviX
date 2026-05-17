@@ -26,7 +26,6 @@ kotlinCompileTesting = "0.6.0"
 lint = "31.7.3"
 robolectric = "4.14.1"
 androidxTestCore = "1.6.1"
-ktlint-gradle = "12.1.2"
 
 [libraries]
 # Kotlin
@@ -97,4 +96,3 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPublish" }
 binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
