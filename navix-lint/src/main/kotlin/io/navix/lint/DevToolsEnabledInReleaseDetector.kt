@@ -43,8 +43,8 @@ import org.jetbrains.uast.ULiteralExpression
 class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UCallExpression::class.java)
 
-    override fun createUastHandler(context: JavaContext): UElementHandler =
-        object : UElementHandler() {
+    override fun createUastHandler(context: JavaContext): UElementHandler {
+        return object : UElementHandler() {
             override fun visitCallExpression(node: UCallExpression) {
                 if (node.methodName != COMPOSABLE_NAME) return
 
@@ -72,6 +72,7 @@ class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
                 }
             }
         }
+    }
 
     companion object {
         private const val COMPOSABLE_NAME = "NavixDevToolsOverlay"

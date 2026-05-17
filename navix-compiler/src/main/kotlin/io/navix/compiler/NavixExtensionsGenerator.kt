@@ -89,8 +89,8 @@ internal class NavixExtensionsGenerator(
             }
     }
 
-    private fun generateExtension(descriptor: RouteDestinationDescriptor): String =
-        buildString {
+    private fun generateExtension(descriptor: RouteDestinationDescriptor): String {
+        return buildString {
             val fnName = "navigateTo${descriptor.className}"
             val params = descriptor.constructorParams
 
@@ -115,4 +115,5 @@ internal class NavixExtensionsGenerator(
                 appendLine("}")
             }
         }
+    }
 }

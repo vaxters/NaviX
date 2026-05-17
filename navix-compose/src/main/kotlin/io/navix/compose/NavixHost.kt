@@ -123,13 +123,14 @@ fun NavixHost(
     // Keyed by entry.id — owns lifecycle + SavedState; ViewModelStore is injected.
     val ownerMap = remember { HashMap<String, NavBackStackEntryOwner>() }
 
-    fun ownerFor(id: String): NavBackStackEntryOwner =
-        ownerMap.getOrPut(id) {
+    fun ownerFor(id: String): NavBackStackEntryOwner {
+        return ownerMap.getOrPut(id) {
             NavBackStackEntryOwner(
                 viewModelStore = ownerStore.storeFor(id),
                 restoredBundle = holder?.consumeRestoredState(id)
             ).also { holder?.registerOwner(id, it) }
         }
+    }
 
     fun evict(id: String) {
         ownerMap.remove(id)?.destroy()

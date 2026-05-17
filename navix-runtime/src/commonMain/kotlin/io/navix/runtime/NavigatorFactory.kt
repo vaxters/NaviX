@@ -41,8 +41,8 @@ fun createNavigator(
     entryFactory: EntryFactory = DefaultEntryFactory,
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList()
-): Navigator =
-    NavigatorImpl(
+): Navigator {
+    return NavigatorImpl(
         root = root,
         scope = scope,
         reducer = reducer,
@@ -50,6 +50,7 @@ fun createNavigator(
         telemetry = telemetry,
         deepLinkHandlers = deepLinkHandlers
     )
+}
 
 /**
  * Restores a [Navigator] from a previously serialised [BackstackSnapshot].

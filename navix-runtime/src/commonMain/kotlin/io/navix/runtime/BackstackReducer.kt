@@ -73,14 +73,15 @@ fun interface EntryFactory {
  */
 object DefaultEntryFactory : EntryFactory {
     @OptIn(ExperimentalUuidApi::class)
-    override fun create(route: Route, transition: NavTransitionKey): RouteEntry =
-        RouteEntry(
+    override fun create(route: Route, transition: NavTransitionKey): RouteEntry {
+        return RouteEntry(
             id = Uuid.random().toString(),
             route = route,
             createdAt = Clock.System.now().toEpochMilliseconds(),
             lifecycleState = NavLifecycleState.RESUMED,
             transitionKey = transition
         )
+    }
 }
 
 /**
@@ -96,8 +97,8 @@ object DefaultEntryFactory : EntryFactory {
  * - Each entry's [RouteEntry.transitionKey] records the animation used when it became active.
  */
 class DefaultReducer(private val entryFactory: EntryFactory = DefaultEntryFactory) : Reducer {
-    override fun reduce(snapshot: BackstackSnapshot, action: BackstackAction): BackstackSnapshot =
-        when (action) {
+    override fun reduce(snapshot: BackstackSnapshot, action: BackstackAction): BackstackSnapshot {
+        return when (action) {
             is BackstackAction.Push ->
                 snapshot.withEntries(
                     snapshot.entries.map { it.copy(lifecycleState = NavLifecycleState.STARTED) } +
@@ -166,6 +167,7 @@ class DefaultReducer(private val entryFactory: EntryFactory = DefaultEntryFactor
                 }
             }
         }
+    }
 }
 
 private fun BackstackSnapshot.withEntries(entries: List<RouteEntry>): BackstackSnapshot = copy(entries = entries)

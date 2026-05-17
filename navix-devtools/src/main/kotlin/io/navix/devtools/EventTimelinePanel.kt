@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -154,8 +155,8 @@ private fun EventRow(event: NavEvent) {
     }
 }
 
-private fun NavEventType.badge() =
-    when (this) {
+private fun NavEventType.badge(): String {
+    return when (this) {
         NavEventType.PUSH -> "PUSH"
         NavEventType.POP -> "POP "
         NavEventType.REPLACE -> "REPL"
@@ -163,9 +164,10 @@ private fun NavEventType.badge() =
         NavEventType.POP_TO -> "POPT"
         NavEventType.DEEP_LINK -> "DEEP"
     }
+}
 
-private fun NavEventType.color() =
-    when (this) {
+private fun NavEventType.color(): Color {
+    return when (this) {
         NavEventType.PUSH -> DevToolsColors.push
         NavEventType.POP -> DevToolsColors.pop
         NavEventType.REPLACE -> DevToolsColors.replace
@@ -173,5 +175,6 @@ private fun NavEventType.color() =
         NavEventType.POP_TO -> DevToolsColors.pop
         NavEventType.DEEP_LINK -> DevToolsColors.deepLink
     }
+}
 
 private const val MAX_EVENTS = 100

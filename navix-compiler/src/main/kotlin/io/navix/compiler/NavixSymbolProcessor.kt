@@ -89,10 +89,11 @@ internal class NavixSymbolProcessor(
 
 /** Registered via META-INF/services — KSP uses this to discover the processor. */
 class NavixSymbolProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor =
-        NavixSymbolProcessor(
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+        return NavixSymbolProcessor(
             codeGenerator = environment.codeGenerator,
             logger = environment.logger,
             options = environment.options
         )
+    }
 }

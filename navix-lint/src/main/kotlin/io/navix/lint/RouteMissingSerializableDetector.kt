@@ -51,8 +51,8 @@ import org.jetbrains.uast.UElement
 class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
 
-    override fun createUastHandler(context: JavaContext): UElementHandler =
-        object : UElementHandler() {
+    override fun createUastHandler(context: JavaContext): UElementHandler {
+        return object : UElementHandler() {
             override fun visitClass(node: UClass) {
                 val hasRouteDestination =
                     node.uAnnotations.any { annotation ->
@@ -86,6 +86,7 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
                 )
             }
         }
+    }
 
     companion object {
         private const val ROUTE_DESTINATION_FQN = "io.navix.annotations.RouteDestination"
