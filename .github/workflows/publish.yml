@@ -39,7 +39,7 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
                 with:
                     fetch-depth: 0
 
@@ -69,19 +69,19 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
                 with:
                     fetch-depth: 0   # full history required by git-cliff
                     token: ${{ secrets.RELEASE_TOKEN || github.token }}
 
             -   name: Set up JDK 17
-                uses: actions/setup-java@v4
+                uses: actions/setup-java@v5
                 with:
                     java-version: '17'
                     distribution: 'temurin'
 
             -   name: Set up Gradle
-                uses: gradle/actions/setup-gradle@v3
+                uses: gradle/actions/setup-gradle@v6
                 with:
                     gradle-home-cache-cleanup: true
 
