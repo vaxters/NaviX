@@ -59,9 +59,8 @@ internal class RouteDestinationVisitor(
         val routeValue = annotation.arguments.firstOrNull { it.name?.asString() == "route" }?.value as? String ?: ""
         val canonicalRoute = routeValue.ifBlank { "$packageName.$className" }
 
-        val deepLinkValues =
-            (annotation.arguments.firstOrNull { it.name?.asString() == "deepLinks" }?.value as? List<*>)?.filterIsInstance<String>()
-                ?: emptyList()
+        val deepLinks = annotation.arguments.firstOrNull { it.name?.asString() == "deepLinks" }?.value as? List<*>
+        val deepLinkValues = deepLinks?.filterIsInstance<String>() ?: emptyList()
 
         val parsedTemplates = deepLinkValues.mapNotNull { template ->
             DeepLinkTemplateParser.parse(template).fold(
