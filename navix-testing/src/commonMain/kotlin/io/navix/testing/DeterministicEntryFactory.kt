@@ -38,7 +38,9 @@ import io.navix.runtime.EntryFactory
  *
  * This is the default factory used by [FakeNavigator].
  */
-class DeterministicEntryFactory(private var seed: Int = 0) : EntryFactory {
+class DeterministicEntryFactory(
+    private var seed: Int = 0,
+) : EntryFactory {
     override fun create(
         route: Route,
         transition: NavTransitionKey,

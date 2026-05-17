@@ -46,8 +46,7 @@ class ProductReviewsViewModel(
             getProductReviews(productId)
                 .onSuccess { reviews ->
                     _uiState.update { it.copy(reviews = reviews, isLoading = false) }
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _uiState.update { it.copy(isLoading = false, error = error.message) }
                 }
         }

@@ -48,7 +48,9 @@ import org.jetbrains.uast.UElement
  * data class ProductDetail(val id: String) : Route
  * ```
  */
-class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
+class RouteMissingSerializableDetector :
+    Detector(),
+    SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =
@@ -58,10 +60,12 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
                     node.uAnnotations.any { annotation ->
                         val name =
                             annotation.qualifiedName ?: annotation.attributeValues
-                                .firstOrNull()?.name
-                        name == ROUTE_DESTINATION_FQN || annotation.qualifiedName?.endsWith(
-                            ".RouteDestination",
-                        ) == true
+                                .firstOrNull()
+                                ?.name
+                        name == ROUTE_DESTINATION_FQN ||
+                            annotation.qualifiedName?.endsWith(
+                                ".RouteDestination",
+                            ) == true
                     }
                 if (!hasRouteDestination) return
 

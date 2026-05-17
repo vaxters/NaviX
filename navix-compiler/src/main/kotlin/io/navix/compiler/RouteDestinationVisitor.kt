@@ -45,9 +45,10 @@ internal class RouteDestinationVisitor(
         val packageName = classDeclaration.packageName.asString()
         val className = classDeclaration.simpleName.asString()
 
-        val isSerializable = classDeclaration.annotations.any {
-            it.shortName.asString() == "Serializable"
-        }
+        val isSerializable =
+            classDeclaration.annotations.any {
+                it.shortName.asString() == "Serializable"
+            }
         if (!isSerializable) {
             logger.error(
                 "@RouteDestination class '$className' must also be annotated with @Serializable.",
@@ -62,22 +63,27 @@ internal class RouteDestinationVisitor(
         val deepLinks = annotation.arguments.firstOrNull { it.name?.asString() == "deepLinks" }?.value as? List<*>
         val deepLinkValues = deepLinks?.filterIsInstance<String>() ?: emptyList()
 
-        val parsedTemplates = deepLinkValues.mapNotNull { template ->
-            DeepLinkTemplateParser.parse(template).fold(
-                onSuccess = { it },
-                onFailure = { err ->
-                    logger.error(
-                        "Invalid deep link template '$template' on '$className': ${err.message}",
-                        classDeclaration,
-                    )
-                    null
-                },
-            )
-        }
+        val parsedTemplates =
+            deepLinkValues.mapNotNull { template ->
+                DeepLinkTemplateParser.parse(template).fold(
+                    onSuccess = { it },
+                    onFailure = { err ->
+                        logger.error(
+                            "Invalid deep link template '$template' on '$className': ${err.message}",
+                            classDeclaration,
+                        )
+                        null
+                    },
+                )
+            }
 
-        val constructorParams = classDeclaration.primaryConstructor?.parameters?.map { param ->
-            ConstructorParam(name = param.name?.asString() ?: "_", typeName = param.type.resolve().toKotlinTypeName())
-        } ?: emptyList()
+        val constructorParams =
+            classDeclaration.primaryConstructor?.parameters?.map { param ->
+                ConstructorParam(
+                    name = param.name?.asString() ?: "_",
+                    typeName = param.type.resolve().toKotlinTypeName(),
+                )
+            } ?: emptyList()
 
         descriptors.add(
             RouteDestinationDescriptor(

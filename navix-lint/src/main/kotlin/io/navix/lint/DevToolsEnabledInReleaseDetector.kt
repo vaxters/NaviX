@@ -40,7 +40,9 @@ import org.jetbrains.uast.ULiteralExpression
  * Unsafe pattern (flagged):
  * - `NavixDevToolsOverlay(navigator, enabled = true)` — ships debug UI to production
  */
-class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
+class DevToolsEnabledInReleaseDetector :
+    Detector(),
+    SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UCallExpression::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =

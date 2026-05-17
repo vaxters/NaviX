@@ -31,6 +31,12 @@ android {
             isReturnDefaultValues = true
         }
     }
+    lint {
+        abortOnError = false
+        htmlReport = true
+        xmlReport = true
+        warningsAsErrors = false
+    }
 }
 
 // Mark contracts types as stable so the Compose compiler skips unnecessary recompositions

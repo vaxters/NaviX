@@ -174,7 +174,11 @@ class FakeNavigator(
         _emittedEventTypes.add(NavEventType.RESET)
         _events.tryEmit(NavEvent(NavEventType.RESET, prev, _backstack.value.active, 0L))
         // Cancel all pending results for entries removed by the reset.
-        val removedIds = before.entries.map { it.id } - _backstack.value.entries.map { it.id }.toSet()
+        val removedIds =
+            before.entries.map { it.id } -
+                _backstack.value.entries
+                    .map { it.id }
+                    .toSet()
         for (id in removedIds) {
             pendingResults.remove(id)?.complete(pendingResultValues.remove(id))
             pendingResultValues.remove(id)

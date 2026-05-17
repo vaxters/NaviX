@@ -28,7 +28,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal class CounterViewModel(val handle: SavedStateHandle) : ViewModel()
+internal class CounterViewModel(
+    val handle: SavedStateHandle,
+) : ViewModel()
 
 /**
  * Authoritative process-death proof for the per-entry [androidx.savedstate.SavedStateRegistry]

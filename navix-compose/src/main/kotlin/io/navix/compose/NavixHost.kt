@@ -296,7 +296,9 @@ fun NavixHost(
 
                 DisposableEffect(entry.id) {
                     onDispose {
-                        if (navigator.backstack.value.entries.none { it.id == entry.id }) {
+                        if (navigator.backstack.value.entries
+                                .none { it.id == entry.id }
+                        ) {
                             evict(entry.id)
                         }
                     }
@@ -398,7 +400,9 @@ private fun NavixOverlayContent(
 
     DisposableEffect(overlayEntry.id) {
         onDispose {
-            if (navigator.backstack.value.entries.none { it.id == overlayEntry.id }) {
+            if (navigator.backstack.value.entries
+                    .none { it.id == overlayEntry.id }
+            ) {
                 evict(overlayEntry.id)
             }
         }

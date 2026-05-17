@@ -16,7 +16,9 @@ plugins {
     // Applied to the root project; it scans every subproject's public API and
     // generates / validates api/<module>.api baselines.
     alias(libs.plugins.binary.compatibility.validator)
-    // Static analysis — applied false here; wired into every subproject below.
+    // Declared here (apply false) so Spotless classes are on the buildscript
+    // classpath for the subprojects{} configuration block below.
+    alias(libs.plugins.spotless) apply false
 }
 
 // ---------------------------------------------------------------------------
@@ -36,12 +38,26 @@ apiValidation {
 }
 
 // ---------------------------------------------------------------------------
-// Shared Maven Central publishing configuration
-// Applied automatically to every subproject that applies the vanniktech plugin.
-// Module-specific fields (name, description, coordinates override) are set
-// inside each module's own build.gradle.kts.
+// Subproject configuration — Spotless formatting + Maven Central publishing
+// Spotless:  ./gradlew spotlessApply   auto-format | spotlessCheck   CI gate
+// Publishing: applied automatically to every subproject with vanniktech plugin.
+// Module-specific fields (name, description) are set in each module's build.gradle.kts.
 // ---------------------------------------------------------------------------
 subprojects {
+    apply(plugin = "com.diffplug.spotless")
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            ktlint("1.5.0")
+                .setEditorConfigPath("${rootProject.projectDir}/.editorconfig")
+            target("src/**/*.kt")
+        }
+        kotlinGradle {
+            ktlint("1.5.0")
+                .setEditorConfigPath("${rootProject.projectDir}/.editorconfig")
+            target("*.gradle.kts")
+        }
+    }
+
     plugins.withId("com.vanniktech.maven.publish") {
         extensions.configure<MavenPublishBaseExtension> {
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)

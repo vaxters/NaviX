@@ -269,9 +269,10 @@ fun rememberSaveableNavixMultiStack(
                         sharedHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
                         val tabStacks = NavixPersistedState.unpackTabBackstacks(blob)
                         val bytesByKey =
-                            specs.mapNotNull { spec ->
-                                tabStacks.getByteArray(spec.key)?.let { spec.key to it }
-                            }.toMap()
+                            specs
+                                .mapNotNull { spec ->
+                                    tabStacks.getByteArray(spec.key)?.let { spec.key to it }
+                                }.toMap()
                         build(bytesByKey, NavixPersistedState.unpackTabIndex(blob, initialTabIndex))
                     }
                 },

@@ -80,9 +80,7 @@ class NavixTelemetryPipelineTest {
                     exporters =
                         listOf(
                             object : NavEventExporter {
-                                override fun export(event: NavEvent) {
-                                    throw RuntimeException("oops")
-                                }
+                                override fun export(event: NavEvent): Unit = throw RuntimeException("oops")
                             },
                             object : NavEventExporter {
                                 override fun export(event: NavEvent) {

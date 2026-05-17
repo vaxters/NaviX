@@ -17,7 +17,6 @@ package io.navix.runtime
 
 import io.navix.contracts.BackstackSnapshot
 import io.navix.contracts.NavLifecycleState
-import io.navix.contracts.NavTransitionKey
 import io.navix.contracts.RouteEntry
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,17 +27,6 @@ class BackstackReducerTest {
     // Shared reducer instance — a single DefaultReducer with a deterministic factory
     // so that entry IDs are predictable and snapshot equality is reliable across calls.
     private var entryCounter = 0
-
-    private fun nextEntry(
-        route: io.navix.contracts.Route,
-        transition: NavTransitionKey = NavTransitionKey.Default,
-    ) = RouteEntry(
-        id = "id-${entryCounter++}",
-        route = route,
-        createdAt = 0L,
-        lifecycleState = NavLifecycleState.RESUMED,
-        transitionKey = transition,
-    )
 
     private val reducer =
         DefaultReducer(

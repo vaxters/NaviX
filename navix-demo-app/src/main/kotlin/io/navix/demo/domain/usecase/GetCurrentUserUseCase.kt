@@ -21,6 +21,8 @@ import io.navix.demo.data.repository.UserRepository
 /**
  * Returns the currently signed-in [User] wrapped in a [Result].
  */
-class GetCurrentUserUseCase(private val repository: UserRepository) {
+class GetCurrentUserUseCase(
+    private val repository: UserRepository,
+) {
     suspend operator fun invoke(): Result<User> = runCatching { repository.getCurrentUser() }
 }

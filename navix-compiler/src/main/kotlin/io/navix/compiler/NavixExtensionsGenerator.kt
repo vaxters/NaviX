@@ -55,7 +55,8 @@ internal class NavixExtensionsGenerator(
         if (descriptors.isEmpty()) return
 
         val sanitized =
-            moduleName.replaceFirstChar { it.uppercaseChar() }
+            moduleName
+                .replaceFirstChar { it.uppercaseChar() }
                 .replace(Regex("[^a-zA-Z0-9]"), "")
         val fileName = "${sanitized}NavixExtensions"
         val packageName = "io.navix.generated"
@@ -81,13 +82,14 @@ internal class NavixExtensionsGenerator(
                 }
             }
 
-        codeGenerator.createNewFile(
-            dependencies = Dependencies(aggregating = true),
-            packageName = packageName,
-            fileName = fileName,
-        ).use { stream ->
-            stream.write(source.toByteArray())
-        }
+        codeGenerator
+            .createNewFile(
+                dependencies = Dependencies(aggregating = true),
+                packageName = packageName,
+                fileName = fileName,
+            ).use { stream ->
+                stream.write(source.toByteArray())
+            }
     }
 
     private fun generateExtension(descriptor: RouteDestinationDescriptor): String =

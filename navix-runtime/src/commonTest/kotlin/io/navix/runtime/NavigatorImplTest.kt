@@ -59,7 +59,10 @@ class NavigatorImplTest {
     fun backstack_afterInit_containsRoot() {
         val nav = navigator()
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<HomeRoute>(nav.backstack.value.active?.route)
+        assertIs<HomeRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     // ── Push ──────────────────────────────────────────────────────────────
@@ -69,7 +72,10 @@ class NavigatorImplTest {
         val nav = navigator()
         nav.push(DetailRoute("42"))
         assertEquals(2, nav.backstack.value.depth)
-        assertIs<DetailRoute>(nav.backstack.value.active?.route)
+        assertIs<DetailRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -90,7 +96,11 @@ class NavigatorImplTest {
     fun push_withTransitionKey_stampsActiveEntryWithKey() {
         val nav = navigator()
         nav.push(DetailRoute("1"), NavTransitionKey.SlideLeft)
-        assertEquals(NavTransitionKey.SlideLeft, nav.backstack.value.active?.transitionKey)
+        assertEquals(
+            NavTransitionKey.SlideLeft,
+            nav.backstack.value.active
+                ?.transitionKey,
+        )
     }
 
     // ── Pop ───────────────────────────────────────────────────────────────
@@ -100,7 +110,10 @@ class NavigatorImplTest {
         val nav = navigator()
         nav.pop()
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<HomeRoute>(nav.backstack.value.active?.route)
+        assertIs<HomeRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -109,7 +122,10 @@ class NavigatorImplTest {
         nav.push(DetailRoute("1"))
         nav.pop()
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<HomeRoute>(nav.backstack.value.active?.route)
+        assertIs<HomeRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -132,7 +148,10 @@ class NavigatorImplTest {
         val nav = navigator()
         nav.replace(SettingsRoute)
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<SettingsRoute>(nav.backstack.value.active?.route)
+        assertIs<SettingsRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -156,7 +175,10 @@ class NavigatorImplTest {
         nav.push(SettingsRoute)
         nav.reset(ProfileRoute)
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<ProfileRoute>(nav.backstack.value.active?.route)
+        assertIs<ProfileRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -182,7 +204,10 @@ class NavigatorImplTest {
         nav.push(ProfileRoute)
         nav.popTo<DetailRoute>()
         assertEquals(2, nav.backstack.value.depth)
-        assertIs<DetailRoute>(nav.backstack.value.active?.route)
+        assertIs<DetailRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
     }
 
     // ── Deep link ─────────────────────────────────────────────────────────
@@ -203,8 +228,17 @@ class NavigatorImplTest {
             }
         val nav = navigator(deepLinkHandlers = listOf(handler))
         assertTrue(nav.handleDeepLink("myapp://detail/99"))
-        assertIs<DetailRoute>(nav.backstack.value.active?.route)
-        assertEquals("99", (nav.backstack.value.active?.route as DetailRoute).id)
+        assertIs<DetailRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
+        assertEquals(
+            "99",
+            (
+                nav.backstack.value.active
+                    ?.route as DetailRoute
+            ).id,
+        )
     }
 
     @Test
@@ -262,7 +296,10 @@ class NavigatorImplTest {
 
         // Backstack reflects both operations: root entry only after push + pop
         assertEquals(1, nav.backstack.value.depth)
-        assertIs<HomeRoute>(nav.backstack.value.active?.route)
+        assertIs<HomeRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
 
         // POP telemetry callback did NOT throw, so it was delivered
         assertEquals(1, received.size)
@@ -290,8 +327,17 @@ class NavigatorImplTest {
             }
         val nav = navigator(deepLinkHandlers = listOf(nullResolvingHandler, fallbackHandler))
         assertTrue(nav.handleDeepLink("myapp://detail/42"))
-        assertIs<DetailRoute>(nav.backstack.value.active?.route)
-        assertEquals("42", (nav.backstack.value.active?.route as DetailRoute).id)
+        assertIs<DetailRoute>(
+            nav.backstack.value.active
+                ?.route,
+        )
+        assertEquals(
+            "42",
+            (
+                nav.backstack.value.active
+                    ?.route as DetailRoute
+            ).id,
+        )
     }
 
     // ── State restoration ─────────────────────────────────────────────────
@@ -313,7 +359,10 @@ class NavigatorImplTest {
             )
 
         assertEquals(3, restored.backstack.value.depth)
-        assertIs<SettingsRoute>(restored.backstack.value.active?.route)
+        assertIs<SettingsRoute>(
+            restored.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -329,7 +378,10 @@ class NavigatorImplTest {
             )
 
         assertEquals(1, restored.backstack.value.depth)
-        assertIs<HomeRoute>(restored.backstack.value.active?.route)
+        assertIs<HomeRoute>(
+            restored.backstack.value.active
+                ?.route,
+        )
     }
 
     @Test
@@ -347,7 +399,9 @@ class NavigatorImplTest {
                 saver = saver,
             )
 
-        val restoredRoute = restored.backstack.value.active?.route
+        val restoredRoute =
+            restored.backstack.value.active
+                ?.route
         assertNotNull(restoredRoute)
         assertIs<DetailRoute>(restoredRoute)
         assertEquals("product-99", restoredRoute.id)
@@ -362,7 +416,13 @@ class NavigatorImplTest {
         repeat(5) { i -> nav.push(DetailRoute("$i")) }
         // With UnconfinedTestDispatcher the actor processes all 5 immediately.
         assertEquals(6, nav.backstack.value.depth) // root + 5 pushes
-        assertEquals("4", (nav.backstack.value.active?.route as DetailRoute).id)
+        assertEquals(
+            "4",
+            (
+                nav.backstack.value.active
+                    ?.route as DetailRoute
+            ).id,
+        )
     }
 
     // Unlike the rapid-fire test above (single call site), this exercises the documented

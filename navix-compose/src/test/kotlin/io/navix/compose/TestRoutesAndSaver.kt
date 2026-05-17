@@ -44,13 +44,15 @@ internal object TestSaver : NavigatorSaver {
             .associateBy { it::class.simpleName!! }
 
     override fun save(snapshot: BackstackSnapshot): ByteArray =
-        snapshot.entries.joinToString("\n") { "${it.id}|${it.route::class.simpleName}" }
+        snapshot.entries
+            .joinToString("\n") { "${it.id}|${it.route::class.simpleName}" }
             .encodeToByteArray()
 
     override fun restore(bytes: ByteArray): BackstackSnapshot? =
         runCatching {
             BackstackSnapshot(
-                bytes.decodeToString()
+                bytes
+                    .decodeToString()
                     .split("\n")
                     .filter { it.isNotBlank() }
                     .map { line ->

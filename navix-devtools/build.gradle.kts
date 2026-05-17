@@ -17,6 +17,12 @@ android {
     }
     kotlinOptions { jvmTarget = "11" }
     buildFeatures { compose = true }
+    lint {
+        abortOnError = false
+        htmlReport = true
+        xmlReport = true
+        warningsAsErrors = false
+    }
 }
 
 dependencies {

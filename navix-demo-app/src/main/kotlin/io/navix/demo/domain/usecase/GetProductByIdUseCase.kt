@@ -23,6 +23,8 @@ import io.navix.demo.data.repository.ProductRepository
  * the product does not exist and a [Failure][Result.isFailure] when the data source
  * throws.
  */
-class GetProductByIdUseCase(private val repository: ProductRepository) {
+class GetProductByIdUseCase(
+    private val repository: ProductRepository,
+) {
     suspend operator fun invoke(id: String): Result<Product?> = runCatching { repository.getProduct(id) }
 }

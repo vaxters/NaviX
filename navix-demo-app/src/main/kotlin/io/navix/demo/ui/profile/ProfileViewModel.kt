@@ -45,8 +45,7 @@ class ProfileViewModel(
             getCurrentUser()
                 .onSuccess { user ->
                     _uiState.update { it.copy(user = user, isLoading = false) }
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _uiState.update { it.copy(isLoading = false, error = error.message) }
                 }
         }

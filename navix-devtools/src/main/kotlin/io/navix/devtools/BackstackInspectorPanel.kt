@@ -56,10 +56,11 @@ internal fun BackstackInspectorPanel(navigator: Navigator) {
     Column {
         Text(
             text = "Backstack  [depth: ${snapshot.depth}]",
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = FontWeight.Bold,
-                color = DevToolsColors.header,
-            ),
+            style =
+                MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = DevToolsColors.header,
+                ),
             modifier = Modifier.padding(bottom = 4.dp),
         )
 
@@ -78,27 +79,32 @@ internal fun BackstackInspectorPanel(navigator: Navigator) {
 }
 
 @Composable
-private fun BackstackEntryRow(entry: RouteEntry, isActive: Boolean) {
+private fun BackstackEntryRow(
+    entry: RouteEntry,
+    isActive: Boolean,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                if (isActive) DevToolsColors.activeEntry else Color.Transparent,
-                shape = MaterialTheme.shapes.small,
-            )
-            .padding(horizontal = 8.dp, vertical = 3.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    if (isActive) DevToolsColors.activeEntry else Color.Transparent,
+                    shape = MaterialTheme.shapes.small,
+                ).padding(horizontal = 8.dp, vertical = 3.dp),
     ) {
-        val dotColor = when (entry.lifecycleState) {
-            NavLifecycleState.RESUMED -> DevToolsColors.resumed
-            NavLifecycleState.STARTED -> DevToolsColors.started
-            else -> DevToolsColors.dimmed
-        }
+        val dotColor =
+            when (entry.lifecycleState) {
+                NavLifecycleState.RESUMED -> DevToolsColors.resumed
+                NavLifecycleState.STARTED -> DevToolsColors.started
+                else -> DevToolsColors.dimmed
+            }
         Spacer(
-            modifier = Modifier
-                .size(8.dp)
-                .clip(CircleShape)
-                .background(dotColor),
+            modifier =
+                Modifier
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(dotColor),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {

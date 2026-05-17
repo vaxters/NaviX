@@ -37,8 +37,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -64,8 +63,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
@@ -83,8 +81,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
@@ -102,8 +99,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }

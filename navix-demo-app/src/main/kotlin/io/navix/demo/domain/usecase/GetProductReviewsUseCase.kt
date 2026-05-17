@@ -21,7 +21,9 @@ import io.navix.demo.data.repository.ProductRepository
 /**
  * Returns all [Review]s for the given [productId] wrapped in a [Result].
  */
-class GetProductReviewsUseCase(private val repository: ProductRepository) {
+class GetProductReviewsUseCase(
+    private val repository: ProductRepository,
+) {
     suspend operator fun invoke(productId: String): Result<List<Review>> =
         runCatching { repository.getReviews(productId) }
 }

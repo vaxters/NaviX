@@ -39,8 +39,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     data class ProductDetail(val id: String) : Route
                     """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -65,8 +64,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     data object Home : Route
                     """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -95,8 +93,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     data class ProductDetail(val id: String) : Route
                     """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
@@ -113,8 +110,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     data class SomeDto(val value: String)
                     """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
@@ -129,8 +125,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     data class NoAnnotation(val x: Int)
                     """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }

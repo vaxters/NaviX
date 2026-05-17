@@ -123,9 +123,10 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             val nextStep =
                 (
-                    snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                    snapshot.entries
+                        .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                         .maxOrNull() ?: 0
-                    ) + 1
+                ) + 1
             Button(
                 onClick = { navigator.push(NavPlaygroundStep(nextStep), NavTransitionKey.SlideLeft) },
                 modifier = Modifier.weight(1f),
@@ -144,9 +145,10 @@ fun NavPlaygroundScreen(navigator: Navigator) {
             onClick = {
                 val nextStep =
                     (
-                        snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                        snapshot.entries
+                            .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                             .maxOrNull() ?: 0
-                        ) + 1
+                    ) + 1
                 navigator.replace(NavPlaygroundStep(nextStep), NavTransitionKey.Fade)
             },
             modifier = Modifier.fillMaxWidth(),
@@ -221,9 +223,10 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                         onClick = {
                             val nextStep =
                                 (
-                                    snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                                    snapshot.entries
+                                        .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                                         .maxOrNull() ?: 0
-                                    ) + 1
+                                ) + 1
                             navigator.push(NavPlaygroundStep(nextStep), key)
                         },
                         modifier = Modifier.weight(1f),

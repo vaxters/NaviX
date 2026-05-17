@@ -65,13 +65,14 @@ internal class SerializersModuleGenerator(
         val (valName, source) = buildSerializersModuleSource(descriptors, moduleName)
         val packageName = "io.navix.generated"
 
-        codeGenerator.createNewFile(
-            dependencies = Dependencies(aggregating = true),
-            packageName = packageName,
-            fileName = valName,
-        ).use { stream ->
-            stream.write(source.toByteArray())
-        }
+        codeGenerator
+            .createNewFile(
+                dependencies = Dependencies(aggregating = true),
+                packageName = packageName,
+                fileName = valName,
+            ).use { stream ->
+                stream.write(source.toByteArray())
+            }
     }
 }
 
@@ -85,7 +86,8 @@ internal fun buildSerializersModuleSource(
     moduleName: String,
 ): Pair<String, String> {
     val sanitized =
-        moduleName.replaceFirstChar { it.uppercaseChar() }
+        moduleName
+            .replaceFirstChar { it.uppercaseChar() }
             .replace(Regex("[^a-zA-Z0-9]"), "")
     val valName = "${sanitized}NavixSerializersModule"
     val packageName = "io.navix.generated"

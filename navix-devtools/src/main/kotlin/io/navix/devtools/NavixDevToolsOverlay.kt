@@ -152,8 +152,7 @@ fun NavixDevToolsOverlay(
                                     awaitPointerEvent(pass = PointerEventPass.Final).changes.forEach { it.consume() }
                                 }
                             }
-                        }
-                        .padding(12.dp),
+                        }.padding(12.dp),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

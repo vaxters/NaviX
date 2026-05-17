@@ -45,7 +45,8 @@ internal class RouteRegistryGenerator(
         if (descriptors.isEmpty()) return
 
         val sanitized =
-            moduleName.replaceFirstChar { it.uppercaseChar() }
+            moduleName
+                .replaceFirstChar { it.uppercaseChar() }
                 .replace(Regex("[^a-zA-Z0-9]"), "")
         val objectName = "${sanitized}NavixRouteRegistry"
         val packageName = "io.navix.generated"
@@ -69,12 +70,13 @@ internal class RouteRegistryGenerator(
                 appendLine("}")
             }
 
-        codeGenerator.createNewFile(
-            dependencies = Dependencies(aggregating = true),
-            packageName = packageName,
-            fileName = objectName,
-        ).use { stream ->
-            stream.write(source.toByteArray())
-        }
+        codeGenerator
+            .createNewFile(
+                dependencies = Dependencies(aggregating = true),
+                packageName = packageName,
+                fileName = objectName,
+            ).use { stream ->
+                stream.write(source.toByteArray())
+            }
     }
 }

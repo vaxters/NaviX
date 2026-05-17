@@ -39,7 +39,9 @@ package io.navix.runtime
  */
 sealed class NavResult<out R> {
     /** The target screen called [Navigator.setResult] with a value of type [R]. */
-    data class Success<R>(val value: R) : NavResult<R>()
+    data class Success<R>(
+        val value: R,
+    ) : NavResult<R>()
 
     /**
      * The target screen was popped/reset without calling [Navigator.setResult].

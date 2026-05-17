@@ -54,8 +54,7 @@ internal class NavixSymbolProcessor(
                     requireNotNull(RouteDestination::class.qualifiedName) {
                         "RouteDestination annotation must have a qualified name"
                     },
-                )
-                .filterIsInstance<KSClassDeclaration>()
+                ).filterIsInstance<KSClassDeclaration>()
                 .toList()
 
         if (annotatedSymbols.isEmpty()) return emptyList()
