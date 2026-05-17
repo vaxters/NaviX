@@ -45,8 +45,7 @@ class HomeViewModel(
             getProducts()
                 .onSuccess { products ->
                     _uiState.update { it.copy(products = products, isLoading = false) }
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _uiState.update { it.copy(isLoading = false, error = error.message) }
                 }
         }

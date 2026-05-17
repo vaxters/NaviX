@@ -46,8 +46,7 @@ class ProductDetailViewModel(
             getProductById(productId)
                 .onSuccess { product ->
                     _uiState.update { it.copy(product = product, isLoading = false) }
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _uiState.update { it.copy(isLoading = false, error = error.message) }
                 }
         }

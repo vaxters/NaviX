@@ -32,7 +32,9 @@ import kotlinx.coroutines.flow.update
  * Registered alongside [io.navix.telemetry.LogcatExporter] to demonstrate the
  * [io.navix.telemetry.NavixTelemetryPipeline] fan-out model.
  */
-class InMemoryEventExporter(private val maxEvents: Int = 100) : NavEventExporter {
+class InMemoryEventExporter(
+    private val maxEvents: Int = 100,
+) : NavEventExporter {
     private val _events = MutableStateFlow<List<NavEvent>>(emptyList())
 
     /** Snapshot of all retained events, newest first. */

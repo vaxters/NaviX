@@ -4,216 +4,216 @@ name: Publish to Maven Central
 #   • Pushing a version tag (e.g. v1.0.0) kicks off an automatic release.
 #   • workflow_dispatch lets you trigger a release manually from the Actions UI.
 on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+-*'   # also matches pre-release tags like v0.1.0-alpha01
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Publish to local Maven (~/.m2) instead of Maven Central'
-        type: boolean
-        default: false
-      version:
-        description: 'Version to release (e.g. 1.0.0) — leave empty to use gradle.properties'
-        type: string
-        required: false
+    push:
+        tags:
+            - 'v[0-9]+.[0-9]+.[0-9]+'
+            - 'v[0-9]+.[0-9]+.[0-9]+-*'   # also matches pre-release tags like v0.1.0-alpha01
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: 'Publish to local Maven (~/.m2) instead of Maven Central'
+                type: boolean
+                default: false
+            version:
+                description: 'Version to release (e.g. 1.0.0) — leave empty to use gradle.properties'
+                type: string
+                required: false
 
 # Only one publish job may run at a time for a given ref.
 concurrency:
-  group: publish-${{ github.ref }}
-  cancel-in-progress: false
+    group: publish-${{ github.ref }}
+    cancel-in-progress: false
 
 jobs:
 
-  # ---------------------------------------------------------------------------
-  # Fast pre-flight check. Runs even on feature-branch tags so we get a clear
-  # signal, but always exits 0 — so a tag pushed from a PR branch results in a
-  # SKIPPED publish job (grey dot) rather than a FAILED check (red ✗).
-  # ---------------------------------------------------------------------------
-  guard:
-    name: Validate release conditions
-    runs-on: ubuntu-latest
-    outputs:
-      on_master: ${{ steps.check.outputs.on_master }}
+    # ---------------------------------------------------------------------------
+    # Fast pre-flight check. Runs even on feature-branch tags so we get a clear
+    # signal, but always exits 0 — so a tag pushed from a PR branch results in a
+    # SKIPPED publish job (grey dot) rather than a FAILED check (red ✗).
+    # ---------------------------------------------------------------------------
+    guard:
+        name: Validate release conditions
+        runs-on: ubuntu-latest
+        outputs:
+            on_master: ${{ steps.check.outputs.on_master }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
 
-      - name: Verify tag is on master
-        id: check
-        run: |
-          git fetch origin master
-          if git merge-base --is-ancestor HEAD origin/master; then
-            echo "on_master=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Tag '${GITHUB_REF_NAME}' is not reachable from master — publish will be skipped."
-            echo "on_master=false" >> "$GITHUB_OUTPUT"
-          fi
+            -   name: Verify tag is on master
+                id: check
+                run: |
+                    git fetch origin master
+                    if git merge-base --is-ancestor HEAD origin/master; then
+                      echo "on_master=true" >> "$GITHUB_OUTPUT"
+                    else
+                      echo "::warning::Tag '${GITHUB_REF_NAME}' is not reachable from master — publish will be skipped."
+                      echo "on_master=false" >> "$GITHUB_OUTPUT"
+                    fi
 
-  # ---------------------------------------------------------------------------
-  # Main publish job — only runs when the tag is confirmed to be on master.
-  # ---------------------------------------------------------------------------
-  publish:
-    name: Publish all modules
-    needs: guard
-    if: needs.guard.outputs.on_master == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # ---------------------------------------------------------------------------
+    # Main publish job — only runs when the tag is confirmed to be on master.
+    # ---------------------------------------------------------------------------
+    publish:
+        name: Publish all modules
+        needs: guard
+        if: needs.guard.outputs.on_master == 'true'
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
 
-    permissions:
-      contents: write   # needed to create GitHub Releases and push to master
+        permissions:
+            contents: write   # needed to create GitHub Releases and push to master
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # full history required by git-cliff
-          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0   # full history required by git-cliff
+                    token: ${{ secrets.RELEASE_TOKEN || github.token }}
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+            -   name: Set up JDK 17
+                uses: actions/setup-java@v4
+                with:
+                    java-version: '17'
+                    distribution: 'temurin'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+            -   name: Set up Gradle
+                uses: gradle/actions/setup-gradle@v3
+                with:
+                    gradle-home-cache-cleanup: true
 
-      # -----------------------------------------------------------------------
-      # Derive the release version from the pushed tag so gradle.properties
-      # never needs to be manually bumped before tagging.
-      #
-      # Priority:
-      #   1. Tag name (v1.0.0 → 1.0.0)          — normal tag-push release
-      #   2. workflow_dispatch `version` input   — manual override
-      #   3. Current gradle.properties value     — workflow_dispatch fallback
-      # -----------------------------------------------------------------------
-      - name: Derive version
-        run: |
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            VERSION="${GITHUB_REF_NAME#v}"
-          elif [[ -n "${{ inputs.version }}" ]]; then
-            VERSION="${{ inputs.version }}"
-          else
-            VERSION=$(grep "^VERSION_NAME=" gradle.properties | cut -d'=' -f2)
-          fi
-          if [[ "$VERSION" == *"-SNAPSHOT"* ]]; then
-            echo "::error::Version '$VERSION' is a SNAPSHOT — not a valid release version."
-            exit 1
-          fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+            # -----------------------------------------------------------------------
+            # Derive the release version from the pushed tag so gradle.properties
+            # never needs to be manually bumped before tagging.
+            #
+            # Priority:
+            #   1. Tag name (v1.0.0 → 1.0.0)          — normal tag-push release
+            #   2. workflow_dispatch `version` input   — manual override
+            #   3. Current gradle.properties value     — workflow_dispatch fallback
+            # -----------------------------------------------------------------------
+            -   name: Derive version
+                run: |
+                    if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+                      VERSION="${GITHUB_REF_NAME#v}"
+                    elif [[ -n "${{ inputs.version }}" ]]; then
+                      VERSION="${{ inputs.version }}"
+                    else
+                      VERSION=$(grep "^VERSION_NAME=" gradle.properties | cut -d'=' -f2)
+                    fi
+                    if [[ "$VERSION" == *"-SNAPSHOT"* ]]; then
+                      echo "::error::Version '$VERSION' is a SNAPSHOT — not a valid release version."
+                      exit 1
+                    fi
+                    echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
-      # -----------------------------------------------------------------------
-      # Overwrite VERSION_NAME in gradle.properties with the tag-derived version
-      # so all Gradle publish tasks use the correct coordinate without any
-      # manual file edits before tagging.
-      # -----------------------------------------------------------------------
-      - name: Sync VERSION_NAME in gradle.properties
-        run: |
-          sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${VERSION}/" gradle.properties
-          grep "^VERSION_NAME=" gradle.properties
+            # -----------------------------------------------------------------------
+            # Overwrite VERSION_NAME in gradle.properties with the tag-derived version
+            # so all Gradle publish tasks use the correct coordinate without any
+            # manual file edits before tagging.
+            # -----------------------------------------------------------------------
+            -   name: Sync VERSION_NAME in gradle.properties
+                run: |
+                    sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${VERSION}/" gradle.properties
+                    grep "^VERSION_NAME=" gradle.properties
 
-      # -----------------------------------------------------------------------
-      # Install git-cliff and prepend the new version section into CHANGELOG.md.
-      # ffurrer2/extract-release-notes (next step) will then pull the body out
-      # of that file — no need to run git-cliff twice with --strip all.
-      # -----------------------------------------------------------------------
-      - name: Install git-cliff v2.8.0
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          CLIFF_VERSION="2.8.0"
-          curl -fsSL \
-            "https://github.com/orhun/git-cliff/releases/download/v${CLIFF_VERSION}/git-cliff-${CLIFF_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-            -o git-cliff.tar.gz
-          tar -xzf git-cliff.tar.gz
-          CLIFF_BIN=$(find . -maxdepth 3 -name "git-cliff" -type f | head -1)
-          chmod +x "$CLIFF_BIN"
-          sudo mv "$CLIFF_BIN" /usr/local/bin/git-cliff
-          git-cliff --version
+            # -----------------------------------------------------------------------
+            # Install git-cliff and prepend the new version section into CHANGELOG.md.
+            # ffurrer2/extract-release-notes (next step) will then pull the body out
+            # of that file — no need to run git-cliff twice with --strip all.
+            # -----------------------------------------------------------------------
+            -   name: Install git-cliff v2.8.0
+                if: ${{ inputs.dry_run != true }}
+                run: |
+                    CLIFF_VERSION="2.8.0"
+                    curl -fsSL \
+                      "https://github.com/orhun/git-cliff/releases/download/v${CLIFF_VERSION}/git-cliff-${CLIFF_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+                      -o git-cliff.tar.gz
+                    tar -xzf git-cliff.tar.gz
+                    CLIFF_BIN=$(find . -maxdepth 3 -name "git-cliff" -type f | head -1)
+                    chmod +x "$CLIFF_BIN"
+                    sudo mv "$CLIFF_BIN" /usr/local/bin/git-cliff
+                    git-cliff --version
 
-      - name: Update CHANGELOG.md with git-cliff
-        if: ${{ inputs.dry_run != true }}
-        run: git cliff --unreleased --tag "v${VERSION}" --prepend CHANGELOG.md
+            -   name: Update CHANGELOG.md with git-cliff
+                if: ${{ inputs.dry_run != true }}
+                run: git cliff --unreleased --tag "v${VERSION}" --prepend CHANGELOG.md
 
-      # -----------------------------------------------------------------------
-      # Extract the just-written version section from CHANGELOG.md.
-      # Outputs: steps.release_notes.outputs.release_notes
-      # -----------------------------------------------------------------------
-      - name: Extract release notes
-        if: ${{ inputs.dry_run != true }}
-        id: release_notes
-        uses: ffurrer2/extract-release-notes@v3
+            # -----------------------------------------------------------------------
+            # Extract the just-written version section from CHANGELOG.md.
+            # Outputs: steps.release_notes.outputs.release_notes
+            # -----------------------------------------------------------------------
+            -   name: Extract release notes
+                if: ${{ inputs.dry_run != true }}
+                id: release_notes
+                uses: ffurrer2/extract-release-notes@v3
 
-      # -----------------------------------------------------------------------
-      # Local dry-run: publish to ~/.m2 so the artifacts can be inspected
-      # without touching Maven Central. Triggered via workflow_dispatch.
-      # -----------------------------------------------------------------------
-      - name: Publish to local Maven (dry run)
-        if: ${{ inputs.dry_run == true }}
-        run: ./gradlew publishToMavenLocal
-        env:
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+            # -----------------------------------------------------------------------
+            # Local dry-run: publish to ~/.m2 so the artifacts can be inspected
+            # without touching Maven Central. Triggered via workflow_dispatch.
+            # -----------------------------------------------------------------------
+            -   name: Publish to local Maven (dry run)
+                if: ${{ inputs.dry_run == true }}
+                run: ./gradlew publishToMavenLocal
+                env:
+                    ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+                    ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+                    ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
-      # -----------------------------------------------------------------------
-      # Real publish: upload all publications and trigger an automatic release
-      # on Sonatype Central Portal.
-      # -----------------------------------------------------------------------
-      - name: Publish to Maven Central
-        if: ${{ inputs.dry_run != true }}
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+            # -----------------------------------------------------------------------
+            # Real publish: upload all publications and trigger an automatic release
+            # on Sonatype Central Portal.
+            # -----------------------------------------------------------------------
+            -   name: Publish to Maven Central
+                if: ${{ inputs.dry_run != true }}
+                run: ./gradlew publishAllPublicationsToMavenCentralRepository
+                env:
+                    ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+                    ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+                    ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+                    ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+                    ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
-      # -----------------------------------------------------------------------
-      # Convenience: print the exact coordinates that were published so they
-      # appear in the workflow summary for copy-paste into release notes.
-      # -----------------------------------------------------------------------
-      - name: Print published coordinates
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          echo "## Published artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          for artifact in navix-contracts navix-annotations navix-runtime navix-compiler navix-telemetry navix-devtools navix-testing; do
-            echo "- \`io.github.vaxters:${artifact}:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
-          done
+            # -----------------------------------------------------------------------
+            # Convenience: print the exact coordinates that were published so they
+            # appear in the workflow summary for copy-paste into release notes.
+            # -----------------------------------------------------------------------
+            -   name: Print published coordinates
+                if: ${{ inputs.dry_run != true }}
+                run: |
+                    echo "## Published artifacts" >> $GITHUB_STEP_SUMMARY
+                    echo "" >> $GITHUB_STEP_SUMMARY
+                    for artifact in navix-contracts navix-annotations navix-runtime navix-compiler navix-telemetry navix-devtools navix-testing; do
+                      echo "- \`io.github.vaxters:${artifact}:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
+                    done
 
-      # -----------------------------------------------------------------------
-      # Build the demo app APK (debug — uses default Android debug keystore,
-      # no signing secrets required). Rename to include the version number.
-      # -----------------------------------------------------------------------
-      - name: Build demo APK
-        if: ${{ inputs.dry_run != true }}
-        run: |
-          ./gradlew :navix-demo-app:assembleDebug
-          APK_SRC="navix-demo-app/build/outputs/apk/debug/navix-demo-app-debug.apk"
-          APK_DST="navix-demo-v${VERSION}.apk"
-          cp "$APK_SRC" "$APK_DST"
-          echo "APK_PATH=$APK_DST" >> "$GITHUB_ENV"
+            # -----------------------------------------------------------------------
+            # Build the demo app APK (debug — uses default Android debug keystore,
+            # no signing secrets required). Rename to include the version number.
+            # -----------------------------------------------------------------------
+            -   name: Build demo APK
+                if: ${{ inputs.dry_run != true }}
+                run: |
+                    ./gradlew :navix-demo-app:assembleDebug
+                    APK_SRC="navix-demo-app/build/outputs/apk/debug/navix-demo-app-debug.apk"
+                    APK_DST="navix-demo-v${VERSION}.apk"
+                    cp "$APK_SRC" "$APK_DST"
+                    echo "APK_PATH=$APK_DST" >> "$GITHUB_ENV"
 
-      # -----------------------------------------------------------------------
-      # Create a GitHub Release using the notes extracted from CHANGELOG.md
-      # and attach the demo APK as a downloadable asset.
-      # -----------------------------------------------------------------------
-      - name: Create GitHub Release
-        if: ${{ inputs.dry_run != true }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_NOTES: ${{ steps.release_notes.outputs.release_notes }}
-        run: |
-          echo "$RELEASE_NOTES" > release-notes.md
-          gh release create "v${VERSION}" \
-            --title "Navix v${VERSION}" \
-            --notes-file release-notes.md \
-            "${APK_PATH}#Demo App (debug APK)"
+            # -----------------------------------------------------------------------
+            # Create a GitHub Release using the notes extracted from CHANGELOG.md
+            # and attach the demo APK as a downloadable asset.
+            # -----------------------------------------------------------------------
+            -   name: Create GitHub Release
+                if: ${{ inputs.dry_run != true }}
+                env:
+                    GH_TOKEN: ${{ github.token }}
+                    RELEASE_NOTES: ${{ steps.release_notes.outputs.release_notes }}
+                run: |
+                    echo "$RELEASE_NOTES" > release-notes.md
+                    gh release create "v${VERSION}" \
+                      --title "Navix v${VERSION}" \
+                      --notes-file release-notes.md \
+                      "${APK_PATH}#Demo App (debug APK)"

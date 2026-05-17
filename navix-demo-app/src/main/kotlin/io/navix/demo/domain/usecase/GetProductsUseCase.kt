@@ -25,6 +25,8 @@ import io.navix.demo.data.repository.ProductRepository
  * that calls this use case free from try/catch boilerplate and makes the
  * failure path explicit in the type system.
  */
-class GetProductsUseCase(private val repository: ProductRepository) {
+class GetProductsUseCase(
+    private val repository: ProductRepository,
+) {
     suspend operator fun invoke(): Result<List<Product>> = runCatching { repository.getProducts() }
 }

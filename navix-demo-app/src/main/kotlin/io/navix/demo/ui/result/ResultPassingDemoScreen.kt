@@ -78,6 +78,7 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
                 pickedColor = Color(result.value)
                 lastOutcome = "Success — color selected"
             }
+
             NavResult.Cancelled -> {
                 lastOutcome = "Cancelled — no color selected"
             }
@@ -158,14 +159,22 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
 
 private val DemoColors =
     listOf(
-        Color(0xFFE53935), // Red
-        Color(0xFF43A047), // Green
-        Color(0xFF1E88E5), // Blue
-        Color(0xFFFB8C00), // Orange
-        Color(0xFF8E24AA), // Purple
-        Color(0xFF00ACC1), // Cyan
-        Color(0xFFFFD600), // Yellow
-        Color(0xFF6D4C41), // Brown
+        // Red
+        Color(0xFFE53935),
+        // Green
+        Color(0xFF43A047),
+        // Blue
+        Color(0xFF1E88E5),
+        // Orange
+        Color(0xFFFB8C00),
+        // Purple
+        Color(0xFF8E24AA),
+        // Cyan
+        Color(0xFF00ACC1),
+        // Yellow
+        Color(0xFFFFD600),
+        // Brown
+        Color(0xFF6D4C41),
     )
 
 /**

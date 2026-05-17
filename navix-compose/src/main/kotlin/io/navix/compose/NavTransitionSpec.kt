@@ -44,7 +44,6 @@ import io.navix.contracts.RouteEntry
  */
 @Stable
 interface NavTransitionSpec {
-
     fun enterTransition(
         from: RouteEntry?,
         to: RouteEntry,
@@ -79,16 +78,17 @@ interface NavTransitionSpec {
         key: NavTransitionKey,
         progress: Float,
         swipeEdge: Int,
-    ): Modifier = Modifier.graphicsLayer {
-        // Scale down slightly as the user drags (max 8 % reduction at full progress).
-        val scale = 1f - progress * 0.08f
-        scaleX = scale
-        scaleY = scale
-        // Drift toward the swipe edge: left edge → drift right (+X), right edge → drift left (−X).
-        translationX = if (swipeEdge == SWIPE_EDGE_LEFT) progress * 72f else -progress * 72f
-        // Fade slightly to hint that the screen is leaving.
-        alpha = 1f - progress * 0.25f
-    }
+    ): Modifier =
+        Modifier.graphicsLayer {
+            // Scale down slightly as the user drags (max 8 % reduction at full progress).
+            val scale = 1f - progress * 0.08f
+            scaleX = scale
+            scaleY = scale
+            // Drift toward the swipe edge: left edge → drift right (+X), right edge → drift left (−X).
+            translationX = if (swipeEdge == SWIPE_EDGE_LEFT) progress * 72f else -progress * 72f
+            // Fade slightly to hint that the screen is leaving.
+            alpha = 1f - progress * 0.25f
+        }
 
     companion object {
         /** Matches `BackEventCompat.EDGE_LEFT`. Passed as [predictiveExit]'s [swipeEdge]. */

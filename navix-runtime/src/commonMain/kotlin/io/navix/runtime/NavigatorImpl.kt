@@ -202,8 +202,7 @@ internal class NavigatorImpl(
                 .first { snapshot ->
                     // The new entry is one that wasn't in the pre-push snapshot.
                     snapshot.entries.any { e -> snapshotBeforePush.entries.none { it.id == e.id } }
-                }
-                .entries
+                }.entries
                 .first { e -> snapshotBeforePush.entries.none { it.id == e.id } }
 
         val deferred = CompletableDeferred<Any?>()
@@ -219,7 +218,9 @@ internal class NavigatorImpl(
     }
 
     override fun setResult(value: Any?) {
-        val currentId = store.state.value.active?.id ?: return
+        val currentId =
+            store.state.value.active
+                ?.id ?: return
         pendingResultValues[currentId] = value
     }
 
@@ -273,7 +274,7 @@ internal class NavigatorImpl(
         try {
             telemetry.onEvent(event)
         } catch (t: Throwable) {
-            println("Navix: telemetry.onEvent threw an exception — navigation continues. $t")
+            println("[NaviX][WARN] telemetry.onEvent threw — navigation continues. $t")
         }
     }
 

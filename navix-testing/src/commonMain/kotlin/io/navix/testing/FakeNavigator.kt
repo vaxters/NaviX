@@ -82,7 +82,6 @@ class FakeNavigator(
     entryFactory: EntryFactory = DeterministicEntryFactory(),
     private val reducer: Reducer = DefaultReducer(entryFactory),
 ) : Navigator {
-
     companion object {
         /**
          * Returns a [FakeNavigator] suitable for use in Compose `@Preview` functions.
@@ -107,9 +106,10 @@ class FakeNavigator(
         fun preview(root: Route): FakeNavigator = FakeNavigator(root)
     }
 
-    private val _backstack = MutableStateFlow(
-        BackstackSnapshot(listOf(entryFactory.create(root, NavTransitionKey.Default)))
-    )
+    private val _backstack =
+        MutableStateFlow(
+            BackstackSnapshot(listOf(entryFactory.create(root, NavTransitionKey.Default))),
+        )
     override val backstack: StateFlow<BackstackSnapshot> = _backstack.asStateFlow()
 
     private val _events = MutableSharedFlow<NavEvent>(extraBufferCapacity = 64)
@@ -129,7 +129,10 @@ class FakeNavigator(
 
     // ── Navigation actions ───────────────────────────────────────────────────
 
-    override fun push(route: Route, transition: NavTransitionKey) {
+    override fun push(
+        route: Route,
+        transition: NavTransitionKey,
+    ) {
         pushedRoutes.add(route)
         val prev = _backstack.value.active
         _backstack.value = reducer.reduce(_backstack.value, BackstackAction.Push(route, transition))
@@ -152,7 +155,10 @@ class FakeNavigator(
         }
     }
 
-    override fun replace(route: Route, transition: NavTransitionKey) {
+    override fun replace(
+        route: Route,
+        transition: NavTransitionKey,
+    ) {
         replacedRoutes.add(route)
         val prev = _backstack.value.active
         _backstack.value = reducer.reduce(_backstack.value, BackstackAction.Replace(route, transition))
@@ -168,19 +174,27 @@ class FakeNavigator(
         _emittedEventTypes.add(NavEventType.RESET)
         _events.tryEmit(NavEvent(NavEventType.RESET, prev, _backstack.value.active, 0L))
         // Cancel all pending results for entries removed by the reset.
-        val removedIds = before.entries.map { it.id } - _backstack.value.entries.map { it.id }.toSet()
+        val removedIds =
+            before.entries.map { it.id } -
+                _backstack.value.entries
+                    .map { it.id }
+                    .toSet()
         for (id in removedIds) {
             pendingResults.remove(id)?.complete(pendingResultValues.remove(id))
             pendingResultValues.remove(id)
         }
     }
 
-    override fun popTo(routeClass: KClass<out Route>, inclusive: Boolean) {
+    override fun popTo(
+        routeClass: KClass<out Route>,
+        inclusive: Boolean,
+    ) {
         val prev = _backstack.value.active
-        _backstack.value = reducer.reduce(
-            _backstack.value,
-            BackstackAction.PopTo(routeClass, inclusive),
-        )
+        _backstack.value =
+            reducer.reduce(
+                _backstack.value,
+                BackstackAction.PopTo(routeClass, inclusive),
+            )
         _emittedEventTypes.add(NavEventType.POP_TO)
         _events.tryEmit(NavEvent(NavEventType.POP_TO, prev, _backstack.value.active, 0L))
     }
@@ -200,8 +214,9 @@ class FakeNavigator(
     ): NavResult<R> {
         val snapshotBefore = _backstack.value
         push(route, transition)
-        val pushedEntry = _backstack.value.entries
-            .first { e -> snapshotBefore.entries.none { it.id == e.id } }
+        val pushedEntry =
+            _backstack.value.entries
+                .first { e -> snapshotBefore.entries.none { it.id == e.id } }
 
         val deferred = CompletableDeferred<Any?>()
         pendingResults[pushedEntry.id] = deferred
@@ -274,27 +289,40 @@ class FakeNavigator(
     // ── Assertion helpers ────────────────────────────────────────────────────
 
     fun assertCurrentRoute(expected: Route) {
-        assertEquals(expected, _backstack.value.active?.route,
-            "Expected current route to be $expected but was ${_backstack.value.active?.route}")
+        assertEquals(
+            expected,
+            _backstack.value.active?.route,
+            "Expected current route to be $expected but was ${_backstack.value.active?.route}",
+        )
     }
 
     fun assertBackstackSize(expected: Int) {
-        assertEquals(expected, _backstack.value.depth,
-            "Expected backstack size $expected but was ${_backstack.value.depth}")
+        assertEquals(
+            expected,
+            _backstack.value.depth,
+            "Expected backstack size $expected but was ${_backstack.value.depth}",
+        )
     }
 
     fun assertLastPushed(expected: Route) {
-        assertEquals(expected, pushedRoutes.lastOrNull(),
-            "Expected last pushed route to be $expected but was ${pushedRoutes.lastOrNull()}")
+        assertEquals(
+            expected,
+            pushedRoutes.lastOrNull(),
+            "Expected last pushed route to be $expected but was ${pushedRoutes.lastOrNull()}",
+        )
     }
 
     fun assertCanPop(expected: Boolean) {
         if (expected) {
-            assertTrue(_backstack.value.canPop,
-                "Expected canPop=true but stack has only ${_backstack.value.depth} entry")
+            assertTrue(
+                _backstack.value.canPop,
+                "Expected canPop=true but stack has only ${_backstack.value.depth} entry",
+            )
         } else {
-            assertFalse(_backstack.value.canPop,
-                "Expected canPop=false but stack has ${_backstack.value.depth} entries")
+            assertFalse(
+                _backstack.value.canPop,
+                "Expected canPop=false but stack has ${_backstack.value.depth} entries",
+            )
         }
     }
 
@@ -303,8 +331,11 @@ class FakeNavigator(
     }
 
     fun assertPushCount(expected: Int) {
-        assertEquals(expected, pushedRoutes.size,
-            "Expected $expected pushes but got ${pushedRoutes.size}")
+        assertEquals(
+            expected,
+            pushedRoutes.size,
+            "Expected $expected pushes but got ${pushedRoutes.size}",
+        )
     }
 
     fun assertNoReplaces() {
@@ -312,8 +343,11 @@ class FakeNavigator(
     }
 
     fun assertReplaceCount(expected: Int) {
-        assertEquals(expected, replacedRoutes.size,
-            "Expected $expected replaces but got ${replacedRoutes.size}")
+        assertEquals(
+            expected,
+            replacedRoutes.size,
+            "Expected $expected replaces but got ${replacedRoutes.size}",
+        )
     }
 
     fun assertNoPops() {
@@ -335,24 +369,28 @@ class FakeNavigator(
     fun assertEventEmitted(type: NavEventType) {
         assertTrue(
             _emittedEventTypes.contains(type),
-            "Expected event of type $type to be emitted but only saw: $_emittedEventTypes"
+            "Expected event of type $type to be emitted but only saw: $_emittedEventTypes",
         )
     }
 
     fun assertNoEventEmitted(type: NavEventType) {
         assertFalse(
             _emittedEventTypes.contains(type),
-            "Expected no event of type $type but it was emitted. All events: $_emittedEventTypes"
+            "Expected no event of type $type but it was emitted. All events: $_emittedEventTypes",
         )
     }
 
     fun assertDeepLinkHandled(uri: String) {
-        assertTrue(_handledDeepLinks.contains(uri),
-            "Expected deep link '$uri' to be handled but handledDeepLinks=$_handledDeepLinks")
+        assertTrue(
+            _handledDeepLinks.contains(uri),
+            "Expected deep link '$uri' to be handled but handledDeepLinks=$_handledDeepLinks",
+        )
     }
 
     fun assertNoDeepLinks() {
-        assertTrue(_handledDeepLinks.isEmpty(),
-            "Expected no deep links to be handled but got: $_handledDeepLinks")
+        assertTrue(
+            _handledDeepLinks.isEmpty(),
+            "Expected no deep links to be handled but got: $_handledDeepLinks",
+        )
     }
 }

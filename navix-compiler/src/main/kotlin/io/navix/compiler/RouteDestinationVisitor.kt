@@ -39,8 +39,7 @@ internal class RouteDestinationVisitor(
         data: Unit,
     ) {
         val annotation =
-            classDeclaration.annotations
-                .firstOrNull { it.shortName.asString() == RouteDestination::class.simpleName }
+            classDeclaration.annotations.firstOrNull { it.shortName.asString() == RouteDestination::class.simpleName }
                 ?: return
 
         val packageName = classDeclaration.packageName.asString()
@@ -58,19 +57,11 @@ internal class RouteDestinationVisitor(
             return
         }
 
-        val routeValue =
-            annotation.arguments
-                .firstOrNull { it.name?.asString() == "route" }
-                ?.value as? String
-                ?: ""
+        val routeValue = annotation.arguments.firstOrNull { it.name?.asString() == "route" }?.value as? String ?: ""
         val canonicalRoute = routeValue.ifBlank { "$packageName.$className" }
 
-        val deepLinkValues =
-            (
-                annotation.arguments
-                    .firstOrNull { it.name?.asString() == "deepLinks" }
-                    ?.value as? List<*>
-            )?.filterIsInstance<String>() ?: emptyList()
+        val deepLinks = annotation.arguments.firstOrNull { it.name?.asString() == "deepLinks" }?.value as? List<*>
+        val deepLinkValues = deepLinks?.filterIsInstance<String>() ?: emptyList()
 
         val parsedTemplates =
             deepLinkValues.mapNotNull { template ->
@@ -87,15 +78,12 @@ internal class RouteDestinationVisitor(
             }
 
         val constructorParams =
-            classDeclaration.primaryConstructor
-                ?.parameters
-                ?.map { param ->
-                    ConstructorParam(
-                        name = param.name?.asString() ?: "_",
-                        typeName = param.type.resolve().toKotlinTypeName(),
-                    )
-                }
-                ?: emptyList()
+            classDeclaration.primaryConstructor?.parameters?.map { param ->
+                ConstructorParam(
+                    name = param.name?.asString() ?: "_",
+                    typeName = param.type.resolve().toKotlinTypeName(),
+                )
+            } ?: emptyList()
 
         descriptors.add(
             RouteDestinationDescriptor(
@@ -119,9 +107,7 @@ internal class RouteDestinationVisitor(
  * `kotlin.String`).
  */
 private fun KSType.toKotlinTypeName(): String {
-    val raw =
-        declaration.qualifiedName?.asString()
-            ?: declaration.simpleName.asString()
+    val raw = declaration.qualifiedName?.asString() ?: declaration.simpleName.asString()
     val simplified = raw.removePrefix("kotlin.")
     val args = arguments
     return if (args.isEmpty()) {

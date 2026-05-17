@@ -123,7 +123,8 @@ fun NavPlaygroundScreen(navigator: Navigator) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             val nextStep =
                 (
-                    snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                    snapshot.entries
+                        .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                         .maxOrNull() ?: 0
                 ) + 1
             Button(
@@ -144,7 +145,8 @@ fun NavPlaygroundScreen(navigator: Navigator) {
             onClick = {
                 val nextStep =
                     (
-                        snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                        snapshot.entries
+                            .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                             .maxOrNull() ?: 0
                     ) + 1
                 navigator.replace(NavPlaygroundStep(nextStep), NavTransitionKey.Fade)
@@ -221,7 +223,8 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                         onClick = {
                             val nextStep =
                                 (
-                                    snapshot.entries.mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
+                                    snapshot.entries
+                                        .mapNotNull { (it.route as? NavPlaygroundStep)?.stepNumber }
                                         .maxOrNull() ?: 0
                                 ) + 1
                             navigator.push(NavPlaygroundStep(nextStep), key)

@@ -117,10 +117,11 @@ internal fun EventTimelinePanel(
 private fun EventTimelineHeader() {
     Text(
         text = "Event Timeline",
-        style = MaterialTheme.typography.labelSmall.copy(
-            fontWeight = FontWeight.Bold,
-            color = DevToolsColors.header,
-        ),
+        style =
+            MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Bold,
+                color = DevToolsColors.header,
+            ),
         modifier = Modifier.padding(bottom = 4.dp),
     )
 }
@@ -128,9 +129,10 @@ private fun EventTimelineHeader() {
 @Composable
 private fun EventRow(event: NavEvent) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp),
     ) {
         Text(
             text = event.type.badge(),
@@ -142,11 +144,12 @@ private fun EventRow(event: NavEvent) {
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = buildString {
-                event.from?.route?.let { append(it::class.simpleName) } ?: append("—")
-                append(" → ")
-                event.to?.route?.let { append(it::class.simpleName) } ?: append("—")
-            },
+            text =
+                buildString {
+                    event.from?.route?.let { append(it::class.simpleName) } ?: append("—")
+                    append(" → ")
+                    event.to?.route?.let { append(it::class.simpleName) } ?: append("—")
+                },
             fontFamily = FontFamily.Monospace,
             fontSize = 10.sp,
             color = DevToolsColors.text,
@@ -154,22 +157,24 @@ private fun EventRow(event: NavEvent) {
     }
 }
 
-private fun NavEventType.badge() = when (this) {
-    NavEventType.PUSH -> "PUSH"
-    NavEventType.POP -> "POP "
-    NavEventType.REPLACE -> "REPL"
-    NavEventType.RESET -> "RST "
-    NavEventType.POP_TO -> "POPT"
-    NavEventType.DEEP_LINK -> "DEEP"
-}
+private fun NavEventType.badge() =
+    when (this) {
+        NavEventType.PUSH -> "PUSH"
+        NavEventType.POP -> "POP "
+        NavEventType.REPLACE -> "REPL"
+        NavEventType.RESET -> "RST "
+        NavEventType.POP_TO -> "POPT"
+        NavEventType.DEEP_LINK -> "DEEP"
+    }
 
-private fun NavEventType.color() = when (this) {
-    NavEventType.PUSH -> DevToolsColors.push
-    NavEventType.POP -> DevToolsColors.pop
-    NavEventType.REPLACE -> DevToolsColors.replace
-    NavEventType.RESET -> DevToolsColors.reset
-    NavEventType.POP_TO -> DevToolsColors.pop
-    NavEventType.DEEP_LINK -> DevToolsColors.deepLink
-}
+private fun NavEventType.color() =
+    when (this) {
+        NavEventType.PUSH -> DevToolsColors.push
+        NavEventType.POP -> DevToolsColors.pop
+        NavEventType.REPLACE -> DevToolsColors.replace
+        NavEventType.RESET -> DevToolsColors.reset
+        NavEventType.POP_TO -> DevToolsColors.pop
+        NavEventType.DEEP_LINK -> DevToolsColors.deepLink
+    }
 
 private const val MAX_EVENTS = 100

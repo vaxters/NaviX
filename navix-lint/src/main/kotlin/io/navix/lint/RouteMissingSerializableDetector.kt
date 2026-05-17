@@ -48,26 +48,31 @@ import org.jetbrains.uast.UElement
  * data class ProductDetail(val id: String) : Route
  * ```
  */
-class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
-
-    override fun getApplicableUastTypes(): List<Class<out UElement>> =
-        listOf(UClass::class.java)
+class RouteMissingSerializableDetector :
+    Detector(),
+    SourceCodeScanner {
+    override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =
         object : UElementHandler() {
             override fun visitClass(node: UClass) {
-                val hasRouteDestination = node.uAnnotations.any { annotation ->
-                    val name = annotation.qualifiedName ?: annotation.attributeValues
-                        .firstOrNull()?.name
-                    name == ROUTE_DESTINATION_FQN || annotation.qualifiedName?.endsWith(
-                        ".RouteDestination"
-                    ) == true
-                }
+                val hasRouteDestination =
+                    node.uAnnotations.any { annotation ->
+                        val name =
+                            annotation.qualifiedName ?: annotation.attributeValues
+                                .firstOrNull()
+                                ?.name
+                        name == ROUTE_DESTINATION_FQN ||
+                            annotation.qualifiedName?.endsWith(
+                                ".RouteDestination",
+                            ) == true
+                    }
                 if (!hasRouteDestination) return
 
-                val hasSerializable = node.uAnnotations.any { annotation ->
-                    annotation.qualifiedName?.endsWith(".Serializable") == true
-                }
+                val hasSerializable =
+                    node.uAnnotations.any { annotation ->
+                        annotation.qualifiedName?.endsWith(".Serializable") == true
+                    }
                 if (hasSerializable) return
 
                 // Cast to UElement explicitly to resolve overload ambiguity: UClass implements
@@ -77,10 +82,11 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
                     issue = ISSUE,
                     scope = node as UElement,
                     location = context.getNameLocation(node),
-                    message = "`${node.name}` is annotated with `@RouteDestination` but is " +
-                        "missing `@Serializable`. The Navix KSP processor requires both " +
-                        "annotations to generate the route registry and SerializersModule. " +
-                        "Add `@Serializable` from `kotlinx.serialization`.",
+                    message =
+                        "`${node.name}` is annotated with `@RouteDestination` but is " +
+                            "missing `@Serializable`. The Navix KSP processor requires both " +
+                            "annotations to generate the route registry and SerializersModule. " +
+                            "Add `@Serializable` from `kotlinx.serialization`.",
                 )
             }
         }
@@ -89,10 +95,11 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
         private const val ROUTE_DESTINATION_FQN = "io.navix.annotations.RouteDestination"
 
         @JvmField
-        val ISSUE: Issue = Issue.create(
-            id = "RouteMissingSerializable",
-            briefDescription = "@RouteDestination without @Serializable",
-            explanation = """
+        val ISSUE: Issue =
+            Issue.create(
+                id = "RouteMissingSerializable",
+                briefDescription = "@RouteDestination without @Serializable",
+                explanation = """
                 Every class or object annotated with `@RouteDestination` must also carry
                 `@Serializable` (from `kotlinx.serialization`).
 
@@ -111,13 +118,14 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
                 data class ProductDetail(val id: String) : Route
                 ```
             """,
-            category = Category.CORRECTNESS,
-            priority = 9,
-            severity = Severity.ERROR,
-            implementation = Implementation(
-                RouteMissingSerializableDetector::class.java,
-                Scope.JAVA_FILE_SCOPE,
-            ),
-        )
+                category = Category.CORRECTNESS,
+                priority = 9,
+                severity = Severity.ERROR,
+                implementation =
+                    Implementation(
+                        RouteMissingSerializableDetector::class.java,
+                        Scope.JAVA_FILE_SCOPE,
+                    ),
+            )
     }
 }

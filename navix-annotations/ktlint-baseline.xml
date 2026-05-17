@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<baseline version="1.0">
-    <file name="build.gradle.kts">
-        <error line="28" column="10" source="standard:trailing-comma-on-call-site" />
-        <error line="35" column="88" source="standard:trailing-comma-on-call-site" />
-    </file>
-</baseline>

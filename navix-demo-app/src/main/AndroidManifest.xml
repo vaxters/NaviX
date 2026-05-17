@@ -20,9 +20,13 @@
             <!-- Deep link: navix://product/{productId} -->
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="navix" android:host="product" />
+
+                <data
+                    android:scheme="navix"
+                    android:host="product" />
             </intent-filter>
         </activity>
     </application>

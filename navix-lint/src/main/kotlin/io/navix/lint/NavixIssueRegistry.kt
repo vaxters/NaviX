@@ -20,19 +20,20 @@ import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 
 class NavixIssueRegistry : IssueRegistry() {
-
-    override val issues = listOf(
-        DevToolsEnabledInReleaseDetector.ISSUE,
-        RouteMissingSerializableDetector.ISSUE,
-    )
+    override val issues =
+        listOf(
+            DevToolsEnabledInReleaseDetector.ISSUE,
+            RouteMissingSerializableDetector.ISSUE,
+        )
 
     override val api: Int = CURRENT_API
 
     override val minApi: Int = 8
 
-    override val vendor = Vendor(
-        vendorName = "Navix",
-        identifier = "navix-lint",
-        feedbackUrl = "https://github.com/navix/navix/issues",
-    )
+    override val vendor =
+        Vendor(
+            vendorName = "Navix",
+            identifier = "navix-lint",
+            feedbackUrl = "https://github.com/navix/navix/issues",
+        )
 }

@@ -76,6 +76,7 @@ fun HomeScreen(
             when (effect) {
                 is HomeNavEffect.OpenProductDetail ->
                     navigator.push(ProductDetail(effect.productId), NavTransitionKey.SlideLeft)
+
                 HomeNavEffect.OpenProfile -> navigator.push(Profile)
                 HomeNavEffect.OpenTelemetry -> navigator.push(TelemetryViewer)
                 is HomeNavEffect.HandleDeepLink -> navigator.handleDeepLink(effect.uri)
@@ -169,8 +170,9 @@ private fun BackstackInfoBar(backstack: BackstackSnapshot) {
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
+            val activeRoute = backstack.active?.route?.let { it::class.simpleName } ?: "—"
             Text(
-                text = "Depth: ${backstack.depth}  |  canPop: ${backstack.canPop}  |  Active: ${backstack.active?.route?.let { it::class.simpleName } ?: "—"}",
+                text = "Depth: ${backstack.depth}  |  canPop: ${backstack.canPop}  |  Active: $activeRoute",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

@@ -58,13 +58,14 @@ fun <T : Route> PreviewNavixHost(
     modifier: Modifier = Modifier,
     content: @Composable (entry: RouteEntry, route: T) -> Unit,
 ) {
-    val previewEntry = RouteEntry(
-        id = "preview",
-        route = route,
-        createdAt = 0L,
-        lifecycleState = NavLifecycleState.RESUMED,
-        transitionKey = NavTransitionKey.Default,
-    )
+    val previewEntry =
+        RouteEntry(
+            id = "preview",
+            route = route,
+            createdAt = 0L,
+            lifecycleState = NavLifecycleState.RESUMED,
+            transitionKey = NavTransitionKey.Default,
+        )
     Box(modifier = modifier) {
         content(previewEntry, route)
     }

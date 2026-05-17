@@ -32,7 +32,6 @@ import kotlin.test.assertEquals
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class NavixMultiStackProcessDeathTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -41,13 +40,15 @@ class NavixMultiStackProcessDeathTest {
         val tester = StateRestorationTester(composeRule)
         lateinit var ms: NavixMultiStack
         tester.setContent {
-            ms = rememberSaveableNavixMultiStack(
-                specs = listOf(
-                    NavStackSpec(TabHomeR, key = "home"),
-                    NavStackSpec(TabSearchR, key = "search"),
-                ),
-                saver = TestSaver,
-            )
+            ms =
+                rememberSaveableNavixMultiStack(
+                    specs =
+                        listOf(
+                            NavStackSpec(TabHomeR, key = "home"),
+                            NavStackSpec(TabSearchR, key = "search"),
+                        ),
+                    saver = TestSaver,
+                )
             NavixMultiStackHost(ms) {
                 screen<TabHomeR> { _, _ -> Text("home") }
                 screen<TabSearchR> { _, _ -> Text("search") }
@@ -60,12 +61,24 @@ class NavixMultiStackProcessDeathTest {
         composeRule.runOnIdle { ms.navigators[1].push(TabDetailR) }
         composeRule.waitForIdle()
         assertEquals(1, ms.activeTabIndex.value)
-        assertEquals(2, ms.navigators[1].backstack.value.depth)
+        assertEquals(
+            2,
+            ms.navigators[1]
+                .backstack.value.depth,
+        )
 
         tester.emulateSavedInstanceStateRestore()
 
         assertEquals(1, ms.activeTabIndex.value)
-        assertEquals(2, ms.navigators[1].backstack.value.depth)
-        assertEquals(1, ms.navigators[0].backstack.value.depth)
+        assertEquals(
+            2,
+            ms.navigators[1]
+                .backstack.value.depth,
+        )
+        assertEquals(
+            1,
+            ms.navigators[0]
+                .backstack.value.depth,
+        )
     }
 }

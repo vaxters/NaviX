@@ -108,15 +108,15 @@ navigator.handleDeepLink("myapp://product/123")
 
 ## Module Overview
 
-| Module | Description | KMP |
-|---|---|:---:|
-| `contracts` | Shared data types (`Route`, `RouteEntry`, `NavEvent`, …) | ✅ |
-| `navix-annotations` | `@RouteDestination` (source retention) | ✅ |
-| `navix-runtime` | Backstack engine + Compose `NavixHost` | Core: ✅ |
-| `navix-compiler` | KSP processor — route discovery, deep link generation | Build-time |
-| `navix-telemetry` | Event pipeline with pluggable exporters | ✅ |
-| `navix-devtools` | Live backstack inspector + event timeline overlay | Android |
-| `navix-testing` | `FakeNavigator` + Compose test helpers | Core: ✅ |
+| Module              | Description                                              |    KMP     |
+|---------------------|----------------------------------------------------------|:----------:|
+| `contracts`         | Shared data types (`Route`, `RouteEntry`, `NavEvent`, …) |     ✅      |
+| `navix-annotations` | `@RouteDestination` (source retention)                   |     ✅      |
+| `navix-runtime`     | Backstack engine + Compose `NavixHost`                   |  Core: ✅   |
+| `navix-compiler`    | KSP processor — route discovery, deep link generation    | Build-time |
+| `navix-telemetry`   | Event pipeline with pluggable exporters                  |     ✅      |
+| `navix-devtools`    | Live backstack inspector + event timeline overlay        |  Android   |
+| `navix-testing`     | `FakeNavigator` + Compose test helpers                   |  Core: ✅   |
 
 ---
 
@@ -179,6 +179,7 @@ Box(Modifier.fillMaxSize()) {
 ```
 
 The overlay shows:
+
 - Live backstack with lifecycle states
 - Navigation event timeline
 - Route timing and transition keys
@@ -313,11 +314,11 @@ NavixHost(navigator = navigator) { /* screen<…> { } */ }
 
 What survives a process-death restore:
 
-| State | Mechanism |
-|---|---|
-| Backstack (every route + its arguments) | serialised by the `NavigatorSaver` |
-| `ViewModel` `SavedStateHandle` | per-entry `SavedStateRegistry`, restored into a recreated entry |
-| Screen `rememberSaveable { }` | per-entry, entry-id-keyed saved-state holder |
+| State                                              | Mechanism                                                                                  |
+|----------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Backstack (every route + its arguments)            | serialised by the `NavigatorSaver`                                                         |
+| `ViewModel` `SavedStateHandle`                     | per-entry `SavedStateRegistry`, restored into a recreated entry                            |
+| Screen `rememberSaveable { }`                      | per-entry, entry-id-keyed saved-state holder                                               |
 | Entry-scoped `ViewModel` instances (config change) | host-Activity-scoped store, retained across recreation — no serialization cost on rotation |
 
 Routes must be `@Serializable` so the snapshot can be persisted; the
@@ -461,7 +462,6 @@ Future non-Android KMP targets (Desktop, iOS via Compose Multiplatform) are supp
 providing a platform-specific `NavixHost` equivalent.
 
 ---
-
 
 ## Contributing
 

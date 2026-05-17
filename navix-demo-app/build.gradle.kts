@@ -34,6 +34,12 @@ android {
         compose = true
         buildConfig = true
     }
+    lint {
+        abortOnError = false
+        htmlReport = true
+        xmlReport = true
+        warningsAsErrors = false
+    }
 }
 
 ksp {

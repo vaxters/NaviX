@@ -39,11 +39,15 @@ data object Home : Route
 
 @Serializable
 @RouteDestination(deepLinks = ["navix://product/{productId}"])
-data class ProductDetail(val productId: String) : Route
+data class ProductDetail(
+    val productId: String,
+) : Route
 
 @Serializable
 @RouteDestination
-data class ProductReviews(val productId: String) : Route
+data class ProductReviews(
+    val productId: String,
+) : Route
 
 // ── Profile graph ─────────────────────────────────────────────────────────────
 
@@ -71,7 +75,9 @@ data object NavPlayground : Route
 /** A numbered step pushed onto the backstack by the playground. */
 @Serializable
 @RouteDestination
-data class NavPlaygroundStep(val stepNumber: Int) : Route
+data class NavPlaygroundStep(
+    val stepNumber: Int,
+) : Route
 
 // ── Multi-stack demo (Phase 6A) ───────────────────────────────────────────────
 
@@ -82,13 +88,19 @@ data object TabsDemo : Route
 
 // Tab-internal routes — no @RouteDestination because they are only reachable
 // within the NavixMultiStackHost, not through the outer NavixHost graph.
-@Serializable data object CounterTab : Route
+@Serializable
+data object CounterTab : Route
 
-@Serializable data object ListTab : Route
+@Serializable
+data object ListTab : Route
 
-@Serializable data object InfoTab : Route
+@Serializable
+data object InfoTab : Route
 
-@Serializable data class ListTabDetail(val item: String) : Route
+@Serializable
+data class ListTabDetail(
+    val item: String,
+) : Route
 
 // ── Result passing demo (Phase 9) ────────────────────────────────────────────
 

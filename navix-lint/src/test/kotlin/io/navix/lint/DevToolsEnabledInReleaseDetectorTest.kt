@@ -16,17 +16,15 @@
 package io.navix.lint
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest
-import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 
 class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
-
     override fun getDetector(): Detector = DevToolsEnabledInReleaseDetector()
 
     override fun getIssues(): List<Issue> = listOf(DevToolsEnabledInReleaseDetector.ISSUE)
 
-    fun testOverlay_enabledTrue_isFlagged() {
+    fun testOverlayEnabledTrueIsFlagged() {
         lint()
             .files(
                 kotlin(
@@ -36,11 +34,10 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = true)
                     }
-                    """
+                    """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -48,11 +45,11 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     NavixDevToolsOverlay(navigator = navigator, enabled = true)
                                                                           ~~~~
                 0 errors, 1 warnings
-                """.trimIndent()
+                """.trimIndent(),
             )
     }
 
-    fun testOverlay_enabledBuildConfigDebug_isNotFlagged() {
+    fun testOverlayEnabledBuildConfigDebugIsNotFlagged() {
         lint()
             .files(
                 kotlin(
@@ -63,16 +60,15 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = BuildConfig.DEBUG)
                     }
-                    """
+                    """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
 
-    fun testOverlay_enabledFalse_isNotFlagged() {
+    fun testOverlayEnabledFalseIsNotFlagged() {
         lint()
             .files(
                 kotlin(
@@ -82,16 +78,15 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator, enabled = false)
                     }
-                    """
+                    """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
 
-    fun testOverlay_enabledOmitted_isNotFlagged() {
+    fun testOverlayEnabledOmittedIsNotFlagged() {
         lint()
             .files(
                 kotlin(
@@ -101,19 +96,19 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     fun Screen(navigator: Any) {
                         NavixDevToolsOverlay(navigator = navigator)
                     }
-                    """
+                    """,
                 ).indented(),
                 navixDevToolsStub(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
 
-    private fun navixDevToolsStub() = kotlin(
-        """
+    private fun navixDevToolsStub() =
+        kotlin(
+            """
         package io.navix.devtools
         fun NavixDevToolsOverlay(navigator: Any, enabled: Boolean = false) {}
-        """
-    ).indented()
+        """,
+        ).indented()
 }

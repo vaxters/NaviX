@@ -63,6 +63,7 @@ fun ProductDetailScreen(
             when (effect) {
                 is ProductDetailNavEffect.OpenReviews ->
                     navigator.push(ProductReviews(effect.productId), NavTransitionKey.SlideLeft)
+
                 ProductDetailNavEffect.NavigateBack -> navigator.pop()
                 ProductDetailNavEffect.NavigateBackToHome -> navigator.popTo<Home>()
             }

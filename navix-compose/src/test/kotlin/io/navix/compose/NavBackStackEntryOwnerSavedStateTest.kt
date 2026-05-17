@@ -28,7 +28,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal class CounterViewModel(val handle: SavedStateHandle) : ViewModel()
+internal class CounterViewModel(
+    val handle: SavedStateHandle,
+) : ViewModel()
 
 /**
  * Authoritative process-death proof for the per-entry [androidx.savedstate.SavedStateRegistry]
@@ -43,7 +45,6 @@ internal class CounterViewModel(val handle: SavedStateHandle) : ViewModel()
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class NavBackStackEntryOwnerSavedStateTest {
-
     private fun handleOf(owner: NavBackStackEntryOwner): SavedStateHandle =
         ViewModelProvider(owner)[CounterViewModel::class.java].handle
 

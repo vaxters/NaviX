@@ -79,7 +79,6 @@ internal class NavBackStackEntryOwner(
     ViewModelStoreOwner,
     SavedStateRegistryOwner,
     HasDefaultViewModelProviderFactory {
-
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val _viewModelStore = viewModelStore
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
@@ -97,10 +96,11 @@ internal class NavBackStackEntryOwner(
         SavedStateViewModelFactory(application = null, owner = this, defaultArgs = null)
 
     override val defaultViewModelCreationExtras: CreationExtras
-        get() = MutableCreationExtras().apply {
-            set(SAVED_STATE_REGISTRY_OWNER_KEY, this@NavBackStackEntryOwner)
-            set(VIEW_MODEL_STORE_OWNER_KEY, this@NavBackStackEntryOwner)
-        }
+        get() =
+            MutableCreationExtras().apply {
+                set(SAVED_STATE_REGISTRY_OWNER_KEY, this@NavBackStackEntryOwner)
+                set(VIEW_MODEL_STORE_OWNER_KEY, this@NavBackStackEntryOwner)
+            }
 
     init {
         // Ordering is load-bearing — see the class KDoc.
@@ -126,7 +126,10 @@ internal class NavBackStackEntryOwner(
      * [LifecycleRegistry.currentState] setter generates the appropriate intermediate events
      * (e.g., ON_START, ON_RESUME) so callers don't need to track the previous state.
      */
-    fun moveTo(targetState: Lifecycle.State, hostState: Lifecycle.State) {
+    fun moveTo(
+        targetState: Lifecycle.State,
+        hostState: Lifecycle.State,
+    ) {
         val capped = minOf(targetState, hostState)
         // Guard against INITIALIZED — we start at CREATED and never go back below it.
         val effective = maxOf(capped, Lifecycle.State.CREATED)

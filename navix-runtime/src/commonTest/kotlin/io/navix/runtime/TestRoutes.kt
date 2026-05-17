@@ -22,7 +22,9 @@ import kotlinx.serialization.Serializable
 internal data object HomeRoute : Route
 
 @Serializable
-internal data class DetailRoute(val id: String) : Route
+internal data class DetailRoute(
+    val id: String,
+) : Route
 
 @Serializable
 internal data object SettingsRoute : Route

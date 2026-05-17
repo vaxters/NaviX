@@ -49,8 +49,7 @@ class DataStoreSettingsRepository(
             .catch { cause ->
                 // Emit defaults rather than crashing if the file is unreadable.
                 if (cause is IOException) emit(emptyPreferences()) else throw cause
-            }
-            .map { prefs ->
+            }.map { prefs ->
                 SettingsData(
                     notificationsEnabled = prefs[Keys.NOTIFICATIONS] ?: true,
                     analyticsEnabled = prefs[Keys.ANALYTICS] ?: false,

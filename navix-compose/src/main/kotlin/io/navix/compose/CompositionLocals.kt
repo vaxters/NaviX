@@ -34,12 +34,13 @@ import io.navix.runtime.Navigator
  * }
  * ```
  */
-val LocalNavigator = staticCompositionLocalOf<Navigator> {
-    error(
-        "No Navigator found in the composition. " +
-            "Ensure this composable is called inside NavixHost { }."
-    )
-}
+val LocalNavigator =
+    staticCompositionLocalOf<Navigator> {
+        error(
+            "No Navigator found in the composition. " +
+                "Ensure this composable is called inside NavixHost { }.",
+        )
+    }
 
 /**
  * Provides the [RouteEntry] for the currently rendered screen to any composable inside
@@ -57,9 +58,10 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
  * }
  * ```
  */
-val LocalNavEntry = staticCompositionLocalOf<RouteEntry> {
-    error(
-        "No NavEntry found in the composition. " +
-            "Ensure this composable is called inside NavixHost { }."
-    )
-}
+val LocalNavEntry =
+    staticCompositionLocalOf<RouteEntry> {
+        error(
+            "No NavEntry found in the composition. " +
+                "Ensure this composable is called inside NavixHost { }.",
+        )
+    }

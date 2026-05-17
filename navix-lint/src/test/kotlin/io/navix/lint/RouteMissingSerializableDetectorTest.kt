@@ -16,19 +16,17 @@
 package io.navix.lint
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest
-import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 
 class RouteMissingSerializableDetectorTest : LintDetectorTest() {
-
     override fun getDetector(): Detector = RouteMissingSerializableDetector()
 
     override fun getIssues(): List<Issue> = listOf(RouteMissingSerializableDetector.ISSUE)
 
     // ── Flagged cases ──────────────────────────────────────────────────────
 
-    fun testRouteDestination_missingSerializable_isFlagged() {
+    fun testRouteDestinationMissingSerializableIsFlagged() {
         lint()
             .files(
                 *stubs(),
@@ -39,10 +37,9 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import io.navix.contracts.Route
                     @RouteDestination
                     data class ProductDetail(val id: String) : Route
-                    """
+                    """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -50,11 +47,11 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                 data class ProductDetail(val id: String) : Route
                            ~~~~~~~~~~~~~
                 1 errors, 0 warnings
-                """.trimIndent()
+                """.trimIndent(),
             )
     }
 
-    fun testRouteDestination_dataObject_missingSerializable_isFlagged() {
+    fun testRouteDestinationDataObjectMissingSerializableIsFlagged() {
         lint()
             .files(
                 *stubs(),
@@ -65,10 +62,9 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import io.navix.contracts.Route
                     @RouteDestination
                     data object Home : Route
-                    """
+                    """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expect(
                 """
@@ -76,13 +72,13 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                 data object Home : Route
                             ~~~~
                 1 errors, 0 warnings
-                """.trimIndent()
+                """.trimIndent(),
             )
     }
 
     // ── Clean cases ────────────────────────────────────────────────────────
 
-    fun testRouteDestination_withSerializable_isClean() {
+    fun testRouteDestinationWithSerializableIsClean() {
         lint()
             .files(
                 *stubs(),
@@ -95,15 +91,14 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     @Serializable
                     @RouteDestination
                     data class ProductDetail(val id: String) : Route
-                    """
+                    """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
 
-    fun testSerializable_withoutRouteDestination_isClean() {
+    fun testSerializableWithoutRouteDestinationIsClean() {
         lint()
             .files(
                 *stubs(),
@@ -113,15 +108,14 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import kotlinx.serialization.Serializable
                     @Serializable
                     data class SomeDto(val value: String)
-                    """
+                    """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
 
-    fun testUnannotatedClass_isClean() {
+    fun testUnannotatedClassIsClean() {
         lint()
             .files(
                 *stubs(),
@@ -129,10 +123,9 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     """
                     package test
                     data class NoAnnotation(val x: Int)
-                    """
+                    """,
                 ).indented(),
-            )
-            .allowMissingSdk()
+            ).allowMissingSdk()
             .run()
             .expectClean()
     }
@@ -140,24 +133,25 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
     // ── Helpers ────────────────────────────────────────────────────────────
 
     // Each file can have only one package declaration — split into three separate stubs.
-    private fun stubs() = arrayOf(
-        kotlin(
-            """
+    private fun stubs() =
+        arrayOf(
+            kotlin(
+                """
             package io.navix.annotations
             annotation class RouteDestination(vararg val deepLinks: String = [])
-            """
-        ).indented(),
-        kotlin(
-            """
+            """,
+            ).indented(),
+            kotlin(
+                """
             package io.navix.contracts
             interface Route
-            """
-        ).indented(),
-        kotlin(
-            """
+            """,
+            ).indented(),
+            kotlin(
+                """
             package kotlinx.serialization
             annotation class Serializable
-            """
-        ).indented(),
-    )
+            """,
+            ).indented(),
+        )
 }

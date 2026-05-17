@@ -35,7 +35,6 @@ import java.util.WeakHashMap
  * No synchronization is required and none is added.
  */
 internal class NavixSavedStateHolder {
-
     // Slots restored from a prior process, not yet consumed by a recreated owner.
     private val restoredStates = mutableMapOf<String, Bundle>()
 
@@ -48,7 +47,10 @@ internal class NavixSavedStateHolder {
      */
     fun consumeRestoredState(id: String): Bundle? = restoredStates.remove(id)
 
-    fun registerOwner(id: String, owner: NavBackStackEntryOwner) {
+    fun registerOwner(
+        id: String,
+        owner: NavBackStackEntryOwner,
+    ) {
         liveOwners[id] = owner
     }
 
@@ -63,10 +65,11 @@ internal class NavixSavedStateHolder {
      * [Bundle] (`id` -> per-entry registry bundle). Carrying restored slots forward keeps
      * state for an entry whose owner has not been instantiated this run.
      */
-    fun performSave(): Bundle = Bundle().apply {
-        for ((id, bundle) in restoredStates) putBundle(id, bundle)
-        for ((id, owner) in liveOwners) putBundle(id, owner.performSaveToBundle())
-    }
+    fun performSave(): Bundle =
+        Bundle().apply {
+            for ((id, bundle) in restoredStates) putBundle(id, bundle)
+            for ((id, owner) in liveOwners) putBundle(id, owner.performSaveToBundle())
+        }
 
     /** Loads the per-entry slots from a [Bundle] produced by a prior [performSave]. */
     fun restoreFrom(root: Bundle) {
@@ -91,10 +94,12 @@ internal class NavixSavedStateHolder {
  * pre-existing behaviour.
  */
 internal object NavixHolderRegistry {
-
     private val holders = WeakHashMap<Navigator, NavixSavedStateHolder>()
 
-    fun put(navigator: Navigator, holder: NavixSavedStateHolder) {
+    fun put(
+        navigator: Navigator,
+        holder: NavixSavedStateHolder,
+    ) {
         holders[navigator] = holder
     }
 

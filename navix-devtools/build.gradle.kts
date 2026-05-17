@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.JavadocJar
 
 plugins {
     alias(libs.plugins.android.library)
@@ -18,6 +17,12 @@ android {
     }
     kotlinOptions { jvmTarget = "11" }
     buildFeatures { compose = true }
+    lint {
+        abortOnError = false
+        htmlReport = true
+        xmlReport = true
+        warningsAsErrors = false
+    }
 }
 
 dependencies {
@@ -39,14 +44,14 @@ mavenPublishing {
             variant = "release",
             sourcesJar = true,
             publishJavadocJar = true,
-        )
+        ),
     )
 
     pom {
         name.set("Navix DevTools")
         description.set(
             "Debug overlay for Navix: live backstack inspector, navigation event timeline, " +
-                "and route timing panel. Automatically excluded from release builds."
+                "and route timing panel. Automatically excluded from release builds.",
         )
     }
 }

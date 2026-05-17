@@ -44,7 +44,12 @@ internal object DeepLinkTemplateParser {
         }
 
         val params = PARAM_REGEX.findAll(template).map { it.groupValues[1] }.toList()
-        val duplicates = params.groupingBy { it }.eachCount().filter { it.value > 1 }.keys
+        val duplicates =
+            params
+                .groupingBy { it }
+                .eachCount()
+                .filter { it.value > 1 }
+                .keys
         if (duplicates.isNotEmpty()) {
             return Result.failure(
                 IllegalArgumentException(

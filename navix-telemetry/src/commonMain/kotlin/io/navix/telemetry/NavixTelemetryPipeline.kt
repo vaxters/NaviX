@@ -17,6 +17,8 @@ package io.navix.telemetry
 
 import io.navix.contracts.NavEvent
 import io.navix.contracts.NavixTelemetry
+import io.navix.telemetry.NavixTelemetryPipeline.Companion.MAX_CHANNEL_CAPACITY
+import io.navix.telemetry.NavixTelemetryPipeline.Companion.MAX_REPLAY_BUFFER
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,12 +72,12 @@ class NavixTelemetryPipeline(
     private val exporters: List<NavEventExporter>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : NavixTelemetry {
-
     private val scope = CoroutineScope(SupervisorJob() + dispatcher)
-    private val channel = Channel<NavEvent>(
-        capacity = MAX_CHANNEL_CAPACITY,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
+    private val channel =
+        Channel<NavEvent>(
+            capacity = MAX_CHANNEL_CAPACITY,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
 
     private val _droppedEventCount = MutableStateFlow(0)
 
@@ -128,7 +130,7 @@ class NavixTelemetryPipeline(
             _droppedEventCount.update { it + 1 }
             println(
                 "NavixTelemetry: channel full, dropped event ${event.type}. " +
-                    "Total dropped: ${_droppedEventCount.value}"
+                    "Total dropped: ${_droppedEventCount.value}",
             )
         }
     }

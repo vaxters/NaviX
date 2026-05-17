@@ -27,8 +27,9 @@ import io.navix.contracts.NavEvent
  * Suitable for development and debug builds only. Disable or replace with a
  * [NoOpExporter] in release builds.
  */
-class LogcatExporter(private val tag: String = "Navix") : NavEventExporter {
-
+class LogcatExporter(
+    private val tag: String = "Navix",
+) : NavEventExporter {
     override fun export(event: NavEvent) {
         val from = event.from?.route?.let { it::class.qualifiedName ?: it::class.simpleName } ?: "null"
         val to = event.to?.route?.let { it::class.qualifiedName ?: it::class.simpleName } ?: "null"

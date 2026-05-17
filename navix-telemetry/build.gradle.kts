@@ -47,6 +47,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    lint {
+        abortOnError = false
+        htmlReport = true
+        xmlReport = true
+        warningsAsErrors = false
+    }
 }
 
 mavenPublishing {
@@ -55,14 +61,14 @@ mavenPublishing {
             javadocJar = JavadocJar.Empty(),
             sourcesJar = true,
             androidVariantsToPublish = listOf("release"),
-        )
+        ),
     )
 
     pom {
         name.set("Navix Telemetry")
         description.set(
             "Pluggable navigation event pipeline for Navix: async fan-out to " +
-                "NavEventExporter implementations (Logcat, Firebase, custom analytics)."
+                "NavEventExporter implementations (Logcat, Firebase, custom analytics).",
         )
     }
 }

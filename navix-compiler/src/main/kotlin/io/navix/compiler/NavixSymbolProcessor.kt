@@ -50,8 +50,11 @@ internal class NavixSymbolProcessor(
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val annotatedSymbols =
             resolver
-                .getSymbolsWithAnnotation(RouteDestination::class.qualifiedName!!)
-                .filterIsInstance<KSClassDeclaration>()
+                .getSymbolsWithAnnotation(
+                    requireNotNull(RouteDestination::class.qualifiedName) {
+                        "RouteDestination annotation must have a qualified name"
+                    },
+                ).filterIsInstance<KSClassDeclaration>()
                 .toList()
 
         if (annotatedSymbols.isEmpty()) return emptyList()

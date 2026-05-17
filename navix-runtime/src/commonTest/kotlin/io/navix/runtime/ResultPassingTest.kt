@@ -72,7 +72,10 @@ class ResultPassingTest {
             resultDeferred.await()
 
             assertEquals(1, nav.backstack.value.depth)
-            assertIs<HomeRoute>(nav.backstack.value.active?.route)
+            assertIs<HomeRoute>(
+                nav.backstack.value.active
+                    ?.route,
+            )
         }
 
     // ── Cancellation paths ─────────────────────────────────────────────────

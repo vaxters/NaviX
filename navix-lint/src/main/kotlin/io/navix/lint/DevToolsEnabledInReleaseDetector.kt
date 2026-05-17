@@ -40,10 +40,10 @@ import org.jetbrains.uast.ULiteralExpression
  * Unsafe pattern (flagged):
  * - `NavixDevToolsOverlay(navigator, enabled = true)` — ships debug UI to production
  */
-class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
-
-    override fun getApplicableUastTypes(): List<Class<out UElement>> =
-        listOf(UCallExpression::class.java)
+class DevToolsEnabledInReleaseDetector :
+    Detector(),
+    SourceCodeScanner {
+    override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UCallExpression::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =
         object : UElementHandler() {
@@ -54,10 +54,11 @@ class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
                 // REORDER_ARGUMENTS test mode) doesn't break the lookup.
                 val method = node.resolve() ?: return
                 val mapping = context.evaluator.computeArgumentMapping(node, method)
-                val enabledArg = mapping.entries
-                    .find { (_, param) -> param.name == ENABLED_PARAM }
-                    ?.key
-                    ?: return // No 'enabled' argument supplied — default is false, safe.
+                val enabledArg =
+                    mapping.entries
+                        .find { (_, param) -> param.name == ENABLED_PARAM }
+                        ?.key
+                        ?: return // No 'enabled' argument supplied — default is false, safe.
 
                 val isLiteralTrue = enabledArg is ULiteralExpression && enabledArg.value == true
                 if (isLiteralTrue) {
@@ -65,9 +66,10 @@ class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
                         issue = ISSUE,
                         scope = node,
                         location = context.getLocation(enabledArg),
-                        message = "`NavixDevToolsOverlay` has `enabled = true` hardcoded. " +
-                            "This will show the debug overlay in release builds. " +
-                            "Use `enabled = BuildConfig.DEBUG` instead.",
+                        message =
+                            "`NavixDevToolsOverlay` has `enabled = true` hardcoded. " +
+                                "This will show the debug overlay in release builds. " +
+                                "Use `enabled = BuildConfig.DEBUG` instead.",
                     )
                 }
             }
@@ -78,23 +80,25 @@ class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
         private const val ENABLED_PARAM = "enabled"
 
         @JvmField
-        val ISSUE: Issue = Issue.create(
-            id = "NavixDevToolsEnabledInRelease",
-            briefDescription = "NavixDevToolsOverlay enabled in release builds",
-            explanation = """
+        val ISSUE: Issue =
+            Issue.create(
+                id = "NavixDevToolsEnabledInRelease",
+                briefDescription = "NavixDevToolsOverlay enabled in release builds",
+                explanation = """
                 `NavixDevToolsOverlay` with `enabled = true` hardcoded will render the debug
                 overlay in release builds, exposing internal navigation state to end users.
 
                 Replace with `enabled = BuildConfig.DEBUG` to restrict the overlay to debug
                 builds only, or omit the parameter entirely (the default is `false`).
             """,
-            category = Category.CORRECTNESS,
-            priority = 8,
-            severity = Severity.WARNING,
-            implementation = Implementation(
-                DevToolsEnabledInReleaseDetector::class.java,
-                Scope.JAVA_FILE_SCOPE,
-            ),
-        )
+                category = Category.CORRECTNESS,
+                priority = 8,
+                severity = Severity.WARNING,
+                implementation =
+                    Implementation(
+                        DevToolsEnabledInReleaseDetector::class.java,
+                        Scope.JAVA_FILE_SCOPE,
+                    ),
+            )
     }
 }

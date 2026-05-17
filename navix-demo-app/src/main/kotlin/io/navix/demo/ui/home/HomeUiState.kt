@@ -24,11 +24,15 @@ data class HomeUiState(
 )
 
 sealed interface HomeNavEffect {
-    data class OpenProductDetail(val productId: String) : HomeNavEffect
+    data class OpenProductDetail(
+        val productId: String,
+    ) : HomeNavEffect
 
     data object OpenProfile : HomeNavEffect
 
     data object OpenTelemetry : HomeNavEffect
 
-    data class HandleDeepLink(val uri: String) : HomeNavEffect
+    data class HandleDeepLink(
+        val uri: String,
+    ) : HomeNavEffect
 }

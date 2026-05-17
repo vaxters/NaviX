@@ -23,10 +23,15 @@ import io.navix.runtime.NavigatorSaver
 // Test destinations. data objects so the trivial saver below can round-trip them by
 // their simple class name without needing the kotlinx.serialization plugin in this module.
 internal data object HomeR : Route
+
 internal data object DetailR : Route
+
 internal data object Detail2R : Route
+
 internal data object TabHomeR : Route
+
 internal data object TabSearchR : Route
+
 internal data object TabDetailR : Route
 
 /**
@@ -34,28 +39,30 @@ internal data object TabDetailR : Route
  * **entry id is preserved** across restore (per-entry saved-state slots are keyed by id).
  */
 internal object TestSaver : NavigatorSaver {
-
     private val routes: Map<String, Route> =
         listOf(HomeR, DetailR, Detail2R, TabHomeR, TabSearchR, TabDetailR)
             .associateBy { it::class.simpleName!! }
 
     override fun save(snapshot: BackstackSnapshot): ByteArray =
-        snapshot.entries.joinToString("\n") { "${it.id}|${it.route::class.simpleName}" }
+        snapshot.entries
+            .joinToString("\n") { "${it.id}|${it.route::class.simpleName}" }
             .encodeToByteArray()
 
-    override fun restore(bytes: ByteArray): BackstackSnapshot? = runCatching {
-        BackstackSnapshot(
-            bytes.decodeToString()
-                .split("\n")
-                .filter { it.isNotBlank() }
-                .map { line ->
-                    val sep = line.indexOf('|')
-                    RouteEntry(
-                        id = line.substring(0, sep),
-                        route = routes.getValue(line.substring(sep + 1)),
-                        createdAt = 0L,
-                    )
-                },
-        )
-    }.getOrNull()
+    override fun restore(bytes: ByteArray): BackstackSnapshot? =
+        runCatching {
+            BackstackSnapshot(
+                bytes
+                    .decodeToString()
+                    .split("\n")
+                    .filter { it.isNotBlank() }
+                    .map { line ->
+                        val sep = line.indexOf('|')
+                        RouteEntry(
+                            id = line.substring(0, sep),
+                            route = routes.getValue(line.substring(sep + 1)),
+                            createdAt = 0L,
+                        )
+                    },
+            )
+        }.getOrNull()
 }

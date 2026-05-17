@@ -37,20 +37,20 @@ conventional_commits = true
 filter_unconventional = true
 split_commits = false
 commit_preprocessors = [
-  # Strip issue/PR references from the end of commit messages
-  { pattern = '\s*\(#\d+\)\s*$', replace = "" },
+    # Strip issue/PR references from the end of commit messages
+    { pattern = '\s*\(#\d+\)\s*$', replace = "" },
 ]
 commit_parsers = [
-  { message = "^feat",              group = "Added"         },
-  { message = "^fix",               group = "Fixed"         },
-  { message = "^perf",              group = "Performance"   },
-  { message = "^refactor",          group = "Changed"       },
-  { message = "^docs",              group = "Documentation" },
-  { message = "^test",              group = "Testing"       },
-  { message = "^chore\\(release\\)", skip = true            },
-  { message = "^chore",             group = "Chore"         },
-  { message = "^ci",                group = "CI"            },
-  { body = ".*security",            group = "Security"      },
+    { message = "^feat", group = "Added" },
+    { message = "^fix", group = "Fixed" },
+    { message = "^perf", group = "Performance" },
+    { message = "^refactor", group = "Changed" },
+    { message = "^docs", group = "Documentation" },
+    { message = "^test", group = "Testing" },
+    { message = "^chore\\(release\\)", skip = true },
+    { message = "^chore", group = "Chore" },
+    { message = "^ci", group = "CI" },
+    { body = ".*security", group = "Security" },
 ]
 protect_breaking_commits = false
 filter_commits = true
