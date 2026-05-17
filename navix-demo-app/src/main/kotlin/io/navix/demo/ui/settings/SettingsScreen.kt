@@ -115,14 +115,14 @@ private fun SettingsContent(
             item {
                 TransitionStyleItem(
                     selected = state.transitionStyle,
-                    onSelect = onTransitionStyleChange,
+                    onSelect = onTransitionStyleChange
                 )
                 HorizontalDivider()
             }
             item {
                 ListItem(
                     headlineContent = { Text("Version") },
-                    trailingContent = { Text(state.appVersion) },
+                    trailingContent = { Text(state.appVersion) }
                 )
             }
         }

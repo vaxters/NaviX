@@ -70,7 +70,7 @@ internal class RouteDestinationVisitor(
                             classDeclaration
                         )
                         null
-                    },
+                    }
                 )
             }
 

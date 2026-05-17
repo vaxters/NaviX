@@ -85,7 +85,7 @@ fun TabsDemoScreen(outerNavigator: Navigator) {
                 listOf(
                     NavStackSpec(root = CounterTab, key = "counter"),
                     NavStackSpec(root = ListTab, key = "list"),
-                    NavStackSpec(root = InfoTab, key = "info"),
+                    NavStackSpec(root = InfoTab, key = "info")
                 )
         )
 
