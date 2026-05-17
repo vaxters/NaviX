@@ -32,7 +32,7 @@ apiValidation {
         listOf(
             "navix-demo-app",
             "navix-compiler",
-            "navix-lint",
+            "navix-lint"
         )
     )
 }

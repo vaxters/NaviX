@@ -61,15 +61,15 @@ mavenPublishing {
         KotlinMultiplatform(
             javadocJar = JavadocJar.Empty(),
             sourcesJar = true,
-            androidVariantsToPublish = listOf("release"),
-        ),
+            androidVariantsToPublish = listOf("release")
+        )
     )
 
     pom {
         name.set("Navix Testing")
         description.set(
             "Test utilities for the Navix navigation platform: FakeNavigator with assertion " +
-                "helpers, and Compose test rule integration for navigation-driven UI tests.",
+                "helpers, and Compose test rule integration for navigation-driven UI tests."
         )
     }
 }

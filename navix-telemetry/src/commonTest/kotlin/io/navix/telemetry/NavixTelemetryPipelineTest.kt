@@ -30,12 +30,7 @@ import kotlin.test.assertTrue
 
 class NavixTelemetryPipelineTest {
     private fun fakeEvent(type: NavEventType = NavEventType.PUSH) =
-        NavEvent(
-            type = type,
-            from = null,
-            to = null,
-            timestampMs = 0L,
-        )
+        NavEvent(type = type, from = null, to = null, timestampMs = 0L)
 
     @Test
     fun onEvent_multipleExporters_allExportersReceiveEveryEvent() =
@@ -56,9 +51,9 @@ class NavixTelemetryPipelineTest {
                                 override fun export(event: NavEvent) {
                                     received2.add(event)
                                 }
-                            },
+                            }
                         ),
-                    dispatcher = StandardTestDispatcher(testScheduler),
+                    dispatcher = StandardTestDispatcher(testScheduler)
                 )
 
             val event = fakeEvent(NavEventType.PUSH)
@@ -86,9 +81,9 @@ class NavixTelemetryPipelineTest {
                                 override fun export(event: NavEvent) {
                                     received.add(event)
                                 }
-                            },
+                            }
                         ),
-                    dispatcher = StandardTestDispatcher(testScheduler),
+                    dispatcher = StandardTestDispatcher(testScheduler)
                 )
 
             pipeline.onEvent(fakeEvent())
@@ -118,9 +113,9 @@ class NavixTelemetryPipelineTest {
                                 override fun export(event: NavEvent) {
                                     types.add(event.type)
                                 }
-                            },
+                            }
                         ),
-                    dispatcher = StandardTestDispatcher(testScheduler),
+                    dispatcher = StandardTestDispatcher(testScheduler)
                 )
 
             pipeline.onEvent(fakeEvent(NavEventType.PUSH))
@@ -135,10 +130,7 @@ class NavixTelemetryPipelineTest {
     fun replayBuffer_multipleEvents_accumulatesOldestFirst() =
         runTest {
             val pipeline =
-                NavixTelemetryPipeline(
-                    exporters = emptyList(),
-                    dispatcher = StandardTestDispatcher(testScheduler),
-                )
+                NavixTelemetryPipeline(exporters = emptyList(), dispatcher = StandardTestDispatcher(testScheduler))
 
             pipeline.onEvent(fakeEvent(NavEventType.PUSH))
             pipeline.onEvent(fakeEvent(NavEventType.POP))
@@ -154,10 +146,7 @@ class NavixTelemetryPipelineTest {
     fun replayBuffer_lateSubscriber_receivesAllPreviousEvents() =
         runTest {
             val pipeline =
-                NavixTelemetryPipeline(
-                    exporters = emptyList(),
-                    dispatcher = StandardTestDispatcher(testScheduler),
-                )
+                NavixTelemetryPipeline(exporters = emptyList(), dispatcher = StandardTestDispatcher(testScheduler))
 
             // Emit events before any observer subscribes
             pipeline.onEvent(fakeEvent(NavEventType.PUSH))
@@ -183,10 +172,7 @@ class NavixTelemetryPipelineTest {
             // Previously, concurrent onEvent() calls could corrupt the ArrayDeque.
             // Now the buffer is actor-confined (single writer), so this is safe.
             val pipeline =
-                NavixTelemetryPipeline(
-                    exporters = emptyList(),
-                    dispatcher = StandardTestDispatcher(testScheduler),
-                )
+                NavixTelemetryPipeline(exporters = emptyList(), dispatcher = StandardTestDispatcher(testScheduler))
 
             // Fire 20 events from different coroutines concurrently
             val jobs =

@@ -102,7 +102,7 @@ fun NavixDevToolsOverlay(
     navigator: Navigator,
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
-    eventHistory: StateFlow<List<NavEvent>>? = null,
+    eventHistory: StateFlow<List<NavEvent>>? = null
 ) {
     if (!enabled) return
 
@@ -119,12 +119,12 @@ fun NavixDevToolsOverlay(
                     .size(40.dp)
                     .zIndex(10f),
             containerColor = DevToolsColors.header,
-            contentColor = DevToolsColors.background,
+            contentColor = DevToolsColors.background
         ) {
             Icon(
                 imageVector = if (panelVisible) Icons.Default.Close else Icons.Default.BugReport,
                 contentDescription = if (panelVisible) "Close DevTools" else "Open DevTools",
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(20.dp)
             )
         }
 
@@ -137,7 +137,7 @@ fun NavixDevToolsOverlay(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .zIndex(9f),
+                    .zIndex(9f)
         ) {
             Column(
                 modifier =
@@ -152,27 +152,27 @@ fun NavixDevToolsOverlay(
                                     awaitPointerEvent(pass = PointerEventPass.Final).changes.forEach { it.consume() }
                                 }
                             }
-                        }.padding(12.dp),
+                        }.padding(12.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = "Navix DevTools",
                         fontSize = 12.sp,
-                        color = DevToolsColors.header,
+                        color = DevToolsColors.header
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     IconButton(
                         onClick = { panelVisible = false },
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
                             tint = DevToolsColors.dimmed,
-                            modifier = Modifier.size(16.dp),
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
@@ -182,12 +182,12 @@ fun NavixDevToolsOverlay(
                 TabRow(
                     selectedTabIndex = selectedTab,
                     containerColor = DevToolsColors.background,
-                    contentColor = DevToolsColors.header,
+                    contentColor = DevToolsColors.header
                 ) {
                     Tab(
                         selected = selectedTab == 0,
                         onClick = { selectedTab = 0 },
-                        text = { Text("Stack", fontSize = 11.sp) },
+                        text = { Text("Stack", fontSize = 11.sp) }
                     )
                     Tab(
                         selected = selectedTab == 1,
@@ -196,10 +196,10 @@ fun NavixDevToolsOverlay(
                             Icon(
                                 Icons.Default.Timeline,
                                 contentDescription = null,
-                                modifier = Modifier.size(14.dp),
+                                modifier = Modifier.size(14.dp)
                             )
                         },
-                        text = { Text("Events", fontSize = 11.sp) },
+                        text = { Text("Events", fontSize = 11.sp) }
                     )
                 }
 

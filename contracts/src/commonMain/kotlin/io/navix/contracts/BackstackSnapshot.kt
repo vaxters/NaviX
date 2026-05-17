@@ -25,9 +25,7 @@ import kotlinx.serialization.Serializable
  * breaking collectors of the [io.navix.runtime.Navigator.backstack] StateFlow.
  */
 @Serializable
-data class BackstackSnapshot(
-    val entries: List<RouteEntry>,
-) {
+data class BackstackSnapshot(val entries: List<RouteEntry>) {
     /** The currently visible destination, or null when the stack is empty. */
     val active: RouteEntry?
         get() = entries.lastOrNull()

@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,10 +58,7 @@ import kotlinx.coroutines.flow.StateFlow
  * was first opened are not visible. Pass [eventHistory] to avoid this limitation.
  */
 @Composable
-internal fun EventTimelinePanel(
-    navigator: Navigator,
-    eventHistory: StateFlow<List<NavEvent>>? = null,
-) {
+internal fun EventTimelinePanel(navigator: Navigator, eventHistory: StateFlow<List<NavEvent>>? = null) {
     val listState = rememberLazyListState()
 
     if (eventHistory != null) {
@@ -120,9 +118,9 @@ private fun EventTimelineHeader() {
         style =
             MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = DevToolsColors.header,
+                color = DevToolsColors.header
             ),
-        modifier = Modifier.padding(bottom = 4.dp),
+        modifier = Modifier.padding(bottom = 4.dp)
     )
 }
 
@@ -132,7 +130,7 @@ private fun EventRow(event: NavEvent) {
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(vertical = 2.dp),
+                .padding(vertical = 2.dp)
     ) {
         Text(
             text = event.type.badge(),
@@ -140,7 +138,7 @@ private fun EventRow(event: NavEvent) {
             fontSize = 10.sp,
             color = event.type.color(),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.width(52.dp),
+            modifier = Modifier.width(52.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
@@ -152,13 +150,13 @@ private fun EventRow(event: NavEvent) {
                 },
             fontFamily = FontFamily.Monospace,
             fontSize = 10.sp,
-            color = DevToolsColors.text,
+            color = DevToolsColors.text
         )
     }
 }
 
-private fun NavEventType.badge() =
-    when (this) {
+private fun NavEventType.badge(): String {
+    return when (this) {
         NavEventType.PUSH -> "PUSH"
         NavEventType.POP -> "POP "
         NavEventType.REPLACE -> "REPL"
@@ -166,9 +164,10 @@ private fun NavEventType.badge() =
         NavEventType.POP_TO -> "POPT"
         NavEventType.DEEP_LINK -> "DEEP"
     }
+}
 
-private fun NavEventType.color() =
-    when (this) {
+private fun NavEventType.color(): Color {
+    return when (this) {
         NavEventType.PUSH -> DevToolsColors.push
         NavEventType.POP -> DevToolsColors.pop
         NavEventType.REPLACE -> DevToolsColors.replace
@@ -176,5 +175,6 @@ private fun NavEventType.color() =
         NavEventType.POP_TO -> DevToolsColors.pop
         NavEventType.DEEP_LINK -> DevToolsColors.deepLink
     }
+}
 
 private const val MAX_EVENTS = 100

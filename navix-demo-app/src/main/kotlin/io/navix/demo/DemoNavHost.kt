@@ -55,7 +55,7 @@ private fun TransitionStyle.toNavTransitionSpec(): NavTransitionSpec {
         override fun enterTransition(
             from: RouteEntry?,
             to: RouteEntry,
-            key: NavTransitionKey,
+            key: NavTransitionKey
         ): EnterTransition =
             when (if (key == NavTransitionKey.Default) styleKey else key) {
                 NavTransitionKey.SlideLeft -> slideInHorizontally(tween(durationMs)) { it }
@@ -68,7 +68,7 @@ private fun TransitionStyle.toNavTransitionSpec(): NavTransitionSpec {
         override fun exitTransition(
             from: RouteEntry,
             to: RouteEntry?,
-            key: NavTransitionKey,
+            key: NavTransitionKey
         ): ExitTransition =
             when (if (key == NavTransitionKey.Default) styleKey else key) {
                 NavTransitionKey.SlideLeft -> slideOutHorizontally(tween(durationMs)) { -it }
@@ -111,7 +111,7 @@ fun DemoNavHost(deepLinkUri: String? = null) {
             root = Login,
             deepLinkHandlers = deepLinkHandlers,
             telemetry = app.telemetry,
-            reducer = SingleTopReducer(),
+            reducer = SingleTopReducer()
         )
 
     LaunchedEffect(deepLinkUri) {
@@ -131,7 +131,7 @@ fun DemoNavHost(deepLinkUri: String? = null) {
         // Debug build: real DevTools overlay. Release build: no-op (src/release source set).
         NavixDebugOverlay(
             navigator = navigator,
-            eventHistory = app.telemetryPipeline.replayBuffer,
+            eventHistory = app.telemetryPipeline.replayBuffer
         )
     }
 }

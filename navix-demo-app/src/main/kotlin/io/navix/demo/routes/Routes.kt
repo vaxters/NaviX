@@ -40,13 +40,13 @@ data object Home : Route
 @Serializable
 @RouteDestination(deepLinks = ["navix://product/{productId}"])
 data class ProductDetail(
-    val productId: String,
+    val productId: String
 ) : Route
 
 @Serializable
 @RouteDestination
 data class ProductReviews(
-    val productId: String,
+    val productId: String
 ) : Route
 
 // ── Profile graph ─────────────────────────────────────────────────────────────
@@ -76,7 +76,7 @@ data object NavPlayground : Route
 @Serializable
 @RouteDestination
 data class NavPlaygroundStep(
-    val stepNumber: Int,
+    val stepNumber: Int
 ) : Route
 
 // ── Multi-stack demo (Phase 6A) ───────────────────────────────────────────────
@@ -99,7 +99,7 @@ data object InfoTab : Route
 
 @Serializable
 data class ListTabDetail(
-    val item: String,
+    val item: String
 ) : Route
 
 // ── Result passing demo (Phase 9) ────────────────────────────────────────────

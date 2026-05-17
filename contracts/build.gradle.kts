@@ -34,15 +34,15 @@ mavenPublishing {
     configure(
         KotlinMultiplatform(
             javadocJar = JavadocJar.Empty(),
-            sourcesJar = true,
-        ),
+            sourcesJar = true
+        )
     )
 
     pom {
         name.set("Navix Contracts")
         description.set(
             "Shared data types and stable interfaces for the Navix navigation platform " +
-                "(Route, RouteEntry, BackstackSnapshot, NavEvent).",
+                "(Route, RouteEntry, BackstackSnapshot, NavEvent)."
         )
     }
 }

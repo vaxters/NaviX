@@ -20,12 +20,12 @@ import io.navix.demo.data.model.Product
 data class ProductDetailUiState(
     val product: Product? = null,
     val isLoading: Boolean = true,
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface ProductDetailNavEffect {
     data class OpenReviews(
-        val productId: String,
+        val productId: String
     ) : ProductDetailNavEffect
 
     data object NavigateBack : ProductDetailNavEffect

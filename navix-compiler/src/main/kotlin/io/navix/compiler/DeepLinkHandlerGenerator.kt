@@ -49,7 +49,7 @@ import com.google.devtools.ksp.processing.Dependencies
  * ```
  */
 internal class DeepLinkHandlerGenerator(
-    private val codeGenerator: CodeGenerator,
+    private val codeGenerator: CodeGenerator
 ) {
     fun generate(descriptor: RouteDestinationDescriptor) {
         val source = buildDeepLinkHandlerSource(descriptor) ?: return
@@ -65,7 +65,7 @@ internal class DeepLinkHandlerGenerator(
             .createNewFile(
                 dependencies = Dependencies(aggregating = false, sources = sources),
                 packageName = packageName,
-                fileName = className,
+                fileName = className
             ).use { stream ->
                 stream.write(source.toByteArray())
             }

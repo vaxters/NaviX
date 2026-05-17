@@ -40,7 +40,7 @@ sealed class BackstackAction {
      */
     data class Push(
         val route: Route,
-        val transition: NavTransitionKey = NavTransitionKey.Default,
+        val transition: NavTransitionKey = NavTransitionKey.Default
     ) : BackstackAction()
 
     /**
@@ -48,7 +48,7 @@ sealed class BackstackAction {
      * entry being revealed). No-op if the stack has only one entry.
      */
     data class Pop(
-        val transition: NavTransitionKey = NavTransitionKey.SlideRight,
+        val transition: NavTransitionKey = NavTransitionKey.SlideRight
     ) : BackstackAction()
 
     /**
@@ -56,7 +56,7 @@ sealed class BackstackAction {
      */
     data class Replace(
         val route: Route,
-        val transition: NavTransitionKey = NavTransitionKey.Default,
+        val transition: NavTransitionKey = NavTransitionKey.Default
     ) : BackstackAction()
 
     /**
@@ -64,7 +64,7 @@ sealed class BackstackAction {
      */
     data class Reset(
         val root: Route,
-        val transition: NavTransitionKey = NavTransitionKey.Fade,
+        val transition: NavTransitionKey = NavTransitionKey.Fade
     ) : BackstackAction()
 
     /**
@@ -75,6 +75,6 @@ sealed class BackstackAction {
     data class PopTo(
         val routeClass: KClass<out Route>,
         val inclusive: Boolean = false,
-        val transition: NavTransitionKey = NavTransitionKey.SlideRight,
+        val transition: NavTransitionKey = NavTransitionKey.SlideRight
     ) : BackstackAction()
 }

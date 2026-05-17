@@ -90,12 +90,12 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Result Passing Demo",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Text(
             text =
@@ -103,7 +103,7 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
                     "LaunchedEffect until the callee calls setResult(value) then pop(). " +
                     "Pressing back without picking yields NavResult.Cancelled.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(8.dp))
@@ -112,12 +112,12 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
         Surface(
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.surfaceVariant,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
                     modifier =
@@ -125,14 +125,14 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
                             .size(72.dp)
                             .clip(CircleShape)
                             .background(pickedColor ?: MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                            .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                            .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
                 )
                 Text(
                     text =
                         pickedColor?.let { "#%06X".format(it.toArgb() and 0xFFFFFF) }
                             ?: "No color picked yet",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -140,19 +140,19 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
         Text(
             text = "Last outcome: $lastOutcome",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Button(
             onClick = { pickTrigger++ },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Pick a Color") }
 
         Spacer(Modifier.weight(1f))
 
         OutlinedButton(
             onClick = { navigator.pop() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("← Back") }
     }
 }
@@ -174,7 +174,7 @@ private val DemoColors =
         // Yellow
         Color(0xFFFFD600),
         // Brown
-        Color(0xFF6D4C41),
+        Color(0xFF6D4C41)
     )
 
 /**
@@ -191,26 +191,26 @@ fun ColorPickerScreen(navigator: Navigator) {
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             text = "Pick a Color",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Text(
             text =
                 "Tap a color to return it to the caller via setResult + pop. " +
                     "Press back without picking to return NavResult.Cancelled.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         // 4-column color grid
         DemoColors.chunked(4).forEach { rowColors ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 rowColors.forEach { color ->
                     Box(
@@ -223,7 +223,7 @@ fun ColorPickerScreen(navigator: Navigator) {
                                 .clickable {
                                     navigator.setResult(color.toArgb())
                                     navigator.pop()
-                                },
+                                }
                     )
                 }
             }
@@ -233,7 +233,7 @@ fun ColorPickerScreen(navigator: Navigator) {
 
         OutlinedButton(
             onClick = { navigator.pop() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("← Back (cancel)") }
     }
 }

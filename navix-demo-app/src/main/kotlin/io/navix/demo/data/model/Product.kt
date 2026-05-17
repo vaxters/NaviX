@@ -19,5 +19,5 @@ data class Product(
     val id: String,
     val name: String,
     val rating: Float,
-    val reviewCount: Int,
+    val reviewCount: Int
 )

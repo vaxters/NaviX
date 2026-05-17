@@ -119,7 +119,7 @@ class NavGraphBuilderTest {
         assertEquals(
             DestinationKind.Dialog,
             b.destinationKinds[ConfirmDialog::class],
-            "Last registration should win — Dialog should overwrite Screen",
+            "Last registration should win — Dialog should overwrite Screen"
         )
         assertEquals(1, b.destinations.size)
     }

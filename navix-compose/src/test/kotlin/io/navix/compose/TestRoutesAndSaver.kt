@@ -60,9 +60,9 @@ internal object TestSaver : NavigatorSaver {
                         RouteEntry(
                             id = line.substring(0, sep),
                             route = routes.getValue(line.substring(sep + 1)),
-                            createdAt = 0L,
+                            createdAt = 0L
                         )
-                    },
+                    }
             )
         }.getOrNull()
 }

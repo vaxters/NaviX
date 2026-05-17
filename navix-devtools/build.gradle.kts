@@ -43,15 +43,15 @@ mavenPublishing {
         AndroidSingleVariantLibrary(
             variant = "release",
             sourcesJar = true,
-            publishJavadocJar = true,
-        ),
+            publishJavadocJar = true
+        )
     )
 
     pom {
         name.set("Navix DevTools")
         description.set(
             "Debug overlay for Navix: live backstack inspector, navigation event timeline, " +
-                "and route timing panel. Automatically excluded from release builds.",
+                "and route timing panel. Automatically excluded from release builds."
         )
     }
 }

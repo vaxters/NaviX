@@ -36,7 +36,7 @@ import java.io.IOException
  * the UI never hangs on a corrupted preferences file.
  */
 class DataStoreSettingsRepository(
-    private val dataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences>
 ) : SettingsRepository {
     private object Keys {
         val NOTIFICATIONS = booleanPreferencesKey("notifications_enabled")
@@ -56,7 +56,7 @@ class DataStoreSettingsRepository(
                     transitionStyle =
                         prefs[Keys.TRANSITION_STYLE]
                             ?.let { runCatching { TransitionStyle.valueOf(it) }.getOrNull() }
-                            ?: TransitionStyle.Default,
+                            ?: TransitionStyle.Default
                 )
             }
 

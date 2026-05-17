@@ -50,10 +50,7 @@ import kotlin.uuid.Uuid
  * ```
  */
 fun interface Reducer {
-    fun reduce(
-        snapshot: BackstackSnapshot,
-        action: BackstackAction,
-    ): BackstackSnapshot
+    fun reduce(snapshot: BackstackSnapshot, action: BackstackAction): BackstackSnapshot
 }
 
 /**
@@ -67,10 +64,7 @@ fun interface Reducer {
  *   IDs and zero timestamps so snapshot equality checks are reliable.
  */
 fun interface EntryFactory {
-    fun create(
-        route: Route,
-        transition: NavTransitionKey,
-    ): RouteEntry
+    fun create(route: Route, transition: NavTransitionKey): RouteEntry
 }
 
 /**
@@ -79,17 +73,15 @@ fun interface EntryFactory {
  */
 object DefaultEntryFactory : EntryFactory {
     @OptIn(ExperimentalUuidApi::class)
-    override fun create(
-        route: Route,
-        transition: NavTransitionKey,
-    ): RouteEntry =
-        RouteEntry(
+    override fun create(route: Route, transition: NavTransitionKey): RouteEntry {
+        return RouteEntry(
             id = Uuid.random().toString(),
             route = route,
             createdAt = Clock.System.now().toEpochMilliseconds(),
             lifecycleState = NavLifecycleState.RESUMED,
-            transitionKey = transition,
+            transitionKey = transition
         )
+    }
 }
 
 /**
@@ -104,18 +96,13 @@ object DefaultEntryFactory : EntryFactory {
  * - All other entries have [NavLifecycleState.STARTED].
  * - Each entry's [RouteEntry.transitionKey] records the animation used when it became active.
  */
-class DefaultReducer(
-    private val entryFactory: EntryFactory = DefaultEntryFactory,
-) : Reducer {
-    override fun reduce(
-        snapshot: BackstackSnapshot,
-        action: BackstackAction,
-    ): BackstackSnapshot =
-        when (action) {
+class DefaultReducer(private val entryFactory: EntryFactory = DefaultEntryFactory) : Reducer {
+    override fun reduce(snapshot: BackstackSnapshot, action: BackstackAction): BackstackSnapshot {
+        return when (action) {
             is BackstackAction.Push ->
                 snapshot.withEntries(
                     snapshot.entries.map { it.copy(lifecycleState = NavLifecycleState.STARTED) } +
-                        entryFactory.create(action.route, action.transition),
+                        entryFactory.create(action.route, action.transition)
                 )
 
             is BackstackAction.Pop -> {
@@ -125,14 +112,11 @@ class DefaultReducer(
                     snapshot.withEntries(
                         snapshot.entries.dropLast(1).mapIndexed { index, entry ->
                             if (index == snapshot.entries.size - 2) {
-                                entry.copy(
-                                    lifecycleState = NavLifecycleState.RESUMED,
-                                    transitionKey = action.transition,
-                                )
+                                entry.copy(lifecycleState = NavLifecycleState.RESUMED, transitionKey = action.transition)
                             } else {
                                 entry
                             }
-                        },
+                        }
                     )
                 }
             }
@@ -149,7 +133,7 @@ class DefaultReducer(
 
             is BackstackAction.Reset ->
                 snapshot.withEntries(
-                    listOf(entryFactory.create(action.root, action.transition)),
+                    listOf(entryFactory.create(action.root, action.transition))
                 )
 
             is BackstackAction.PopTo -> {
@@ -171,18 +155,19 @@ class DefaultReducer(
                                     if (index == remaining.size - 1) {
                                         entry.copy(
                                             lifecycleState = NavLifecycleState.RESUMED,
-                                            transitionKey = action.transition,
+                                            transitionKey = action.transition
                                         )
                                     } else {
                                         entry
                                     }
-                                },
+                                }
                             )
                         }
                     }
                 }
             }
         }
+    }
 }
 
 private fun BackstackSnapshot.withEntries(entries: List<RouteEntry>): BackstackSnapshot = copy(entries = entries)

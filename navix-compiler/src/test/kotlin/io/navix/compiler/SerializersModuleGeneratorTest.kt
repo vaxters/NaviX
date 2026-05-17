@@ -28,100 +28,76 @@ import kotlin.test.assertTrue
  * is not involved; these run as plain JVM unit tests.
  */
 class SerializersModuleGeneratorTest {
-    // ── File name (val name) ───────────────────────────────────────────────
 
     @Test
     fun buildSource_moduleName_producesCorrectValName() {
-        val (valName, _) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (valName, _) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertEquals("AppNavixSerializersModule", valName)
     }
 
     @Test
     fun buildSource_hyphenatedModuleName_sanitizesCorrectly() {
-        val (valName, _) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "my-feature",
-            )
+        val (valName, _) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "my-feature"
+        )
         // "my-feature" → replaceFirstChar uppercases 'm', then strip non-alphanumeric → "Myfeature"
         assertEquals("MyfeatureNavixSerializersModule", valName)
     }
 
     @Test
     fun buildSource_lowercaseModuleName_uppercasesFirstChar() {
-        val (valName, _) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "checkout",
-            )
+        val (valName, _) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "checkout"
+        )
         assertEquals("CheckoutNavixSerializersModule", valName)
     }
 
-    // ── Package declaration ────────────────────────────────────────────────
-
     @Test
     fun buildSource_generatedSource_containsCorrectPackage() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertTrue(source.contains("package io.navix.generated"))
     }
 
-    // ── Required imports ───────────────────────────────────────────────────
-
     @Test
     fun buildSource_generatedSource_containsAllRequiredImports() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertTrue(source.contains("import io.navix.contracts.Route"))
         assertTrue(source.contains("import kotlinx.serialization.modules.SerializersModule"))
         assertTrue(source.contains("import kotlinx.serialization.modules.polymorphic"))
         assertTrue(source.contains("import kotlinx.serialization.modules.subclass"))
     }
 
-    // ── Polymorphic block ──────────────────────────────────────────────────
-
     @Test
     fun buildSource_singleRoute_containsPolymorphicBlock() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertTrue(source.contains("polymorphic(Route::class)"))
     }
 
     @Test
     fun buildSource_singleRoute_containsSubclassDeclaration() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertTrue(source.contains("subclass(com.example.HomeRoute::class)"))
     }
 
     @Test
     fun buildSource_multipleRoutes_allSubclassesPresent() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors =
-                    listOf(
-                        descriptor("com.example.HomeRoute"),
-                        descriptor("com.example.DetailRoute"),
-                        descriptor("com.example.SettingsRoute"),
-                    ),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(
+                descriptor("com.example.HomeRoute"),
+                descriptor("com.example.DetailRoute"),
+                descriptor("com.example.SettingsRoute")
+            ), moduleName = "app"
+        )
         assertTrue(source.contains("subclass(com.example.HomeRoute::class)"))
         assertTrue(source.contains("subclass(com.example.DetailRoute::class)"))
         assertTrue(source.contains("subclass(com.example.SettingsRoute::class)"))
@@ -129,47 +105,36 @@ class SerializersModuleGeneratorTest {
 
     @Test
     fun buildSource_multipleRoutes_sortedAlphabetically() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors =
-                    listOf(
-                        descriptor("com.example.ZetaRoute"),
-                        descriptor("com.example.AlphaRoute"),
-                        descriptor("com.example.BetaRoute"),
-                    ),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(
+                descriptor("com.example.ZetaRoute"),
+                descriptor("com.example.AlphaRoute"),
+                descriptor("com.example.BetaRoute")
+            ), moduleName = "app"
+        )
         val alphaIdx = source.indexOf("AlphaRoute")
         val betaIdx = source.indexOf("BetaRoute")
         val zetaIdx = source.indexOf("ZetaRoute")
         assertTrue(alphaIdx < betaIdx && betaIdx < zetaIdx, "Routes should be sorted alphabetically")
     }
 
-    // ── SerializersModule val declaration ──────────────────────────────────
-
     @Test
     fun buildSource_generatedSource_declaresValWithCorrectType() {
-        val (valName, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (valName, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")), moduleName = "app"
+        )
         assertTrue(source.contains("val $valName: SerializersModule = SerializersModule {"))
     }
 
-    // ── Header comment ─────────────────────────────────────────────────────
 
     @Test
     fun buildSource_generatedSource_startsWithDoNotEditComment() {
-        val (_, source) =
-            buildSerializersModuleSource(
-                descriptors = listOf(descriptor("com.example.HomeRoute")),
-                moduleName = "app",
-            )
+        val (_, source) = buildSerializersModuleSource(
+            descriptors = listOf(descriptor("com.example.HomeRoute")),
+            moduleName = "app"
+        )
         assertTrue(source.trimStart().startsWith("// Generated by Navix Compiler"))
     }
-
-    // ── Helpers ───────────────────────────────────────────────────────────
 
     /**
      * Creates a minimal [RouteDestinationDescriptor] from a fully-qualified class name.
@@ -184,7 +149,7 @@ class SerializersModuleGeneratorTest {
             className = className,
             canonicalRoute = fqn,
             deepLinkTemplates = emptyList(),
-            isSerializable = true,
+            isSerializable = true
         )
     }
 }

@@ -20,12 +20,12 @@ import io.navix.demo.data.model.Product
 data class HomeUiState(
     val products: List<Product> = emptyList(),
     val isLoading: Boolean = true,
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface HomeNavEffect {
     data class OpenProductDetail(
-        val productId: String,
+        val productId: String
     ) : HomeNavEffect
 
     data object OpenProfile : HomeNavEffect
@@ -33,6 +33,6 @@ sealed interface HomeNavEffect {
     data object OpenTelemetry : HomeNavEffect
 
     data class HandleDeepLink(
-        val uri: String,
+        val uri: String
     ) : HomeNavEffect
 }

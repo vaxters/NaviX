@@ -28,7 +28,7 @@ data class NavEvent(
     val from: RouteEntry?,
     val to: RouteEntry?,
     val timestampMs: Long,
-    val metadata: Map<String, String> = emptyMap(),
+    val metadata: Map<String, String> = emptyMap()
 )
 
 enum class NavEventType {
@@ -37,5 +37,5 @@ enum class NavEventType {
     REPLACE,
     RESET,
     POP_TO,
-    DEEP_LINK,
+    DEEP_LINK
 }

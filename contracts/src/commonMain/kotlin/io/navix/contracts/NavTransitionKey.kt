@@ -28,9 +28,7 @@ import kotlinx.serialization.Serializable
  * string id and handled by a custom `NavTransitionSpec` registered in `NavixHost`.
  */
 @Serializable
-data class NavTransitionKey(
-    val id: String,
-) {
+data class NavTransitionKey(val id: String) {
     companion object {
         val Default = NavTransitionKey("default")
         val None = NavTransitionKey("none")

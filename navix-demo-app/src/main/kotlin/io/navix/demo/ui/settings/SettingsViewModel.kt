@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
@@ -44,7 +44,7 @@ class SettingsViewModel(
                     it.copy(
                         notificationsEnabled = data.notificationsEnabled,
                         analyticsEnabled = data.analyticsEnabled,
-                        transitionStyle = data.transitionStyle,
+                        transitionStyle = data.transitionStyle
                     )
                 }
             }

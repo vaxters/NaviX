@@ -44,17 +44,9 @@ import io.navix.contracts.RouteEntry
  */
 @Stable
 interface NavTransitionSpec {
-    fun enterTransition(
-        from: RouteEntry?,
-        to: RouteEntry,
-        key: NavTransitionKey,
-    ): EnterTransition
+    fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey): EnterTransition
 
-    fun exitTransition(
-        from: RouteEntry,
-        to: RouteEntry?,
-        key: NavTransitionKey,
-    ): ExitTransition
+    fun exitTransition(from: RouteEntry, to: RouteEntry?, key: NavTransitionKey): ExitTransition
 
     /**
      * Returns a [Modifier] applied to the [from] entry while a predictive back gesture is
@@ -77,7 +69,7 @@ interface NavTransitionSpec {
         to: RouteEntry?,
         key: NavTransitionKey,
         progress: Float,
-        swipeEdge: Int,
+        swipeEdge: Int
     ): Modifier =
         Modifier.graphicsLayer {
             // Scale down slightly as the user drags (max 8 % reduction at full progress).

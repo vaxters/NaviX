@@ -58,7 +58,7 @@ class NavTransitionSpecPredictiveBackTest {
                 to = fakeEntry("e2"),
                 key = NavTransitionKey.Default,
                 progress = 0.5f,
-                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT
             )
         assertNotNull(result)
     }
@@ -71,7 +71,7 @@ class NavTransitionSpecPredictiveBackTest {
                 to = null,
                 key = NavTransitionKey.SlideLeft,
                 progress = 0f,
-                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT
             )
         assertNotNull(result)
     }
@@ -84,7 +84,7 @@ class NavTransitionSpecPredictiveBackTest {
                 to = null,
                 key = NavTransitionKey.SlideRight,
                 progress = 1f,
-                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT
             )
         assertNotNull(result)
     }
@@ -99,7 +99,7 @@ class NavTransitionSpecPredictiveBackTest {
                 to = null,
                 key = NavTransitionKey.None,
                 progress = 0.5f,
-                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT
             )
         assertNotNull(result)
     }
@@ -116,13 +116,13 @@ class NavTransitionSpecPredictiveBackTest {
                 override fun enterTransition(
                     from: RouteEntry?,
                     to: RouteEntry,
-                    key: NavTransitionKey,
+                    key: NavTransitionKey
                 ) = EnterTransition.None
 
                 override fun exitTransition(
                     from: RouteEntry,
                     to: RouteEntry?,
-                    key: NavTransitionKey,
+                    key: NavTransitionKey
                 ) = ExitTransition.None
 
                 override fun predictiveExit(
@@ -130,7 +130,7 @@ class NavTransitionSpecPredictiveBackTest {
                     to: RouteEntry?,
                     key: NavTransitionKey,
                     progress: Float,
-                    swipeEdge: Int,
+                    swipeEdge: Int
                 ): Modifier {
                     capturedProgress = progress
                     capturedEdge = swipeEdge
@@ -143,7 +143,7 @@ class NavTransitionSpecPredictiveBackTest {
             to = null,
             key = NavTransitionKey.Default,
             progress = 0.75f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT
         )
 
         assertEquals(0.75f, capturedProgress, absoluteTolerance = 0.001f)
@@ -159,13 +159,13 @@ class NavTransitionSpecPredictiveBackTest {
                 override fun enterTransition(
                     from: RouteEntry?,
                     to: RouteEntry,
-                    key: NavTransitionKey,
+                    key: NavTransitionKey
                 ) = EnterTransition.None
 
                 override fun exitTransition(
                     from: RouteEntry,
                     to: RouteEntry?,
-                    key: NavTransitionKey,
+                    key: NavTransitionKey
                 ) = ExitTransition.None
 
                 override fun predictiveExit(
@@ -173,7 +173,7 @@ class NavTransitionSpecPredictiveBackTest {
                     to: RouteEntry?,
                     key: NavTransitionKey,
                     progress: Float,
-                    swipeEdge: Int,
+                    swipeEdge: Int
                 ): Modifier = sentinel
             }
 
@@ -183,7 +183,7 @@ class NavTransitionSpecPredictiveBackTest {
                 to = null,
                 key = NavTransitionKey.Default,
                 progress = 0.5f,
-                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+                swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT
             )
 
         assertSame(sentinel, result)
@@ -198,7 +198,7 @@ class NavTransitionSpecPredictiveBackTest {
             to = null,
             key = NavTransitionKey.Default,
             progress = 0.3f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT,
+            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT
         )
     }
 
@@ -209,7 +209,7 @@ class NavTransitionSpecPredictiveBackTest {
             to = null,
             key = NavTransitionKey.Default,
             progress = 0.3f,
-            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT,
+            swipeEdge = NavTransitionSpec.SWIPE_EDGE_RIGHT
         )
     }
 
@@ -219,7 +219,7 @@ class NavTransitionSpecPredictiveBackTest {
         RouteEntry(
             id = id,
             route = FakeRoute,
-            createdAt = 0L,
+            createdAt = 0L
         )
 
     private object FakeRoute : io.navix.contracts.Route
