@@ -54,7 +54,7 @@ import io.navix.runtime.popTo
 @Composable
 fun ProductDetailScreen(
     navigator: Navigator,
-    viewModel: ProductDetailViewModel,
+    viewModel: ProductDetailViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -84,7 +84,7 @@ private fun ProductDetailContent(
     state: ProductDetailUiState,
     onReadReviews: () -> Unit,
     onBack: () -> Unit,
-    onBackToHome: () -> Unit,
+    onBackToHome: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -94,7 +94,7 @@ private fun ProductDetailContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -116,7 +116,7 @@ private fun ProductDetailContent(
                         modifier =
                             Modifier
                                 .align(Alignment.Center)
-                                .padding(24.dp),
+                                .padding(24.dp)
                     )
                 }
 
@@ -124,7 +124,7 @@ private fun ProductDetailContent(
                     ProductDetailBody(
                         product = state.product,
                         onReadReviews = onReadReviews,
-                        onBackToHome = onBackToHome,
+                        onBackToHome = onBackToHome
                     )
                 }
             }
@@ -136,7 +136,7 @@ private fun ProductDetailContent(
 private fun ProductDetailBody(
     product: Product,
     onReadReviews: () -> Unit,
-    onBackToHome: () -> Unit,
+    onBackToHome: () -> Unit
 ) {
     Column(
         modifier =
@@ -161,12 +161,12 @@ private fun ProductDetailBody(
                 Icon(
                     Icons.Default.Star,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiary,
+                    tint = MaterialTheme.colorScheme.tertiary
                 )
             }
             Text(
                 text = "  ${product.rating} (${product.reviewCount} reviews)",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 

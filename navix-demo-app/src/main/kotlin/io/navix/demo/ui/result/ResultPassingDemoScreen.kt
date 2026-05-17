@@ -117,7 +117,7 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
             Column(
                 modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
                     modifier =
@@ -125,14 +125,14 @@ fun ResultPassingDemoScreen(navigator: Navigator) {
                             .size(72.dp)
                             .clip(CircleShape)
                             .background(pickedColor ?: MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                            .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                            .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
                 )
                 Text(
                     text =
                         pickedColor?.let { "#%06X".format(it.toArgb() and 0xFFFFFF) }
                             ?: "No color picked yet",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -210,7 +210,7 @@ fun ColorPickerScreen(navigator: Navigator) {
         DemoColors.chunked(4).forEach { rowColors ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 rowColors.forEach { color ->
                     Box(
@@ -223,7 +223,7 @@ fun ColorPickerScreen(navigator: Navigator) {
                                 .clickable {
                                     navigator.setResult(color.toArgb())
                                     navigator.pop()
-                                },
+                                }
                     )
                 }
             }

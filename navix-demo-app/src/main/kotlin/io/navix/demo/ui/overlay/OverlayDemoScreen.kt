@@ -106,7 +106,7 @@ fun OverlayDemoScreen(navigator: Navigator) {
 @Composable
 fun ConfirmDialogContent(
     onConfirm: () -> Unit,
-    onCancel: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
@@ -124,7 +124,7 @@ fun ConfirmDialogContent(
             Text(
                 text = "Confirm Action",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(12.dp))
             Text(
@@ -132,21 +132,21 @@ fun ConfirmDialogContent(
                     "This dialog is a first-class backstack entry. The screen behind it " +
                         "stays fully composed. Back press calls navigator.pop().",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(24.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(
                     onClick = onCancel,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
                 ) { Text("Cancel") }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                        ),
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                 ) { Text("Confirm") }
             }
         }
@@ -156,7 +156,7 @@ fun ConfirmDialogContent(
 @Composable
 private fun StatusRow(
     label: String,
-    value: String,
+    value: String
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),

@@ -18,7 +18,7 @@ package io.navix.demo.ui.auth
 data class AuthUiState(
     val isLoading: Boolean = false,
     /** Non-null when sign-in fails. Cleared on the next sign-in attempt. */
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface AuthNavEffect {

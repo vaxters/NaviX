@@ -84,7 +84,7 @@ private fun SettingsContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -99,7 +99,7 @@ private fun SettingsContent(
                     title = "Notifications",
                     subtitle = "Enable push notifications",
                     checked = state.notificationsEnabled,
-                    onCheckedChange = onToggleNotifications,
+                    onCheckedChange = onToggleNotifications
                 )
                 HorizontalDivider()
             }
@@ -108,7 +108,7 @@ private fun SettingsContent(
                     title = "Analytics",
                     subtitle = "Off = NavixTelemetry.NoOp — no events emitted",
                     checked = state.analyticsEnabled,
-                    onCheckedChange = onToggleAnalytics,
+                    onCheckedChange = onToggleAnalytics
                 )
                 HorizontalDivider()
             }
@@ -142,7 +142,7 @@ private fun SettingsToggleItem(
         trailingContent = {
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = onCheckedChange
             )
         }
     )
@@ -161,7 +161,7 @@ private fun TransitionStyleItem(
                     Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TransitionStyle.entries.forEach { style ->
                     FilterChip(
@@ -170,9 +170,9 @@ private fun TransitionStyleItem(
                         label = {
                             Text(
                                 text = style.name,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall
                             )
-                        },
+                        }
                     )
                 }
             }

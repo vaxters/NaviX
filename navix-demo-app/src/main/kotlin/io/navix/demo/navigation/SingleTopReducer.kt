@@ -66,7 +66,7 @@ class SingleTopReducer(
                 // Route type already on the stack — pop to it instead of pushing a duplicate.
                 return delegate.reduce(
                     snapshot,
-                    BackstackAction.PopTo(action.route::class, inclusive = false),
+                    BackstackAction.PopTo(action.route::class, inclusive = false)
                 )
             }
         }

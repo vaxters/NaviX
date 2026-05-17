@@ -48,7 +48,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun RegisterScreen(
     navigator: Navigator,
-    viewModel: RegisterViewModel,
+    viewModel: RegisterViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -73,7 +73,7 @@ fun RegisterScreen(
 private fun RegisterContent(
     state: RegisterUiState,
     onRegister: () -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -83,7 +83,7 @@ private fun RegisterContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -97,19 +97,19 @@ private fun RegisterContent(
         ) {
             Text(
                 text = "Register",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onRegister,
                 enabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(18.dp),
                         strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
                     Text("Complete Registration")
@@ -122,7 +122,7 @@ private fun RegisterContent(
                     Text(
                         text = errorMessage,
                         color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

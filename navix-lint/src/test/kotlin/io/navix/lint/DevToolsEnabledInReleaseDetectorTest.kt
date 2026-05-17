@@ -45,7 +45,7 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
                     NavixDevToolsOverlay(navigator = navigator, enabled = true)
                                                                           ~~~~
                 0 errors, 1 warnings
-                """.trimIndent(),
+                """.trimIndent()
             )
     }
 

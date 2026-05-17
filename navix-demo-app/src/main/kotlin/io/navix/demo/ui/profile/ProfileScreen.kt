@@ -101,7 +101,7 @@ private fun ProfileContent(
                     IconButton(onClick = onOpenSettings) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -114,7 +114,7 @@ private fun ProfileContent(
             when {
                 state.isLoading ->
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
+                        modifier = Modifier.align(Alignment.Center)
                     )
 
                 state.error != null ->
@@ -126,7 +126,7 @@ private fun ProfileContent(
                         modifier =
                             Modifier
                                 .align(Alignment.Center)
-                                .padding(horizontal = 32.dp),
+                                .padding(horizontal = 32.dp)
                     )
 
                 else ->
@@ -134,7 +134,7 @@ private fun ProfileContent(
                         user = state.user,
                         onSignOut = onSignOut,
                         onResetToHome = onResetToHome,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
                     )
             }
         }
@@ -163,7 +163,7 @@ private fun ProfileBody(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
                 modifier = Modifier.padding(24.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
 

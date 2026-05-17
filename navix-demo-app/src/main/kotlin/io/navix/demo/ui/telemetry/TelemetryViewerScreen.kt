@@ -81,7 +81,7 @@ private fun TelemetryContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -98,7 +98,7 @@ private fun TelemetryContent(
                     text = "Navigation Events (newest first, up to 100)",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
             items(events, key = { it.timestampMs }) { event ->

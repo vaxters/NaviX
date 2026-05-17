@@ -51,7 +51,7 @@ import io.navix.runtime.popTo
 @Composable
 fun ProductReviewsScreen(
     navigator: Navigator,
-    viewModel: ProductReviewsViewModel,
+    viewModel: ProductReviewsViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -76,7 +76,7 @@ fun ProductReviewsScreen(
 private fun ProductReviewsContent(
     state: ProductReviewsUiState,
     onBack: () -> Unit,
-    onJumpToHome: () -> Unit,
+    onJumpToHome: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -86,7 +86,7 @@ private fun ProductReviewsContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -108,14 +108,14 @@ private fun ProductReviewsContent(
                         modifier =
                             Modifier
                                 .align(Alignment.Center)
-                                .padding(24.dp),
+                                .padding(24.dp)
                     )
                 }
 
                 else -> {
                     ReviewList(
                         reviews = state.reviews,
-                        onJumpToHome = onJumpToHome,
+                        onJumpToHome = onJumpToHome
                     )
                 }
             }
@@ -126,7 +126,7 @@ private fun ProductReviewsContent(
 @Composable
 private fun ReviewList(
     reviews: List<Review>,
-    onJumpToHome: () -> Unit,
+    onJumpToHome: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -136,7 +136,7 @@ private fun ReviewList(
         item {
             OutlinedButton(
                 onClick = onJumpToHome,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Jump to Home (popTo)")
             }

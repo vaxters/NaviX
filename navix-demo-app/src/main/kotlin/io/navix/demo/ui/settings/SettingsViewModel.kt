@@ -44,7 +44,7 @@ class SettingsViewModel(
                     it.copy(
                         notificationsEnabled = data.notificationsEnabled,
                         analyticsEnabled = data.analyticsEnabled,
-                        transitionStyle = data.transitionStyle,
+                        transitionStyle = data.transitionStyle
                     )
                 }
             }

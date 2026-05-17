@@ -47,7 +47,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                 data class ProductDetail(val id: String) : Route
                            ~~~~~~~~~~~~~
                 1 errors, 0 warnings
-                """.trimIndent(),
+                """.trimIndent()
             )
     }
 
@@ -72,7 +72,7 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                 data object Home : Route
                             ~~~~
                 1 errors, 0 warnings
-                """.trimIndent(),
+                """.trimIndent()
             )
     }
 

@@ -104,9 +104,9 @@ fun TabsDemoScreen(outerNavigator: Navigator) {
                 navigationIcon = {
                     OutlinedButton(
                         onClick = { outerNavigator.pop() },
-                        modifier = Modifier.padding(start = 8.dp),
+                        modifier = Modifier.padding(start = 8.dp)
                     ) { Text("← Back") }
-                },
+                }
             )
         },
         bottomBar = {
@@ -118,10 +118,10 @@ fun TabsDemoScreen(outerNavigator: Navigator) {
                         icon = {
                             Text(
                                 text = label.first().toString(),
-                                fontWeight = FontWeight.Bold,
+                                fontWeight = FontWeight.Bold
                             )
                         },
-                        label = { Text(label) },
+                        label = { Text(label) }
                     )
                 }
             }
@@ -218,12 +218,12 @@ private fun ListTabScreen(navigator: Navigator) {
             items(SAMPLE_ITEMS) { item ->
                 Card(
                     onClick = { navigator.push(ListTabDetail(item)) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = item,
                         modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
@@ -234,7 +234,7 @@ private fun ListTabScreen(navigator: Navigator) {
 @Composable
 private fun ListTabDetailScreen(
     navigator: Navigator,
-    item: String,
+    item: String
 ) {
     Column(
         modifier =
@@ -274,7 +274,7 @@ private fun InfoTabScreen() {
             Text(
                 text = "Info Tab",
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(16.dp))
             Text(
@@ -287,7 +287,7 @@ private fun InfoTabScreen() {
                         "• When the active tab is at root,\n" +
                         "  back propagates to the outer stack",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

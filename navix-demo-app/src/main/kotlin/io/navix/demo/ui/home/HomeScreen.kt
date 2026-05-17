@@ -66,7 +66,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun HomeScreen(
     navigator: Navigator,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val backstack by navigator.backstack.collectAsStateWithLifecycle()
@@ -102,7 +102,7 @@ private fun HomeContent(
     onProductClicked: (String) -> Unit,
     onOpenProfile: () -> Unit,
     onOpenTelemetry: () -> Unit,
-    onDeepLink: (String) -> Unit,
+    onDeepLink: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -115,7 +115,7 @@ private fun HomeContent(
                     IconButton(onClick = onOpenProfile) {
                         Icon(Icons.Default.Person, contentDescription = "Profile")
                     }
-                },
+                }
             )
         }
     ) { padding ->
@@ -140,7 +140,7 @@ private fun HomeContent(
                             modifier =
                                 Modifier
                                     .align(Alignment.Center)
-                                    .padding(24.dp),
+                                    .padding(24.dp)
                         )
                     }
 
@@ -148,7 +148,7 @@ private fun HomeContent(
                         ProductList(
                             products = state.products,
                             onProductClicked = onProductClicked,
-                            onDeepLink = onDeepLink,
+                            onDeepLink = onDeepLink
                         )
                     }
                 }
@@ -174,11 +174,11 @@ private fun BackstackInfoBar(backstack: BackstackSnapshot) {
             Text(
                 text = "Depth: ${backstack.depth}  |  canPop: ${backstack.canPop}  |  Active: $activeRoute",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 backstack.entries.forEach { entry ->
                     val isResumed = entry.lifecycleState == NavLifecycleState.RESUMED
@@ -188,14 +188,14 @@ private fun BackstackInfoBar(backstack: BackstackSnapshot) {
                         label = {
                             Text(
                                 text = "${entry.route::class.simpleName} • ${entry.lifecycleState}",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall
                             )
                         },
                         colors =
                             FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            ),
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
                     )
                 }
             }
@@ -207,7 +207,7 @@ private fun BackstackInfoBar(backstack: BackstackSnapshot) {
 private fun ProductList(
     products: List<Product>,
     onProductClicked: (String) -> Unit,
-    onDeepLink: (String) -> Unit,
+    onDeepLink: (String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -218,7 +218,7 @@ private fun ProductList(
             Text(
                 text = "Featured Products",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 4.dp),
+                modifier = Modifier.padding(bottom = 4.dp)
             )
         }
         items(products, key = { it.id }) { product ->
@@ -227,22 +227,22 @@ private fun ProductList(
         item {
             Column(
                 modifier = Modifier.padding(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
                     text = "Deep Links",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 4.dp),
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedButton(
                     onClick = { onDeepLink("navix://product/1") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Deep Link → Product 1")
                 }
                 OutlinedButton(
                     onClick = { onDeepLink("navix://profile") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Deep Link → Profile")
                 }
@@ -254,7 +254,7 @@ private fun ProductList(
 @Composable
 private fun ProductCard(
     product: Product,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
         modifier =
@@ -270,13 +270,13 @@ private fun ProductCard(
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             )
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

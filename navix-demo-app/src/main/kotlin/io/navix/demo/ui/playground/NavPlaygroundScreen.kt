@@ -89,7 +89,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                 Text(
                     text = "Backstack  [depth: ${snapshot.depth}]",
                     style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(4.dp))
                 snapshot.entries.reversed().forEachIndexed { index, entry ->
@@ -111,7 +111,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                                 MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
-                            },
+                            }
                     )
                 }
             }
@@ -129,12 +129,12 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                 ) + 1
             Button(
                 onClick = { navigator.push(NavPlaygroundStep(nextStep), NavTransitionKey.SlideLeft) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             ) { Text("Push Step $nextStep") }
             OutlinedButton(
                 onClick = { navigator.pop() },
                 enabled = snapshot.canPop,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             ) { Text("Pop") }
         }
 
@@ -211,12 +211,12 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                 "Fade" to NavTransitionKey.Fade,
                 "Scale" to NavTransitionKey.Scale,
                 "SharedAxisX" to NavTransitionKey.SharedAxisX,
-                "None" to NavTransitionKey.None,
+                "None" to NavTransitionKey.None
             )
         transitions.chunked(3).forEach { row ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 row.forEach { (label, key) ->
                     OutlinedButton(
@@ -229,7 +229,7 @@ fun NavPlaygroundScreen(navigator: Navigator) {
                                 ) + 1
                             navigator.push(NavPlaygroundStep(nextStep), key)
                         },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
                     ) { Text(label, fontSize = 10.sp, maxLines = 1) }
                 }
             }

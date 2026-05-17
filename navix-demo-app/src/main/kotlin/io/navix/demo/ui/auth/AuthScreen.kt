@@ -46,7 +46,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun AuthScreen(
     navigator: Navigator,
-    viewModel: AuthViewModel,
+    viewModel: AuthViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -70,7 +70,7 @@ fun AuthScreen(
 private fun AuthContent(
     state: AuthUiState,
     onSignIn: () -> Unit,
-    onCreateAccount: () -> Unit,
+    onCreateAccount: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -85,12 +85,12 @@ private fun AuthContent(
                 text = "Navix",
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = "Navigation Platform Demo",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(64.dp))
@@ -98,13 +98,13 @@ private fun AuthContent(
             Button(
                 onClick = onSignIn,
                 enabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(18.dp),
                         strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
                     Text("Sign In")
@@ -116,7 +116,7 @@ private fun AuthContent(
             OutlinedButton(
                 onClick = onCreateAccount,
                 enabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Create Account")
             }
@@ -127,7 +127,7 @@ private fun AuthContent(
                     Text(
                         text = errorMessage,
                         color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

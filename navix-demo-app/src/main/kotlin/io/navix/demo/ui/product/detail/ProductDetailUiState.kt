@@ -20,7 +20,7 @@ import io.navix.demo.data.model.Product
 data class ProductDetailUiState(
     val product: Product? = null,
     val isLoading: Boolean = true,
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface ProductDetailNavEffect {

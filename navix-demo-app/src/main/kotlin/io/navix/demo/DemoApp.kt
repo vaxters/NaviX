@@ -60,7 +60,7 @@ class DemoApp : Application() {
             exporters =
                 listOf(
                     LogcatExporter(tag = "NavixDemo"),
-                    inMemoryExporter,
+                    inMemoryExporter
                 )
         )
     }
