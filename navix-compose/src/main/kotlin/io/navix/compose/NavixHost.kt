@@ -106,7 +106,7 @@ fun NavixHost(
     navigator: Navigator,
     modifier: Modifier = Modifier,
     transitionSpec: NavTransitionSpec = NavTransitionSpec.Default,
-    content: NavGraphBuilder.() -> Unit,
+    content: NavGraphBuilder.() -> Unit
 ) {
     val graphBuilder = remember { NavGraphBuilderImpl().apply(content) }
     val hostLifecycleOwner = LocalLifecycleOwner.current
@@ -127,7 +127,7 @@ fun NavixHost(
         ownerMap.getOrPut(id) {
             NavBackStackEntryOwner(
                 viewModelStore = ownerStore.storeFor(id),
-                restoredBundle = holder?.consumeRestoredState(id),
+                restoredBundle = holder?.consumeRestoredState(id)
             ).also { holder?.registerOwner(id, it) }
         }
 
@@ -158,7 +158,7 @@ fun NavixHost(
                     } else {
                         Lifecycle.State.STARTED
                     },
-                hostState = hostState,
+                hostState = hostState
             )
         }
     }
@@ -176,7 +176,7 @@ fun NavixHost(
                             } else {
                                 Lifecycle.State.STARTED
                             },
-                        hostState = hostState,
+                        hostState = hostState
                     )
                 }
             }
@@ -264,7 +264,7 @@ fun NavixHost(
         enabled = snapshot.canPop && !isOverlayActive,
         navigator = navigator,
         predictiveProgress = predictiveProgress,
-        onSwipeEdgeChange = { swipeEdge = it },
+        onSwipeEdgeChange = { swipeEdge = it }
     )
 
     // ── Screen layer (AnimatedContent) ──────────────────────────────────────
@@ -276,21 +276,13 @@ fun NavixHost(
                 transitionSpec = {
                     val key = targetState.transitionKey
                     val enter =
-                        transitionSpec.enterTransition(
-                            from = initialState,
-                            to = targetState,
-                            key = key,
-                        )
+                        transitionSpec.enterTransition(from = initialState, to = targetState, key = key)
                     val exit =
-                        transitionSpec.exitTransition(
-                            from = initialState,
-                            to = targetState,
-                            key = key,
-                        )
+                        transitionSpec.exitTransition(from = initialState, to = targetState, key = key)
                     enter togetherWith exit
                 },
                 contentKey = { entry -> entry.id },
-                label = "NavixHost",
+                label = "NavixHost"
             ) { entry ->
                 val owner = ownerFor(entry.id)
 
@@ -313,7 +305,7 @@ fun NavixHost(
                             to = previousEntry,
                             key = entry.transitionKey,
                             progress = gestureProgress,
-                            swipeEdge = swipeEdge,
+                            swipeEdge = swipeEdge
                         )
                     } else {
                         Modifier
@@ -324,13 +316,13 @@ fun NavixHost(
                         owner = owner,
                         navigator = navigator,
                         entry = entry,
-                        saveableStateHolder = saveableStateHolder,
+                        saveableStateHolder = saveableStateHolder
                     ) {
                         val screenContent =
                             graphBuilder.destinations[entry.route::class]
                                 ?: error(
                                     "No screen registered for route ${entry.route::class.simpleName}. " +
-                                        "Add a screen<${entry.route::class.simpleName}> { } block inside NavixHost.",
+                                        "Add a screen<${entry.route::class.simpleName}> { } block inside NavixHost."
                                 )
                         screenContent(entry, entry.route)
                     }
@@ -346,7 +338,7 @@ fun NavixHost(
             graphBuilder = graphBuilder,
             ownerFor = ::ownerFor,
             evict = ::evict,
-            saveableStateHolder = saveableStateHolder,
+            saveableStateHolder = saveableStateHolder
         )
     }
 }
@@ -356,7 +348,7 @@ private fun NavixPredictiveBackHandler(
     enabled: Boolean,
     navigator: Navigator,
     predictiveProgress: Animatable<Float, androidx.compose.animation.core.AnimationVector1D>,
-    onSwipeEdgeChange: (Int) -> Unit,
+    onSwipeEdgeChange: (Int) -> Unit
 ) {
     PredictiveBackHandler(enabled = enabled) { backEvents: kotlinx.coroutines.flow.Flow<BackEventCompat> ->
         try {
@@ -370,7 +362,7 @@ private fun NavixPredictiveBackHandler(
         } catch (e: kotlinx.coroutines.CancellationException) {
             predictiveProgress.animateTo(
                 targetValue = 0f,
-                animationSpec = spring(stiffness = Spring.StiffnessMedium),
+                animationSpec = spring(stiffness = Spring.StiffnessMedium)
             )
             throw e
         }
@@ -386,7 +378,7 @@ private fun NavixOverlayContent(
     graphBuilder: NavGraphBuilderImpl,
     ownerFor: (String) -> NavBackStackEntryOwner,
     evict: (String) -> Unit,
-    saveableStateHolder: SaveableStateHolder,
+    saveableStateHolder: SaveableStateHolder
 ) {
     val isOverlayActive = activeKind == DestinationKind.Dialog || activeKind == DestinationKind.BottomSheet
     if (!isOverlayActive) return
@@ -415,13 +407,13 @@ private fun NavixOverlayContent(
                     owner = overlayOwner,
                     navigator = navigator,
                     entry = overlayEntry,
-                    saveableStateHolder = saveableStateHolder,
+                    saveableStateHolder = saveableStateHolder
                 ) {
                     val dialogContent =
                         graphBuilder.destinations[overlayEntry.route::class]
                             ?: error(
                                 "No dialog registered for route ${overlayEntry.route::class.simpleName}. " +
-                                    "Add a dialog<${overlayEntry.route::class.simpleName}> { } block inside NavixHost.",
+                                    "Add a dialog<${overlayEntry.route::class.simpleName}> { } block inside NavixHost."
                             )
                     dialogContent(overlayEntry, overlayEntry.route)
                 }
@@ -432,20 +424,20 @@ private fun NavixOverlayContent(
             val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
             ModalBottomSheet(
                 onDismissRequest = { navigator.pop() },
-                sheetState = sheetState,
+                sheetState = sheetState
             ) {
                 NavEntry(
                     owner = overlayOwner,
                     navigator = navigator,
                     entry = overlayEntry,
-                    saveableStateHolder = saveableStateHolder,
+                    saveableStateHolder = saveableStateHolder
                 ) {
                     val routeName = overlayEntry.route::class.simpleName
                     val sheetContent =
                         graphBuilder.destinations[overlayEntry.route::class]
                             ?: error(
                                 "No bottomSheet registered for route $routeName. " +
-                                    "Add a bottomSheet<$routeName> { } block inside NavixHost.",
+                                    "Add a bottomSheet<$routeName> { } block inside NavixHost."
                             )
                     sheetContent(overlayEntry, overlayEntry.route)
                 }

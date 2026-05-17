@@ -46,7 +46,7 @@ import io.navix.contracts.Route
  */
 fun ComposeContentTestRule.setNavixContent(
     navigator: FakeNavigator,
-    content: NavGraphBuilder.() -> Unit,
+    content: NavGraphBuilder.() -> Unit
 ) {
     setContent {
         NavixHost(navigator = navigator, content = content)
@@ -77,7 +77,7 @@ fun ComposeContentTestRule.setNavixContent(
  */
 fun ComposeContentTestRule.setNavixContent(
     root: Route,
-    content: NavGraphBuilder.() -> Unit,
+    content: NavGraphBuilder.() -> Unit
 ): FakeNavigator {
     val navigator = FakeNavigator(root)
     setContent {

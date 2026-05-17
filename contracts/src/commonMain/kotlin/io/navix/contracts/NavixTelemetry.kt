@@ -26,9 +26,8 @@ interface NavixTelemetry {
     fun onEvent(event: NavEvent)
 
     companion object {
-        val NoOp: NavixTelemetry =
-            object : NavixTelemetry {
-                override fun onEvent(event: NavEvent) = Unit
-            }
+        val NoOp: NavixTelemetry = object : NavixTelemetry {
+            override fun onEvent(event: NavEvent) = Unit
+        }
     }
 }

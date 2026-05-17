@@ -56,7 +56,7 @@ import io.navix.contracts.RouteEntry
 fun <T : Route> PreviewNavixHost(
     route: T,
     modifier: Modifier = Modifier,
-    content: @Composable (entry: RouteEntry, route: T) -> Unit,
+    content: @Composable (entry: RouteEntry, route: T) -> Unit
 ) {
     val previewEntry =
         RouteEntry(
@@ -64,7 +64,7 @@ fun <T : Route> PreviewNavixHost(
             route = route,
             createdAt = 0L,
             lifecycleState = NavLifecycleState.RESUMED,
-            transitionKey = NavTransitionKey.Default,
+            transitionKey = NavTransitionKey.Default
         )
     Box(modifier = modifier) {
         content(previewEntry, route)

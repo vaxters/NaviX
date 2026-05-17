@@ -62,7 +62,7 @@ class NavixMultiStack internal constructor(
     val specs: List<NavStackSpec>,
     /** One [Navigator] per entry in [specs], in the same order. */
     val navigators: List<Navigator>,
-    initialTabIndex: Int,
+    initialTabIndex: Int
 ) {
     private val _activeTabIndex = MutableStateFlow(initialTabIndex)
 
@@ -133,7 +133,7 @@ fun rememberNavixMultiStack(
     initialTabIndex: Int = 0,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer(),
+    reducer: Reducer = DefaultReducer()
 ): NavixMultiStack {
     require(specs.isNotEmpty()) { "rememberNavixMultiStack requires at least one NavStackSpec." }
     val scope = rememberCoroutineScope()
@@ -147,10 +147,10 @@ fun rememberNavixMultiStack(
                         scope = scope,
                         reducer = reducer,
                         telemetry = telemetry,
-                        deepLinkHandlers = deepLinkHandlers,
+                        deepLinkHandlers = deepLinkHandlers
                     )
                 },
-            initialTabIndex = initialTabIndex,
+            initialTabIndex = initialTabIndex
         )
     }
 }
@@ -195,7 +195,7 @@ fun rememberSaveableNavixMultiStack(
     initialTabIndex: Int = 0,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer(),
+    reducer: Reducer = DefaultReducer()
 ): NavixMultiStack {
     require(specs.isNotEmpty()) {
         "rememberSaveableNavixMultiStack requires at least one NavStackSpec."
@@ -210,7 +210,7 @@ fun rememberSaveableNavixMultiStack(
 
     fun build(
         tabBytes: Map<String, ByteArray>,
-        startTab: Int,
+        startTab: Int
     ): NavixMultiStack {
         val navigators =
             specs.map { spec ->
@@ -222,7 +222,7 @@ fun rememberSaveableNavixMultiStack(
                             scope = scope,
                             reducer = reducer,
                             telemetry = telemetry,
-                            deepLinkHandlers = deepLinkHandlers,
+                            deepLinkHandlers = deepLinkHandlers
                         )
                     } else {
                         restoreNavigator(
@@ -232,7 +232,7 @@ fun rememberSaveableNavixMultiStack(
                             saver = saver,
                             reducer = reducer,
                             telemetry = telemetry,
-                            deepLinkHandlers = deepLinkHandlers,
+                            deepLinkHandlers = deepLinkHandlers
                         )
                     }
                 NavixHolderRegistry.put(nav, sharedHolder)
@@ -241,7 +241,7 @@ fun rememberSaveableNavixMultiStack(
         return NavixMultiStack(
             specs = specs,
             navigators = navigators,
-            initialTabIndex = startTab.coerceIn(0, specs.lastIndex),
+            initialTabIndex = startTab.coerceIn(0, specs.lastIndex)
         )
     }
 
@@ -258,7 +258,7 @@ fun rememberSaveableNavixMultiStack(
                     NavixPersistedState.packMultiStack(
                         activeTabIndex = ms.activeTabIndex.value,
                         tabBackstacks = tabStacks,
-                        entryStates = sharedHolder.performSave(),
+                        entryStates = sharedHolder.performSave()
                     )
                 },
                 restore = { saved ->
@@ -275,8 +275,8 @@ fun rememberSaveableNavixMultiStack(
                                 }.toMap()
                         build(bytesByKey, NavixPersistedState.unpackTabIndex(blob, initialTabIndex))
                     }
-                },
-            ),
+                }
+            )
     ) {
         build(emptyMap(), initialTabIndex)
     }

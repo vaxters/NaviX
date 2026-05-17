@@ -41,10 +41,7 @@ interface Navigator {
 
     val events: SharedFlow<NavEvent>
 
-    fun push(
-        route: Route,
-        transition: NavTransitionKey = NavTransitionKey.Default,
-    )
+    fun push(route: Route, transition: NavTransitionKey = NavTransitionKey.Default)
 
     /**
      * Pops the top entry from the backstack.
@@ -61,17 +58,11 @@ interface Navigator {
      */
     fun pop(transition: NavTransitionKey = NavTransitionKey.SlideRight)
 
-    fun replace(
-        route: Route,
-        transition: NavTransitionKey = NavTransitionKey.Default,
-    )
+    fun replace(route: Route, transition: NavTransitionKey = NavTransitionKey.Default)
 
     fun reset(root: Route)
 
-    fun popTo(
-        routeClass: KClass<out Route>,
-        inclusive: Boolean = false,
-    )
+    fun popTo(routeClass: KClass<out Route>, inclusive: Boolean = false)
 
     fun handleDeepLink(uri: String): Boolean
 
@@ -114,7 +105,7 @@ interface Navigator {
      */
     suspend fun <R : Any> pushForResult(
         route: Route,
-        transition: NavTransitionKey = NavTransitionKey.Default,
+        transition: NavTransitionKey = NavTransitionKey.Default
     ): NavResult<R>
 
     /**
@@ -146,5 +137,5 @@ inline fun <reified T : Route> Navigator.popTo(inclusive: Boolean = false) {
  */
 suspend inline fun <reified R : Any> Navigator.pushForResultOrNull(
     route: Route,
-    transition: NavTransitionKey = NavTransitionKey.Default,
+    transition: NavTransitionKey = NavTransitionKey.Default
 ): R? = pushForResult<R>(route, transition).getOrNull()

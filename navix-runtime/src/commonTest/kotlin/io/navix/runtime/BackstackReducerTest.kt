@@ -37,15 +37,12 @@ class BackstackReducerTest {
                         route = route,
                         createdAt = 0L,
                         lifecycleState = NavLifecycleState.RESUMED,
-                        transitionKey = transition,
+                        transitionKey = transition
                     )
-                },
+                }
         )
 
-    private fun reduce(
-        snapshot: BackstackSnapshot,
-        action: BackstackAction,
-    ) = reducer.reduce(snapshot, action)
+    private fun reduce(snapshot: BackstackSnapshot, action: BackstackAction) = reducer.reduce(snapshot, action)
 
     private fun snapshotOf(vararg routes: io.navix.contracts.Route): BackstackSnapshot {
         val entries =
@@ -59,7 +56,7 @@ class BackstackReducerTest {
                             NavLifecycleState.RESUMED
                         } else {
                             NavLifecycleState.STARTED
-                        },
+                        }
                 )
             }
         return BackstackSnapshot(entries)
@@ -216,15 +213,15 @@ class BackstackReducerTest {
                             route = route,
                             createdAt = 42L,
                             lifecycleState = NavLifecycleState.RESUMED,
-                            transitionKey = transition,
+                            transitionKey = transition
                         )
-                    },
+                    }
             )
         }
 
         val initial =
             BackstackSnapshot(
-                listOf(RouteEntry("e-init", HomeRoute, 42L, NavLifecycleState.RESUMED)),
+                listOf(RouteEntry("e-init", HomeRoute, 42L, NavLifecycleState.RESUMED))
             )
 
         fun applySequence(r: Reducer): BackstackSnapshot {

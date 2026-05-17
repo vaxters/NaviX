@@ -55,7 +55,7 @@ import io.navix.demo.routes.Settings as SettingsRoute
 @Composable
 fun ProfileScreen(
     navigator: Navigator,
-    viewModel: ProfileViewModel,
+    viewModel: ProfileViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -75,7 +75,7 @@ fun ProfileScreen(
         onOpenSettings = viewModel::onOpenSettings,
         onSignOut = viewModel::onSignOut,
         onResetToHome = viewModel::onResetToHome,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -86,7 +86,7 @@ private fun ProfileContent(
     onOpenSettings: () -> Unit,
     onSignOut: () -> Unit,
     onResetToHome: () -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -103,13 +103,13 @@ private fun ProfileContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             when {
                 state.isLoading ->
@@ -146,18 +146,18 @@ private fun ProfileBody(
     user: User?,
     onSignOut: () -> Unit,
     onResetToHome: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
         Surface(
             modifier = Modifier.size(96.dp),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Icon(
                 imageVector = Icons.Default.Person,
@@ -171,12 +171,12 @@ private fun ProfileBody(
 
         Text(
             text = user?.name ?: "",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineSmall
         )
         Text(
             text = user?.email ?: "",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(48.dp))

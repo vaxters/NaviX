@@ -26,5 +26,5 @@ include(
     ":navix-devtools",
     ":navix-lint",
     ":navix-testing",
-    ":navix-demo-app",
+    ":navix-demo-app"
 )

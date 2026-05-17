@@ -37,8 +37,8 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import io.navix.contracts.Route
                     @RouteDestination
                     data class ProductDetail(val id: String) : Route
-                    """,
-                ).indented(),
+                    """
+                ).indented()
             ).allowMissingSdk()
             .run()
             .expect(
@@ -62,8 +62,8 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import io.navix.contracts.Route
                     @RouteDestination
                     data object Home : Route
-                    """,
-                ).indented(),
+                    """
+                ).indented()
             ).allowMissingSdk()
             .run()
             .expect(
@@ -91,8 +91,8 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     @Serializable
                     @RouteDestination
                     data class ProductDetail(val id: String) : Route
-                    """,
-                ).indented(),
+                    """
+                ).indented()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -108,8 +108,8 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     import kotlinx.serialization.Serializable
                     @Serializable
                     data class SomeDto(val value: String)
-                    """,
-                ).indented(),
+                    """
+                ).indented()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -123,8 +123,8 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                     """
                     package test
                     data class NoAnnotation(val x: Int)
-                    """,
-                ).indented(),
+                    """
+                ).indented()
             ).allowMissingSdk()
             .run()
             .expectClean()
@@ -139,19 +139,19 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
                 """
             package io.navix.annotations
             annotation class RouteDestination(vararg val deepLinks: String = [])
-            """,
+            """
             ).indented(),
             kotlin(
                 """
             package io.navix.contracts
             interface Route
-            """,
+            """
             ).indented(),
             kotlin(
                 """
             package kotlinx.serialization
             annotation class Serializable
-            """,
-            ).indented(),
+            """
+            ).indented()
         )
 }

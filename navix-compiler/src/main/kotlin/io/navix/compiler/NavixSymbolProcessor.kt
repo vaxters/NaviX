@@ -40,7 +40,7 @@ import io.navix.annotations.RouteDestination
 internal class NavixSymbolProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val options: Map<String, String>,
+    private val options: Map<String, String>
 ) : SymbolProcessor {
     private val registryGenerator = RouteRegistryGenerator(codeGenerator)
     private val deepLinkGenerator = DeepLinkHandlerGenerator(codeGenerator)
@@ -53,7 +53,7 @@ internal class NavixSymbolProcessor(
                 .getSymbolsWithAnnotation(
                     requireNotNull(RouteDestination::class.qualifiedName) {
                         "RouteDestination annotation must have a qualified name"
-                    },
+                    }
                 ).filterIsInstance<KSClassDeclaration>()
                 .toList()
 
@@ -81,7 +81,7 @@ internal class NavixSymbolProcessor(
             .forEach { (route, dupes) ->
                 logger.error(
                     "Duplicate @RouteDestination canonical route '$route' found in: " +
-                        dupes.joinToString { it.fullyQualifiedName },
+                        dupes.joinToString { it.fullyQualifiedName }
                 )
             }
     }
@@ -93,6 +93,6 @@ class NavixSymbolProcessorProvider : SymbolProcessorProvider {
         NavixSymbolProcessor(
             codeGenerator = environment.codeGenerator,
             logger = environment.logger,
-            options = environment.options,
+            options = environment.options
         )
 }

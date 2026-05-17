@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
  * before the screen opens are preserved — the UI sees full history, not just live events.
  */
 class TelemetryViewModel(
-    val navEvents: StateFlow<List<NavEvent>>,
+    val navEvents: StateFlow<List<NavEvent>>
 ) : ViewModel() {
     val uiState: StateFlow<List<NavEvent>> = navEvents
 

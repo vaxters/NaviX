@@ -46,7 +46,7 @@ import io.navix.runtime.Navigator
 @Composable
 fun SettingsScreen(
     navigator: Navigator,
-    viewModel: SettingsViewModel,
+    viewModel: SettingsViewModel
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -63,7 +63,7 @@ fun SettingsScreen(
         onToggleNotifications = viewModel::onToggleNotifications,
         onToggleAnalytics = viewModel::onToggleAnalytics,
         onTransitionStyleChange = viewModel::onTransitionStyleChange,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -74,7 +74,7 @@ private fun SettingsContent(
     onToggleNotifications: (Boolean) -> Unit,
     onToggleAnalytics: (Boolean) -> Unit,
     onTransitionStyleChange: (TransitionStyle) -> Unit,
-    onBack: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -86,13 +86,13 @@ private fun SettingsContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         LazyColumn(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             item {
                 SettingsToggleItem(
@@ -134,7 +134,7 @@ private fun SettingsToggleItem(
     title: String,
     subtitle: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
         headlineContent = { Text(title) },
@@ -144,14 +144,14 @@ private fun SettingsToggleItem(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
             )
-        },
+        }
     )
 }
 
 @Composable
 private fun TransitionStyleItem(
     selected: TransitionStyle,
-    onSelect: (TransitionStyle) -> Unit,
+    onSelect: (TransitionStyle) -> Unit
 ) {
     ListItem(
         headlineContent = { Text("Transition Style") },
@@ -176,6 +176,6 @@ private fun TransitionStyleItem(
                     )
                 }
             }
-        },
+        }
     )
 }

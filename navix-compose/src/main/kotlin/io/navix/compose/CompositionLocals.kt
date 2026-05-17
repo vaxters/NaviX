@@ -38,7 +38,7 @@ val LocalNavigator =
     staticCompositionLocalOf<Navigator> {
         error(
             "No Navigator found in the composition. " +
-                "Ensure this composable is called inside NavixHost { }.",
+                "Ensure this composable is called inside NavixHost { }."
         )
     }
 
@@ -62,6 +62,6 @@ val LocalNavEntry =
     staticCompositionLocalOf<RouteEntry> {
         error(
             "No NavEntry found in the composition. " +
-                "Ensure this composable is called inside NavixHost { }.",
+                "Ensure this composable is called inside NavixHost { }."
         )
     }

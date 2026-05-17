@@ -25,7 +25,7 @@ data class ProductDetailUiState(
 
 sealed interface ProductDetailNavEffect {
     data class OpenReviews(
-        val productId: String,
+        val productId: String
     ) : ProductDetailNavEffect
 
     data object NavigateBack : ProductDetailNavEffect

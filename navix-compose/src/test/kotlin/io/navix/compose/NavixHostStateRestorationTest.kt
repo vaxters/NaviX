@@ -58,7 +58,7 @@ class NavixHostStateRestorationTest {
                 screen<HomeR> { _, _ ->
                     Button(
                         onClick = { nav.push(DetailR) },
-                        modifier = Modifier.testTag("toDetail"),
+                        modifier = Modifier.testTag("toDetail")
                     ) { Text("toDetail") }
                 }
                 screen<DetailR> { _, _ ->
@@ -67,7 +67,7 @@ class NavixHostStateRestorationTest {
                         Text("n=$n", modifier = Modifier.testTag("n"))
                         Button(
                             onClick = { n++ },
-                            modifier = Modifier.testTag("inc"),
+                            modifier = Modifier.testTag("inc")
                         ) { Text("inc") }
                     }
                 }

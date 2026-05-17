@@ -57,10 +57,7 @@ import kotlinx.coroutines.flow.StateFlow
  * was first opened are not visible. Pass [eventHistory] to avoid this limitation.
  */
 @Composable
-internal fun EventTimelinePanel(
-    navigator: Navigator,
-    eventHistory: StateFlow<List<NavEvent>>? = null,
-) {
+internal fun EventTimelinePanel(navigator: Navigator, eventHistory: StateFlow<List<NavEvent>>? = null) {
     val listState = rememberLazyListState()
 
     if (eventHistory != null) {
@@ -120,9 +117,9 @@ private fun EventTimelineHeader() {
         style =
             MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = DevToolsColors.header,
+                color = DevToolsColors.header
             ),
-        modifier = Modifier.padding(bottom = 4.dp),
+        modifier = Modifier.padding(bottom = 4.dp)
     )
 }
 
@@ -132,7 +129,7 @@ private fun EventRow(event: NavEvent) {
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(vertical = 2.dp),
+                .padding(vertical = 2.dp)
     ) {
         Text(
             text = event.type.badge(),
@@ -140,7 +137,7 @@ private fun EventRow(event: NavEvent) {
             fontSize = 10.sp,
             color = event.type.color(),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.width(52.dp),
+            modifier = Modifier.width(52.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
@@ -152,7 +149,7 @@ private fun EventRow(event: NavEvent) {
                 },
             fontFamily = FontFamily.Monospace,
             fontSize = 10.sp,
-            color = DevToolsColors.text,
+            color = DevToolsColors.text
         )
     }
 }

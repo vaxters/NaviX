@@ -19,7 +19,7 @@ import io.navix.contracts.NavEvent
 
 data class TelemetryUiState(
     /** Events displayed newest-first. */
-    val events: List<NavEvent> = emptyList(),
+    val events: List<NavEvent> = emptyList()
 )
 
 sealed interface TelemetryNavEffect {

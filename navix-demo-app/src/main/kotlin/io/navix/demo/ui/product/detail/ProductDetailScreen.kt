@@ -74,7 +74,7 @@ fun ProductDetailScreen(
         state = state,
         onReadReviews = viewModel::onReadReviews,
         onBack = viewModel::onBack,
-        onBackToHome = viewModel::onBackToHome,
+        onBackToHome = viewModel::onBackToHome
     )
 }
 
@@ -96,13 +96,13 @@ private fun ProductDetailContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             when {
                 state.isLoading -> {
@@ -143,17 +143,17 @@ private fun ProductDetailBody(
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = product.name,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineMedium
         )
 
         Text(
             text = "Deep link: navix://product/${product.id}",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -174,14 +174,14 @@ private fun ProductDetailBody(
 
         Button(
             onClick = onReadReviews,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Read Reviews")
         }
 
         OutlinedButton(
             onClick = onBackToHome,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Back to Home (popTo)")
         }

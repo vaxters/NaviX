@@ -64,7 +64,7 @@ fun RegisterScreen(
     RegisterContent(
         state = state,
         onRegister = viewModel::onRegister,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBack
     )
 }
 
@@ -85,7 +85,7 @@ private fun RegisterContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         Column(
             modifier =
@@ -93,7 +93,7 @@ private fun RegisterContent(
                     .fillMaxSize()
                     .padding(padding)
                     .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Register",

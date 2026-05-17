@@ -33,7 +33,7 @@ class ResultPassingTest {
     private fun navigator(): NavigatorImpl =
         NavigatorImpl(
             root = HomeRoute,
-            scope = testScope.backgroundScope,
+            scope = testScope.backgroundScope
         )
 
     // ── Happy path ─────────────────────────────────────────────────────────
@@ -74,7 +74,7 @@ class ResultPassingTest {
             assertEquals(1, nav.backstack.value.depth)
             assertIs<HomeRoute>(
                 nav.backstack.value.active
-                    ?.route,
+                    ?.route
             )
         }
 

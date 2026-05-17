@@ -37,10 +37,7 @@ internal interface BackstackStore {
     fun dispatch(action: BackstackAction)
 }
 
-internal class BackstackStoreImpl(
-    initial: BackstackSnapshot,
-    private val reducer: Reducer,
-) : BackstackStore {
+internal class BackstackStoreImpl(initial: BackstackSnapshot, private val reducer: Reducer) : BackstackStore {
     private val _state = MutableStateFlow(initial)
     override val state: StateFlow<BackstackSnapshot> = _state.asStateFlow()
 

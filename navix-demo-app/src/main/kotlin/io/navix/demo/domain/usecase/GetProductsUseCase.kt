@@ -26,7 +26,7 @@ import io.navix.demo.data.repository.ProductRepository
  * failure path explicit in the type system.
  */
 class GetProductsUseCase(
-    private val repository: ProductRepository,
+    private val repository: ProductRepository
 ) {
     suspend operator fun invoke(): Result<List<Product>> = runCatching { repository.getProducts() }
 }

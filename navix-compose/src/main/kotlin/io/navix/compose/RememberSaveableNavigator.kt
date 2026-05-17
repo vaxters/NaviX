@@ -86,7 +86,7 @@ fun rememberSaveableNavigator(
     reducer: Reducer = DefaultReducer(),
     entryFactory: EntryFactory = DefaultEntryFactory,
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
+    deepLinkHandlers: List<DeepLinkHandler> = emptyList()
 ): Navigator {
     val scope = rememberCoroutineScope()
     val savedStateHolder = remember { NavixSavedStateHolder() }
@@ -98,7 +98,7 @@ fun rememberSaveableNavigator(
                     save = { nav ->
                         NavixPersistedState.pack(
                             backstackBytes = saver.save(nav.backstack.value),
-                            entryStates = savedStateHolder.performSave(),
+                            entryStates = savedStateHolder.performSave()
                         )
                     },
                     restore = { saved ->
@@ -115,11 +115,11 @@ fun rememberSaveableNavigator(
                                 saver = saver,
                                 reducer = reducer,
                                 telemetry = telemetry,
-                                deepLinkHandlers = deepLinkHandlers,
+                                deepLinkHandlers = deepLinkHandlers
                             )
                         }
-                    },
-                ),
+                    }
+                )
         ) {
             createNavigator(
                 root = root,
@@ -127,7 +127,7 @@ fun rememberSaveableNavigator(
                 reducer = reducer,
                 entryFactory = entryFactory,
                 telemetry = telemetry,
-                deepLinkHandlers = deepLinkHandlers,
+                deepLinkHandlers = deepLinkHandlers
             )
         }
 

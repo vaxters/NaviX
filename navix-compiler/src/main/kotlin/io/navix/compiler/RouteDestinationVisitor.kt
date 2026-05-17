@@ -32,12 +32,9 @@ import io.navix.annotations.RouteDestination
  */
 internal class RouteDestinationVisitor(
     private val logger: KSPLogger,
-    private val descriptors: MutableList<RouteDestinationDescriptor>,
+    private val descriptors: MutableList<RouteDestinationDescriptor>
 ) : KSVisitorVoid() {
-    override fun visitClassDeclaration(
-        classDeclaration: KSClassDeclaration,
-        data: Unit,
-    ) {
+    override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
         val annotation =
             classDeclaration.annotations.firstOrNull { it.shortName.asString() == RouteDestination::class.simpleName }
                 ?: return
@@ -52,7 +49,7 @@ internal class RouteDestinationVisitor(
         if (!isSerializable) {
             logger.error(
                 "@RouteDestination class '$className' must also be annotated with @Serializable.",
-                classDeclaration,
+                classDeclaration
             )
             return
         }
@@ -70,7 +67,7 @@ internal class RouteDestinationVisitor(
                     onFailure = { err ->
                         logger.error(
                             "Invalid deep link template '$template' on '$className': ${err.message}",
-                            classDeclaration,
+                            classDeclaration
                         )
                         null
                     },
@@ -79,10 +76,7 @@ internal class RouteDestinationVisitor(
 
         val constructorParams =
             classDeclaration.primaryConstructor?.parameters?.map { param ->
-                ConstructorParam(
-                    name = param.name?.asString() ?: "_",
-                    typeName = param.type.resolve().toKotlinTypeName(),
-                )
+                ConstructorParam(name = param.name?.asString() ?: "_", typeName = param.type.resolve().toKotlinTypeName())
             } ?: emptyList()
 
         descriptors.add(
@@ -95,8 +89,8 @@ internal class RouteDestinationVisitor(
                 constructorParams = constructorParams,
                 // Thread the source file so isolated generators can declare a per-file
                 // dependency, ensuring KSP only re-runs them when this specific file changes.
-                containingFile = classDeclaration.containingFile,
-            ),
+                containingFile = classDeclaration.containingFile
+            )
         )
     }
 }

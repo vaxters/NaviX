@@ -32,15 +32,12 @@ import kotlin.test.assertTrue
  * is involved; tests run as plain JVM unit tests.
  */
 class DeepLinkHandlerGeneratorTest {
-    // ── No templates ─────────────────────────────────────────────────────────
 
     @Test
     fun buildSource_noDeepLinkTemplates_returnsNull() {
         val descriptor = descriptor("com.example.HomeRoute", templates = emptyList())
         assertNull(buildDeepLinkHandlerSource(descriptor))
     }
-
-    // ── Class structure ───────────────────────────────────────────────────────
 
     @Test
     fun buildSource_withTemplate_containsPackageDeclaration() {
@@ -72,34 +69,28 @@ class DeepLinkHandlerGeneratorTest {
         assertTrue(source.contains("class ProductDetailDeepLinkHandler : DeepLinkHandler"))
     }
 
-    // ── Graceful fallback — R2.2 regression guard ─────────────────────────────
-    // Ensures the generator emits `?: return null` (non-local return from resolve())
-    // rather than `?: error(...)` which threw an IllegalStateException at the
-    // handleDeepLink() call site and had no recovery path.
-
     @Test
     fun buildSource_withSingleParam_usesReturnNullNotError() {
         val source = buildSourceForProduct()
         // Must NOT use throwing error()
         assertFalse(
             source.contains("error("),
-            "Generated handler must NOT use error() — it must return null gracefully.",
+            "Generated handler must NOT use error() — it must return null gracefully."
         )
         // Must use non-local return null for graceful fallback
         assertTrue(
             source.contains("?: return null"),
-            "Generated handler must use '?: return null' to fall through gracefully.",
+            "Generated handler must use '?: return null' to fall through gracefully."
         )
     }
 
     @Test
     fun buildSource_withMultipleParams_allParamsUseReturnNull() {
         val template = DeepLinkTemplateParser.parse("myapp://shop/{category}/{itemId}").getOrThrow()
-        val descriptor =
-            descriptor(
-                fqn = "com.example.ShopRoute",
-                templates = listOf(template),
-            )
+        val descriptor = descriptor(
+            fqn = "com.example.ShopRoute",
+            templates = listOf(template)
+        )
         val source = buildDeepLinkHandlerSource(descriptor)
         assertNotNull(source)
         assertFalse(source.contains("error("), "No param should use error() — all must return null.")
@@ -107,7 +98,7 @@ class DeepLinkHandlerGeneratorTest {
         val returnNullCount = source.split("?: return null").size - 1
         assertTrue(
             returnNullCount >= 2,
-            "Expected at least 2 '?: return null' occurrences (one per param), got $returnNullCount.",
+            "Expected at least 2 '?: return null' occurrences (one per param), got $returnNullCount."
         )
     }
 
@@ -124,34 +115,25 @@ class DeepLinkHandlerGeneratorTest {
         assertTrue(source.contains("return null"))
     }
 
-    // ── Positional group access — API-level regression guard ─────────────────
-    // Ensures the generator emits `groups[N]` (works on all API levels) rather than
-    // `groups["name"]` which calls Matcher.group(String) and requires Android API 26.
-    // A minSdk=24 app using named group access would crash on API 24/25 devices.
-
     @Test
     fun buildSource_withSingleParam_usesPositionalGroupNotNamedGroupString() {
         val source = buildSourceForProduct()
         // Named string access groups["name"] requires Android API 26 — must not be emitted.
         assertFalse(
             source.contains("groups[\""),
-            "Generated handler must NOT use named group string access (requires API 26).",
+            "Generated handler must NOT use named group string access (requires API 26)."
         )
         // Must use positional index — groups[1] for the first (and only) capture group.
         assertTrue(
             source.contains("groups[1]"),
-            "Generated handler must use positional group access groups[1] for first param.",
+            "Generated handler must use positional group access groups[1] for first param."
         )
     }
 
     @Test
     fun buildSource_withMultipleParams_usesSequentialPositionalIndices() {
         val template = DeepLinkTemplateParser.parse("myapp://shop/{category}/{itemId}").getOrThrow()
-        val descriptor =
-            descriptor(
-                fqn = "com.example.ShopRoute",
-                templates = listOf(template),
-            )
+        val descriptor = descriptor(fqn = "com.example.ShopRoute", templates = listOf(template))
         val source = buildDeepLinkHandlerSource(descriptor)
         assertNotNull(source)
         assertFalse(source.contains("groups[\""), "No named group string access allowed.")
@@ -159,8 +141,6 @@ class DeepLinkHandlerGeneratorTest {
         assertTrue(source.contains("groups[1]"), "First param must use groups[1].")
         assertTrue(source.contains("groups[2]"), "Second param must use groups[2].")
     }
-
-    // ── canHandle ─────────────────────────────────────────────────────────────
 
     @Test
     fun buildSource_withTemplate_generatesCanHandleMethod() {
@@ -180,8 +160,6 @@ class DeepLinkHandlerGeneratorTest {
         assertContains(source, "template1.containsMatchIn(uri)")
     }
 
-    // ── resolve ───────────────────────────────────────────────────────────────
-
     @Test
     fun buildSource_withTemplate_generatesResolveMethod() {
         val source = buildSourceForProduct()
@@ -194,8 +172,6 @@ class DeepLinkHandlerGeneratorTest {
         assertTrue(source.contains("return com.example.ProductDetail("))
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private fun buildSourceForProduct(): String {
         val template = DeepLinkTemplateParser.parse("myapp://product/{productId}").getOrThrow()
         val descriptor = descriptor("com.example.ProductDetail", templates = listOf(template))
@@ -203,8 +179,7 @@ class DeepLinkHandlerGeneratorTest {
     }
 
     private fun descriptor(
-        fqn: String,
-        templates: List<DeepLinkTemplateParser.ParsedTemplate> = emptyList(),
+        fqn: String, templates: List<DeepLinkTemplateParser.ParsedTemplate> = emptyList()
     ): RouteDestinationDescriptor {
         val lastDot = fqn.lastIndexOf('.')
         val pkg = if (lastDot >= 0) fqn.substring(0, lastDot) else ""
@@ -214,7 +189,7 @@ class DeepLinkHandlerGeneratorTest {
             className = cls,
             canonicalRoute = fqn,
             deepLinkTemplates = templates,
-            isSerializable = true,
+            isSerializable = true
         )
     }
 }

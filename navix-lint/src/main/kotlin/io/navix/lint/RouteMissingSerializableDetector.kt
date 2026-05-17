@@ -48,9 +48,7 @@ import org.jetbrains.uast.UElement
  * data class ProductDetail(val id: String) : Route
  * ```
  */
-class RouteMissingSerializableDetector :
-    Detector(),
-    SourceCodeScanner {
+class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =
@@ -63,9 +61,7 @@ class RouteMissingSerializableDetector :
                                 .firstOrNull()
                                 ?.name
                         name == ROUTE_DESTINATION_FQN ||
-                            annotation.qualifiedName?.endsWith(
-                                ".RouteDestination",
-                            ) == true
+                            annotation.qualifiedName?.endsWith(".RouteDestination") == true
                     }
                 if (!hasRouteDestination) return
 
@@ -86,7 +82,7 @@ class RouteMissingSerializableDetector :
                         "`${node.name}` is annotated with `@RouteDestination` but is " +
                             "missing `@Serializable`. The Navix KSP processor requires both " +
                             "annotations to generate the route registry and SerializersModule. " +
-                            "Add `@Serializable` from `kotlinx.serialization`.",
+                            "Add `@Serializable` from `kotlinx.serialization`."
                 )
             }
         }
@@ -124,8 +120,8 @@ class RouteMissingSerializableDetector :
                 implementation =
                     Implementation(
                         RouteMissingSerializableDetector::class.java,
-                        Scope.JAVA_FILE_SCOPE,
-                    ),
+                        Scope.JAVA_FILE_SCOPE
+                    )
             )
     }
 }

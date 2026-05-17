@@ -21,7 +21,7 @@ data class SettingsUiState(
     val notificationsEnabled: Boolean = true,
     val analyticsEnabled: Boolean = false,
     val transitionStyle: TransitionStyle = TransitionStyle.Default,
-    val appVersion: String = "0.1.0-alpha",
+    val appVersion: String = "0.1.0-alpha"
 )
 
 sealed interface SettingsNavEffect {

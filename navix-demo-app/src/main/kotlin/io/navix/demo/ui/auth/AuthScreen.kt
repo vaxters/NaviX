@@ -62,7 +62,7 @@ fun AuthScreen(
     AuthContent(
         state = state,
         onSignIn = viewModel::onSignIn,
-        onCreateAccount = viewModel::onCreateAccount,
+        onCreateAccount = viewModel::onCreateAccount
     )
 }
 
@@ -79,7 +79,7 @@ private fun AuthContent(
                     .fillMaxSize()
                     .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Navix",

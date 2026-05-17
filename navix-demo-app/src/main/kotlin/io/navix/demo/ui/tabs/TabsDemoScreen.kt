@@ -60,7 +60,7 @@ private val TABS =
     listOf(
         Triple("Counter", CounterTab, 0),
         Triple("List", ListTab, 1),
-        Triple("Info", InfoTab, 2),
+        Triple("Info", InfoTab, 2)
     )
 
 private val SAMPLE_ITEMS = listOf("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
@@ -86,7 +86,7 @@ fun TabsDemoScreen(outerNavigator: Navigator) {
                     NavStackSpec(root = CounterTab, key = "counter"),
                     NavStackSpec(root = ListTab, key = "list"),
                     NavStackSpec(root = InfoTab, key = "info"),
-                ),
+                )
         )
 
     val activeTabIndex by multiStack.activeTabIndex.collectAsState()
@@ -125,11 +125,11 @@ fun TabsDemoScreen(outerNavigator: Navigator) {
                     )
                 }
             }
-        },
+        }
     ) { padding ->
         NavixMultiStackHost(
             multiStack = multiStack,
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.padding(padding)
         ) {
             screen<CounterTab> { _, _ ->
                 CounterTabScreen(navigator = multiStack.navigators[0])
@@ -160,18 +160,18 @@ private fun CounterTabScreen(navigator: Navigator) {
                 .fillMaxSize()
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Counter Tab",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Spacer(Modifier.height(8.dp))
         Text(
             text = "$count",
             style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         )
         Spacer(Modifier.height(16.dp))
         Button(onClick = { count++ }, modifier = Modifier.fillMaxWidth()) {
@@ -179,13 +179,13 @@ private fun CounterTabScreen(navigator: Navigator) {
         }
         OutlinedButton(
             onClick = { count = 0 },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) { Text("Reset") }
         Spacer(Modifier.height(24.dp))
         Text(
             text = "Stack depth: ${snapshot.depth}",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text =
@@ -193,7 +193,7 @@ private fun CounterTabScreen(navigator: Navigator) {
                     "Composable-local state (remember { }) is not preserved.\n" +
                     "See the List tab to observe navigation state preservation.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -205,13 +205,13 @@ private fun ListTabScreen(navigator: Navigator) {
             text = "List Tab",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
         Text(
             text = "Tap an item — each tab has its own independent backstack.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.height(8.dp))
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -241,18 +241,18 @@ private fun ListTabDetailScreen(
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Detail: $item",
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
         Spacer(Modifier.height(12.dp))
         Text(
             text = "Switch to another tab and come back — this detail screen is still here.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(24.dp))
         Button(onClick = { navigator.pop() }) {
@@ -268,7 +268,7 @@ private fun InfoTabScreen() {
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(

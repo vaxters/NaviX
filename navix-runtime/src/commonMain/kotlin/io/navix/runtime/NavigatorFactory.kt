@@ -40,7 +40,7 @@ fun createNavigator(
     reducer: Reducer = DefaultReducer(),
     entryFactory: EntryFactory = DefaultEntryFactory,
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
+    deepLinkHandlers: List<DeepLinkHandler> = emptyList()
 ): Navigator =
     NavigatorImpl(
         root = root,
@@ -48,7 +48,7 @@ fun createNavigator(
         reducer = reducer,
         entryFactory = entryFactory,
         telemetry = telemetry,
-        deepLinkHandlers = deepLinkHandlers,
+        deepLinkHandlers = deepLinkHandlers
     )
 
 /**
@@ -77,7 +77,7 @@ fun restoreNavigator(
     saver: NavigatorSaver,
     reducer: Reducer = DefaultReducer(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
+    deepLinkHandlers: List<DeepLinkHandler> = emptyList()
 ): Navigator {
     val restoredSnapshot: BackstackSnapshot? = saver.restore(savedBytes)
     return NavigatorImpl(
@@ -87,6 +87,6 @@ fun restoreNavigator(
         entryFactory = DefaultEntryFactory,
         telemetry = telemetry,
         deepLinkHandlers = deepLinkHandlers,
-        initialSnapshot = restoredSnapshot,
+        initialSnapshot = restoredSnapshot
     )
 }

@@ -36,12 +36,9 @@ import com.google.devtools.ksp.processing.Dependencies
  * The registry is consumed by [NavixHost] when composing multi-module graphs.
  */
 internal class RouteRegistryGenerator(
-    private val codeGenerator: CodeGenerator,
+    private val codeGenerator: CodeGenerator
 ) {
-    fun generate(
-        descriptors: List<RouteDestinationDescriptor>,
-        moduleName: String,
-    ) {
+    fun generate(descriptors: List<RouteDestinationDescriptor>, moduleName: String) {
         if (descriptors.isEmpty()) return
 
         val sanitized =
@@ -74,7 +71,7 @@ internal class RouteRegistryGenerator(
             .createNewFile(
                 dependencies = Dependencies(aggregating = true),
                 packageName = packageName,
-                fileName = objectName,
+                fileName = objectName
             ).use { stream ->
                 stream.write(source.toByteArray())
             }

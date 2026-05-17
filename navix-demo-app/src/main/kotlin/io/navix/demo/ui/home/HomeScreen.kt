@@ -90,7 +90,7 @@ fun HomeScreen(
         onProductClicked = viewModel::onProductClicked,
         onOpenProfile = viewModel::onOpenProfile,
         onOpenTelemetry = viewModel::onOpenTelemetry,
-        onDeepLink = viewModel::onDeepLink,
+        onDeepLink = viewModel::onDeepLink
     )
 }
 
@@ -117,13 +117,13 @@ private fun HomeContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         Column(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             BackstackInfoBar(backstack = backstack)
 
@@ -161,14 +161,14 @@ private fun HomeContent(
 private fun BackstackInfoBar(backstack: BackstackSnapshot) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
-        tonalElevation = 1.dp,
+        tonalElevation = 1.dp
     ) {
         Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             val activeRoute = backstack.active?.route?.let { it::class.simpleName } ?: "—"
             Text(
@@ -212,7 +212,7 @@ private fun ProductList(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
             Text(
@@ -261,11 +261,11 @@ private fun ProductCard(
             Modifier
                 .fillMaxWidth()
                 .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = product.name,

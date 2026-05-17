@@ -40,9 +40,7 @@ import org.jetbrains.uast.ULiteralExpression
  * Unsafe pattern (flagged):
  * - `NavixDevToolsOverlay(navigator, enabled = true)` — ships debug UI to production
  */
-class DevToolsEnabledInReleaseDetector :
-    Detector(),
-    SourceCodeScanner {
+class DevToolsEnabledInReleaseDetector : Detector(), SourceCodeScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UCallExpression::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler =
@@ -69,7 +67,7 @@ class DevToolsEnabledInReleaseDetector :
                         message =
                             "`NavixDevToolsOverlay` has `enabled = true` hardcoded. " +
                                 "This will show the debug overlay in release builds. " +
-                                "Use `enabled = BuildConfig.DEBUG` instead.",
+                                "Use `enabled = BuildConfig.DEBUG` instead."
                     )
                 }
             }
@@ -97,8 +95,8 @@ class DevToolsEnabledInReleaseDetector :
                 implementation =
                     Implementation(
                         DevToolsEnabledInReleaseDetector::class.java,
-                        Scope.JAVA_FILE_SCOPE,
-                    ),
+                        Scope.JAVA_FILE_SCOPE
+                    )
             )
     }
 }

@@ -46,12 +46,9 @@ import com.google.devtools.ksp.processing.Dependencies
  * the stable call-site; the route class is the internal representation.
  */
 internal class NavixExtensionsGenerator(
-    private val codeGenerator: CodeGenerator,
+    private val codeGenerator: CodeGenerator
 ) {
-    fun generate(
-        descriptors: List<RouteDestinationDescriptor>,
-        moduleName: String,
-    ) {
+    fun generate(descriptors: List<RouteDestinationDescriptor>, moduleName: String) {
         if (descriptors.isEmpty()) return
 
         val sanitized =
@@ -86,7 +83,7 @@ internal class NavixExtensionsGenerator(
             .createNewFile(
                 dependencies = Dependencies(aggregating = true),
                 packageName = packageName,
-                fileName = fileName,
+                fileName = fileName
             ).use { stream ->
                 stream.write(source.toByteArray())
             }

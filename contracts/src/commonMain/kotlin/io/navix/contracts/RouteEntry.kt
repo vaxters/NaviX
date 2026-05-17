@@ -41,5 +41,5 @@ data class RouteEntry(
     @Polymorphic val route: Route,
     val createdAt: Long,
     val lifecycleState: NavLifecycleState = NavLifecycleState.CREATED,
-    val transitionKey: NavTransitionKey = NavTransitionKey.Default,
+    val transitionKey: NavTransitionKey = NavTransitionKey.Default
 )

@@ -24,7 +24,7 @@ import io.navix.demo.data.repository.ProductRepository
  * throws.
  */
 class GetProductByIdUseCase(
-    private val repository: ProductRepository,
+    private val repository: ProductRepository
 ) {
     suspend operator fun invoke(id: String): Result<Product?> = runCatching { repository.getProduct(id) }
 }

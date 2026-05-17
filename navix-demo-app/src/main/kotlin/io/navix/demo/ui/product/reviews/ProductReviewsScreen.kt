@@ -67,7 +67,7 @@ fun ProductReviewsScreen(
     ProductReviewsContent(
         state = state,
         onBack = viewModel::onBack,
-        onJumpToHome = viewModel::onJumpToHome,
+        onJumpToHome = viewModel::onJumpToHome
     )
 }
 
@@ -88,13 +88,13 @@ private fun ProductReviewsContent(
                     }
                 },
             )
-        },
+        }
     ) { padding ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
         ) {
             when {
                 state.isLoading -> {
@@ -131,7 +131,7 @@ private fun ReviewList(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item {
             OutlinedButton(
@@ -152,7 +152,7 @@ private fun ReviewItem(review: Review) {
     Card {
         ListItem(
             headlineContent = { Text(review.author) },
-            supportingContent = { Text(review.body) },
+            supportingContent = { Text(review.body) }
         )
     }
 }

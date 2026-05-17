@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.update
  * In-memory [SettingsRepository] for unit tests and Compose Previews.
  */
 class FakeSettingsRepository(
-    initial: SettingsData = SettingsData(),
+    initial: SettingsData = SettingsData()
 ) : SettingsRepository {
     private val _settings = MutableStateFlow(initial)
     override val settings: Flow<SettingsData> = _settings.asStateFlow()

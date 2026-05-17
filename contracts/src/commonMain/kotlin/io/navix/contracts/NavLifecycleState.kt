@@ -32,5 +32,5 @@ enum class NavLifecycleState {
     STARTED,
     RESUMED,
     STOPPED,
-    DESTROYED,
+    DESTROYED
 }

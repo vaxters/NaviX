@@ -23,7 +23,7 @@ class NavixIssueRegistry : IssueRegistry() {
     override val issues =
         listOf(
             DevToolsEnabledInReleaseDetector.ISSUE,
-            RouteMissingSerializableDetector.ISSUE,
+            RouteMissingSerializableDetector.ISSUE
         )
 
     override val api: Int = CURRENT_API
@@ -34,6 +34,6 @@ class NavixIssueRegistry : IssueRegistry() {
         Vendor(
             vendorName = "Navix",
             identifier = "navix-lint",
-            feedbackUrl = "https://github.com/navix/navix/issues",
+            feedbackUrl = "https://github.com/navix/navix/issues"
         )
 }

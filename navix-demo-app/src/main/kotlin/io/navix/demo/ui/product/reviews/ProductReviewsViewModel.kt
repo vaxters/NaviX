@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 class ProductReviewsViewModel(
     private val productId: String,
-    private val getProductReviews: GetProductReviewsUseCase,
+    private val getProductReviews: GetProductReviewsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductReviewsUiState(productId = productId))
     val uiState: StateFlow<ProductReviewsUiState> = _uiState.asStateFlow()

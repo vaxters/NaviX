@@ -54,11 +54,11 @@ import io.navix.runtime.Reducer
  */
 class SingleTopReducer(
     entryFactory: EntryFactory = DefaultEntryFactory,
-    private val delegate: Reducer = DefaultReducer(entryFactory),
+    private val delegate: Reducer = DefaultReducer(entryFactory)
 ) : Reducer {
     override fun reduce(
         snapshot: BackstackSnapshot,
-        action: BackstackAction,
+        action: BackstackAction
     ): BackstackSnapshot {
         if (action is BackstackAction.Push) {
             val existingIndex = snapshot.entries.indexOfLast { it.route::class == action.route::class }

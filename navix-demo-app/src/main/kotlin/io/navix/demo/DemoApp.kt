@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
  * is ever created for the "navix_settings" preferences file.
  */
 private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "navix_settings",
+    name = "navix_settings"
 )
 
 class DemoApp : Application() {
@@ -61,7 +61,7 @@ class DemoApp : Application() {
                 listOf(
                     LogcatExporter(tag = "NavixDemo"),
                     inMemoryExporter,
-                ),
+                )
         )
     }
 

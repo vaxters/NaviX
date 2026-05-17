@@ -80,7 +80,7 @@ fun NavGraphBuilder.validateAgainst(vararg registries: NavixRouteRegistry) {
                 append(
                     "Add a screen<RouteName> { }, dialog<RouteName> { }, or bottomSheet<RouteName> { } " +
                         "block for each missing route, or remove @RouteDestination if the route " +
-                        "is intentionally excluded from this NavixHost (e.g., tab-internal routes).",
+                        "is intentionally excluded from this NavixHost (e.g., tab-internal routes)."
                 )
             }
         }

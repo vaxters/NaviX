@@ -47,5 +47,5 @@ package io.navix.annotations
 @Retention(AnnotationRetention.SOURCE)
 annotation class RouteDestination(
     val route: String = "",
-    val deepLinks: Array<String> = [],
+    val deepLinks: Array<String> = []
 )

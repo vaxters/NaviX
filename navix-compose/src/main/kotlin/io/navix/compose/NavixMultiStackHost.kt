@@ -93,7 +93,7 @@ fun NavixMultiStackHost(
     multiStack: NavixMultiStack,
     modifier: Modifier = Modifier,
     transitionSpec: NavTransitionSpec = NavTransitionSpec.Default,
-    content: NavGraphBuilder.() -> Unit,
+    content: NavGraphBuilder.() -> Unit
 ) {
     val activeTabIndex by multiStack.activeTabIndex.collectAsState()
 
@@ -101,6 +101,6 @@ fun NavixMultiStackHost(
         navigator = multiStack.navigators[activeTabIndex],
         modifier = modifier,
         transitionSpec = transitionSpec,
-        content = content,
+        content = content
     )
 }

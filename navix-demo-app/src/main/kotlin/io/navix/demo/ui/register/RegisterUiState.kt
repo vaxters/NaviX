@@ -18,7 +18,7 @@ package io.navix.demo.ui.register
 data class RegisterUiState(
     val isLoading: Boolean = false,
     /** Non-null when registration fails. Cleared on the next attempt. */
-    val error: String? = null,
+    val error: String? = null
 )
 
 sealed interface RegisterNavEffect {
