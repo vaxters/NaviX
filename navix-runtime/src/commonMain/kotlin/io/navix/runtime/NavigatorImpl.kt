@@ -192,12 +192,12 @@ internal class NavigatorImpl(
         // Store the deferred so processAction can complete it when the entry leaves the stack.
         pendingResults[pushedEntry.id] = deferred
 
-        return try {
-            val raw = deferred.await()
-            if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
-        } catch (_: Exception) {
-            NavResult.Cancelled
-        }
+        // await() only completes via deferred.complete(value) (never exceptionally), so a
+        // throw here means the caller's coroutine was cancelled. Let CancellationException
+        // propagate — swallowing it would break structured concurrency by resuming a
+        // cancelled caller. A failed `as R` cast is a real programming error, not Cancelled.
+        val raw = deferred.await()
+        return if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
     }
 
     override fun setResult(value: Any?) {
