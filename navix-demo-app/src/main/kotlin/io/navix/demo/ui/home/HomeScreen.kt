@@ -128,14 +128,14 @@ private fun HomeContent(
             BackstackInfoBar(backstack = backstack)
 
             Box(modifier = Modifier.weight(1f)) {
-                when {
-                    state.isLoading -> {
+                when (state) {
+                    is HomeUiState.Loading -> {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
 
-                    state.error != null -> {
+                    is HomeUiState.Error -> {
                         Text(
-                            text = "Error: ${state.error}",
+                            text = "Error: ${state.message}",
                             color = MaterialTheme.colorScheme.error,
                             modifier =
                                 Modifier
@@ -144,7 +144,7 @@ private fun HomeContent(
                         )
                     }
 
-                    else -> {
+                    is HomeUiState.Success -> {
                         ProductList(
                             products = state.products,
                             onProductClicked = onProductClicked,

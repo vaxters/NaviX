@@ -89,7 +89,7 @@ private fun ProductDetailContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.product?.name ?: "Product Detail") },
+                title = { Text(if (state is ProductDetailUiState.Success) state.product.name else "Product Detail") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -104,14 +104,14 @@ private fun ProductDetailContent(
                     .fillMaxSize()
                     .padding(padding)
         ) {
-            when {
-                state.isLoading -> {
+            when (state) {
+                is ProductDetailUiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
-                state.error != null -> {
+                is ProductDetailUiState.Error -> {
                     Text(
-                        text = "Error: ${state.error}",
+                        text = "Error: ${state.message}",
                         color = MaterialTheme.colorScheme.error,
                         modifier =
                             Modifier
@@ -120,7 +120,7 @@ private fun ProductDetailContent(
                     )
                 }
 
-                state.product != null -> {
+                is ProductDetailUiState.Success -> {
                     ProductDetailBody(
                         product = state.product,
                         onReadReviews = onReadReviews,

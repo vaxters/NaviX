@@ -17,12 +17,11 @@ package io.navix.demo.ui.profile
 
 import io.navix.demo.data.model.User
 
-data class ProfileUiState(
-    val user: User? = null,
-    val isLoading: Boolean = true,
-    /** Non-null when loading the user profile fails. */
-    val error: String? = null
-)
+sealed interface ProfileUiState {
+    data object Loading : ProfileUiState
+    data class Success(val user: User) : ProfileUiState
+    data class Error(val message: String) : ProfileUiState
+}
 
 sealed interface ProfileNavEffect {
     data object OpenSettings : ProfileNavEffect

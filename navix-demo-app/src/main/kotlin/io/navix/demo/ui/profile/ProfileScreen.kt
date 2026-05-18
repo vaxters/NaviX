@@ -111,15 +111,15 @@ private fun ProfileContent(
                     .fillMaxSize()
                     .padding(padding)
         ) {
-            when {
-                state.isLoading ->
+            when (state) {
+                is ProfileUiState.Loading ->
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                state.error != null ->
+                is ProfileUiState.Error ->
                     Text(
-                        text = state.error,
+                        text = state.message,
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
@@ -129,7 +129,7 @@ private fun ProfileContent(
                                 .padding(horizontal = 32.dp)
                     )
 
-                else ->
+                is ProfileUiState.Success ->
                     ProfileBody(
                         user = state.user,
                         onSignOut = onSignOut,
@@ -143,7 +143,7 @@ private fun ProfileContent(
 
 @Composable
 private fun ProfileBody(
-    user: User?,
+    user: User,
     onSignOut: () -> Unit,
     onResetToHome: () -> Unit,
     modifier: Modifier = Modifier
@@ -170,11 +170,11 @@ private fun ProfileBody(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = user?.name ?: "",
+            text = user.name,
             style = MaterialTheme.typography.headlineSmall
         )
         Text(
-            text = user?.email ?: "",
+            text = user.email,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

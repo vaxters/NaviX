@@ -19,54 +19,48 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetProductByIdUseCase
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.stateIn
 
 class ProductDetailViewModel(
     private val productId: String,
-    private val getProductById: GetProductByIdUseCase
+    getProductById: GetProductByIdUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ProductDetailUiState())
-    val uiState: StateFlow<ProductDetailUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<ProductDetailUiState> = flow { emit(getProductById(productId)) }
+        .map { result ->
+            result.fold(
+                onSuccess = { product ->
+                    if (product != null) {
+                        ProductDetailUiState.Success(product)
+                    } else {
+                        ProductDetailUiState.Error("Product not found")
+                    }
+                },
+                onFailure = { error -> ProductDetailUiState.Error(error.message ?: "Failed to load product") }
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ProductDetailUiState.Loading,
+        )
 
     private val _navEffect = Channel<ProductDetailNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()
 
-    init {
-        loadProduct()
-    }
-
-    private fun loadProduct() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-            getProductById(productId)
-                .onSuccess { product ->
-                    _uiState.update { it.copy(product = product, isLoading = false) }
-                }.onFailure { error ->
-                    _uiState.update { it.copy(isLoading = false, error = error.message) }
-                }
-        }
-    }
-
     fun onReadReviews() {
-        viewModelScope.launch {
-            _navEffect.send(ProductDetailNavEffect.OpenReviews(productId))
-        }
+        _navEffect.trySend(ProductDetailNavEffect.OpenReviews(productId))
     }
 
     fun onBack() {
-        viewModelScope.launch {
-            _navEffect.send(ProductDetailNavEffect.NavigateBack)
-        }
+        _navEffect.trySend(ProductDetailNavEffect.NavigateBack)
     }
 
     fun onBackToHome() {
-        viewModelScope.launch {
-            _navEffect.send(ProductDetailNavEffect.NavigateBackToHome)
-        }
+        _navEffect.trySend(ProductDetailNavEffect.NavigateBackToHome)
     }
 }
