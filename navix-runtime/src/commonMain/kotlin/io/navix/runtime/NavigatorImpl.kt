@@ -29,8 +29,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlin.reflect.KClass
@@ -97,23 +95,25 @@ internal class NavigatorImpl(
     override val events: SharedFlow<NavEvent> = _events.asSharedFlow()
 
     // Actor channel: UNLIMITED capacity so navigation calls never block or drop.
-    // A single consumer coroutine processes actions serially, preventing concurrent
+    // A single consumer coroutine processes messages serially, preventing concurrent
     // backstack mutations regardless of which thread the caller is on.
     private val actionChannel = Channel<ActorMessage>(Channel.UNLIMITED)
 
-    // Pending result deferreds keyed by the entry ID of the pushed destination.
-    // Populated by pushForResult; completed (or cancelled) when the entry leaves the stack.
-    // Guarded by the actor's serial execution — only processAction touches this map.
+    // Pending result deferreds keyed by the entry ID of the pushed destination, plus the
+    // value the callee set via setResult(). Every read/write of both maps happens on the
+    // single actor coroutine — registration (pushForResult's onApplied), delivery
+    // (processAction's removal drain), and setResult's Task all run there — so the maps
+    // need no synchronization and there is no caller/actor data race.
     private val pendingResults = HashMap<String, CompletableDeferred<Any?>>()
-
-    // Pending result value for the current (topmost) entry, set via setResult().
-    // Keyed by entry ID; replaced if setResult() is called multiple times for the same entry.
     private val pendingResultValues = HashMap<String, Any?>()
 
     init {
         scope.launch {
             for (msg in actionChannel) {
-                processAction(msg)
+                when (msg) {
+                    is ActorMessage.Navigate -> processAction(msg)
+                    is ActorMessage.Task -> msg.block()
+                }
             }
         }
         // Close the channel when the scope's Job completes so the actor coroutine can
@@ -125,7 +125,7 @@ internal class NavigatorImpl(
 
     override fun push(route: Route, transition: NavTransitionKey) {
         actionChannel.trySend(
-            ActorMessage(
+            ActorMessage.Navigate(
                 action = BackstackAction.Push(route = route, transition = transition),
                 eventType = NavEventType.PUSH
             )
@@ -133,12 +133,14 @@ internal class NavigatorImpl(
     }
 
     override fun pop(transition: NavTransitionKey) {
-        actionChannel.trySend(ActorMessage(action = BackstackAction.Pop(transition), eventType = NavEventType.POP))
+        actionChannel.trySend(
+            ActorMessage.Navigate(action = BackstackAction.Pop(transition), eventType = NavEventType.POP)
+        )
     }
 
     override fun replace(route: Route, transition: NavTransitionKey) {
         actionChannel.trySend(
-            ActorMessage(
+            ActorMessage.Navigate(
                 action = BackstackAction.Replace(route = route, transition = transition),
                 eventType = NavEventType.REPLACE
             )
@@ -147,7 +149,7 @@ internal class NavigatorImpl(
 
     override fun reset(root: Route) {
         actionChannel.trySend(
-            ActorMessage(
+            ActorMessage.Navigate(
                 action = BackstackAction.Reset(root = root, transition = NavTransitionKey.Fade),
                 eventType = NavEventType.RESET
             )
@@ -156,7 +158,7 @@ internal class NavigatorImpl(
 
     override fun popTo(routeClass: KClass<out Route>, inclusive: Boolean) {
         actionChannel.trySend(
-            ActorMessage(
+            ActorMessage.Navigate(
                 action =
                     BackstackAction.PopTo(
                         routeClass = routeClass,
@@ -170,27 +172,28 @@ internal class NavigatorImpl(
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <R : Any> pushForResult(route: Route, transition: NavTransitionKey): NavResult<R> {
-        // We need the entry ID of the entry that will be created by the Push action.
-        // Capture the snapshot BEFORE the push so we can detect the new entry after.
-        val snapshotBeforePush = store.state.value
-
-        // Enqueue the push action.
-        push(route, transition)
-
-        // Wait for the backstack to include the new entry (the push action is processed
-        // asynchronously by the actor).
-        val pushedEntry =
-            backstack
-                .drop(0) // include current value
-                .first { snapshot ->
-                    // The new entry is one that wasn't in the pre-push snapshot.
-                    snapshot.entries.any { e -> snapshotBeforePush.entries.none { it.id == e.id } }
-                }.entries
-                .first { e -> snapshotBeforePush.entries.none { it.id == e.id } }
-
         val deferred = CompletableDeferred<Any?>()
-        // Store the deferred so processAction can complete it when the entry leaves the stack.
-        pendingResults[pushedEntry.id] = deferred
+        // Register the pending deferred ON THE ACTOR via onApplied, keyed by the entry the
+        // Push creates. Routing registration through the actor (instead of writing
+        // pendingResults from the caller thread, as a previous version did) confines every
+        // mutation of the result maps to the single actor coroutine — eliminating the
+        // caller/actor data race on these non-concurrent HashMaps.
+        actionChannel.trySend(
+            ActorMessage.Navigate(
+                action = BackstackAction.Push(route = route, transition = transition),
+                eventType = NavEventType.PUSH,
+                onApplied = { before, after ->
+                    val pushed = after.entries.lastOrNull { e -> before.entries.none { it.id == e.id } }
+                    if (pushed != null) {
+                        pendingResults[pushed.id] = deferred
+                    } else {
+                        // Reducer produced no new entry (e.g. a custom single-top reducer):
+                        // nothing to await on — resolve as Cancelled rather than hang.
+                        deferred.complete(null)
+                    }
+                }
+            )
+        )
 
         // await() only completes via deferred.complete(value) (never exceptionally), so a
         // throw here means the caller's coroutine was cancelled. Let CancellationException
@@ -201,10 +204,15 @@ internal class NavigatorImpl(
     }
 
     override fun setResult(value: Any?) {
-        val currentId =
-            store.state.value.active
-                ?.id ?: return
-        pendingResultValues[currentId] = value
+        // Routed through the actor so pendingResultValues is only mutated on the actor
+        // coroutine. Reads the active entry id at processing time; ordering relative to a
+        // following pop()/reset() is preserved by the channel's FIFO single consumer.
+        actionChannel.trySend(
+            ActorMessage.Task {
+                val currentId = store.state.value.active?.id ?: return@Task
+                pendingResultValues[currentId] = value
+            }
+        )
     }
 
     override fun handleDeepLink(uri: String): Boolean {
@@ -213,7 +221,7 @@ internal class NavigatorImpl(
             if (handler.canHandle(uri)) {
                 val route = handler.resolve(uri) ?: continue
                 actionChannel.trySend(
-                    ActorMessage(
+                    ActorMessage.Navigate(
                         action = BackstackAction.Push(route = route, transition = NavTransitionKey.Fade),
                         eventType = NavEventType.DEEP_LINK,
                         metadata = mapOf("uri" to uri)
@@ -225,10 +233,15 @@ internal class NavigatorImpl(
         return false
     }
 
-    private fun processAction(msg: ActorMessage) {
+    private fun processAction(msg: ActorMessage.Navigate) {
         val before = store.state.value
         store.dispatch(msg.action)
         val after = store.state.value
+
+        // Register any pending-result deferred for the entry this action just created,
+        // before draining removals — a Push never removes the entry it added, so the
+        // registration cannot be wiped by this same action's removal pass.
+        msg.onApplied?.invoke(before, after)
 
         // Detect entries that were removed by this action and drain their pending results.
         // This runs on the actor coroutine (single-threaded) so no synchronization is needed.
@@ -259,9 +272,16 @@ internal class NavigatorImpl(
 
     private fun nowMs() = Clock.System.now().toEpochMilliseconds()
 
-    private data class ActorMessage(
-        val action: BackstackAction,
-        val eventType: NavEventType,
-        val metadata: Map<String, String> = emptyMap()
-    )
+    private sealed interface ActorMessage {
+        /** A backstack action plus optional post-apply hook, run on the actor coroutine. */
+        data class Navigate(
+            val action: BackstackAction,
+            val eventType: NavEventType,
+            val metadata: Map<String, String> = emptyMap(),
+            val onApplied: ((before: BackstackSnapshot, after: BackstackSnapshot) -> Unit)? = null
+        ) : ActorMessage
+
+        /** A side-effect-only unit of work serialized onto the actor coroutine. */
+        data class Task(val block: () -> Unit) : ActorMessage
+    }
 }
