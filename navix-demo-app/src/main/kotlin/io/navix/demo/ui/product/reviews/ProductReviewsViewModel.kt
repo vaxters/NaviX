@@ -18,30 +18,21 @@ package io.navix.demo.ui.product.reviews
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetProductReviewsUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 
 class ProductReviewsViewModel(
     private val productId: String,
     getProductReviews: GetProductReviewsUseCase
 ) : ViewModel() {
-    val uiState: StateFlow<ProductReviewsUiState> = flow { emit(getProductReviews(productId)) }
-        .map { result ->
-            result.fold(
-                onSuccess = { reviews -> ProductReviewsUiState.Success(productId, reviews) },
-                onFailure = { error -> ProductReviewsUiState.Error(productId, error.message ?: "Failed to load reviews") }
-            )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ProductReviewsUiState.Loading(productId),
-        )
+    val uiState: StateFlow<ProductReviewsUiState> = viewModelScope.loadUiState(
+        initial = ProductReviewsUiState.Loading(productId),
+        load = { getProductReviews(productId) },
+        onSuccess = { ProductReviewsUiState.Success(productId, it) },
+        onFailure = { ProductReviewsUiState.Error(productId, it.message ?: "Failed to load reviews") },
+    )
 
     private val _navEffect = Channel<ProductReviewsNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()

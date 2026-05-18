@@ -18,29 +18,20 @@ package io.navix.demo.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetCurrentUserUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 
 class ProfileViewModel(
     getCurrentUser: GetCurrentUserUseCase
 ) : ViewModel() {
-    val uiState: StateFlow<ProfileUiState> = flow { emit(getCurrentUser()) }
-        .map { result ->
-            result.fold(
-                onSuccess = { user -> ProfileUiState.Success(user) },
-                onFailure = { error -> ProfileUiState.Error(error.message ?: "Failed to load profile") }
-            )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ProfileUiState.Loading,
-        )
+    val uiState: StateFlow<ProfileUiState> = viewModelScope.loadUiState(
+        initial = ProfileUiState.Loading,
+        load = { getCurrentUser() },
+        onSuccess = { ProfileUiState.Success(it) },
+        onFailure = { ProfileUiState.Error(it.message ?: "Failed to load profile") },
+    )
 
     private val _navEffect = Channel<ProfileNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()

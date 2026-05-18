@@ -18,36 +18,27 @@ package io.navix.demo.ui.product.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetProductByIdUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 
 class ProductDetailViewModel(
     private val productId: String,
     getProductById: GetProductByIdUseCase
 ) : ViewModel() {
-    val uiState: StateFlow<ProductDetailUiState> = flow { emit(getProductById(productId)) }
-        .map { result ->
-            result.fold(
-                onSuccess = { product ->
-                    if (product != null) {
-                        ProductDetailUiState.Success(product)
-                    } else {
-                        ProductDetailUiState.Error("Product not found")
-                    }
-                },
-                onFailure = { error -> ProductDetailUiState.Error(error.message ?: "Failed to load product") }
-            )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ProductDetailUiState.Loading,
-        )
+    val uiState: StateFlow<ProductDetailUiState> = viewModelScope.loadUiState(
+        initial = ProductDetailUiState.Loading,
+        load = { getProductById(productId) },
+        onSuccess = { product ->
+            if (product != null) {
+                ProductDetailUiState.Success(product)
+            } else {
+                ProductDetailUiState.Error("Product not found")
+            }
+        },
+        onFailure = { ProductDetailUiState.Error(it.message ?: "Failed to load product") },
+    )
 
     private val _navEffect = Channel<ProductDetailNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()

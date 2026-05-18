@@ -18,29 +18,20 @@ package io.navix.demo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetProductsUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 
 class HomeViewModel(
     getProducts: GetProductsUseCase
 ) : ViewModel() {
-    val uiState: StateFlow<HomeUiState> = flow { emit(getProducts()) }
-        .map { result ->
-            result.fold(
-                onSuccess = { products -> HomeUiState.Success(products) },
-                onFailure = { error -> HomeUiState.Error(error.message ?: "Failed to load products") }
-            )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = HomeUiState.Loading,
-        )
+    val uiState: StateFlow<HomeUiState> = viewModelScope.loadUiState(
+        initial = HomeUiState.Loading,
+        load = { getProducts() },
+        onSuccess = { HomeUiState.Success(it) },
+        onFailure = { HomeUiState.Error(it.message ?: "Failed to load products") },
+    )
 
     private val _navEffect = Channel<HomeNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()
