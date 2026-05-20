@@ -96,14 +96,14 @@ private fun ProductReviewsContent(
                     .fillMaxSize()
                     .padding(padding)
         ) {
-            when {
-                state.isLoading -> {
+            when (state) {
+                is ProductReviewsUiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
-                state.error != null -> {
+                is ProductReviewsUiState.Error -> {
                     Text(
-                        text = "Error: ${state.error}",
+                        text = "Error: ${state.message}",
                         color = MaterialTheme.colorScheme.error,
                         modifier =
                             Modifier
@@ -112,7 +112,7 @@ private fun ProductReviewsContent(
                     )
                 }
 
-                else -> {
+                is ProductReviewsUiState.Success -> {
                     ReviewList(
                         reviews = state.reviews,
                         onJumpToHome = onJumpToHome

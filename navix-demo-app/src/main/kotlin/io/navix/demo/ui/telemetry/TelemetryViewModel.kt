@@ -16,12 +16,10 @@
 package io.navix.demo.ui.telemetry
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.navix.contracts.NavEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 /**
  * Exposes navigation event history from [InMemoryEventExporter] to the TelemetryViewer.
@@ -38,8 +36,6 @@ class TelemetryViewModel(
     val navEffect = _navEffect.receiveAsFlow()
 
     fun onBack() {
-        viewModelScope.launch {
-            _navEffect.send(TelemetryNavEffect.NavigateBack)
-        }
+        _navEffect.trySend(TelemetryNavEffect.NavigateBack)
     }
 }

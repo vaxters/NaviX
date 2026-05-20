@@ -17,11 +17,11 @@ package io.navix.demo.ui.product.detail
 
 import io.navix.demo.data.model.Product
 
-data class ProductDetailUiState(
-    val product: Product? = null,
-    val isLoading: Boolean = true,
-    val error: String? = null
-)
+sealed interface ProductDetailUiState {
+    data object Loading : ProductDetailUiState
+    data class Success(val product: Product) : ProductDetailUiState
+    data class Error(val message: String) : ProductDetailUiState
+}
 
 sealed interface ProductDetailNavEffect {
     data class OpenReviews(

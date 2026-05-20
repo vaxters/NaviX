@@ -20,36 +20,32 @@ import androidx.lifecycle.viewModelScope
 import io.navix.demo.data.model.TransitionStyle
 import io.navix.demo.data.repository.SettingsRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(SettingsUiState())
-    val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<SettingsUiState> = settingsRepository.settings
+        .map { data ->
+            SettingsUiState(
+                notificationsEnabled = data.notificationsEnabled,
+                analyticsEnabled = data.analyticsEnabled,
+                transitionStyle = data.transitionStyle,
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SettingsUiState(),
+        )
 
     private val _navEffect = Channel<SettingsNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()
-
-    init {
-        // Mirror persisted settings into UI state so toggles survive process death.
-        viewModelScope.launch {
-            settingsRepository.settings.collect { data ->
-                _uiState.update {
-                    it.copy(
-                        notificationsEnabled = data.notificationsEnabled,
-                        analyticsEnabled = data.analyticsEnabled,
-                        transitionStyle = data.transitionStyle
-                    )
-                }
-            }
-        }
-    }
 
     fun onToggleNotifications(enabled: Boolean) {
         viewModelScope.launch {
@@ -70,8 +66,6 @@ class SettingsViewModel(
     }
 
     fun onBack() {
-        viewModelScope.launch {
-            _navEffect.send(SettingsNavEffect.NavigateBack)
-        }
+        _navEffect.trySend(SettingsNavEffect.NavigateBack)
     }
 }

@@ -61,6 +61,9 @@ captures/
 .navigation/
 .kotlin/
 
+# Claude Code session/plan state
+.claude/
+
 # Native build
 .externalNativeBuild/
 .cxx/

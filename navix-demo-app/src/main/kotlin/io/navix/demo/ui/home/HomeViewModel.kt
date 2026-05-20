@@ -18,60 +18,37 @@ package io.navix.demo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetProductsUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val getProducts: GetProductsUseCase
+    getProducts: GetProductsUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<HomeUiState> = viewModelScope.loadUiState(
+        initial = HomeUiState.Loading,
+        load = { getProducts() },
+        onSuccess = { HomeUiState.Success(it) },
+        onFailure = { HomeUiState.Error(it.message ?: "Failed to load products") },
+    )
 
     private val _navEffect = Channel<HomeNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()
 
-    init {
-        loadProducts()
-    }
-
-    private fun loadProducts() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-            getProducts()
-                .onSuccess { products ->
-                    _uiState.update { it.copy(products = products, isLoading = false) }
-                }.onFailure { error ->
-                    _uiState.update { it.copy(isLoading = false, error = error.message) }
-                }
-        }
-    }
-
     fun onProductClicked(productId: String) {
-        viewModelScope.launch {
-            _navEffect.send(HomeNavEffect.OpenProductDetail(productId))
-        }
+        _navEffect.trySend(HomeNavEffect.OpenProductDetail(productId))
     }
 
     fun onOpenProfile() {
-        viewModelScope.launch {
-            _navEffect.send(HomeNavEffect.OpenProfile)
-        }
+        _navEffect.trySend(HomeNavEffect.OpenProfile)
     }
 
     fun onOpenTelemetry() {
-        viewModelScope.launch {
-            _navEffect.send(HomeNavEffect.OpenTelemetry)
-        }
+        _navEffect.trySend(HomeNavEffect.OpenTelemetry)
     }
 
     fun onDeepLink(uri: String) {
-        viewModelScope.launch {
-            _navEffect.send(HomeNavEffect.HandleDeepLink(uri))
-        }
+        _navEffect.trySend(HomeNavEffect.HandleDeepLink(uri))
     }
 }

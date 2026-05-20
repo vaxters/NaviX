@@ -17,12 +17,13 @@ package io.navix.demo.ui.product.reviews
 
 import io.navix.demo.data.model.Review
 
-data class ProductReviewsUiState(
-    val reviews: List<Review> = emptyList(),
-    val productId: String = "",
-    val isLoading: Boolean = true,
-    val error: String? = null
-)
+sealed interface ProductReviewsUiState {
+    val productId: String
+
+    data class Loading(override val productId: String) : ProductReviewsUiState
+    data class Success(override val productId: String, val reviews: List<Review>) : ProductReviewsUiState
+    data class Error(override val productId: String, val message: String) : ProductReviewsUiState
+}
 
 sealed interface ProductReviewsNavEffect {
     data object NavigateBack : ProductReviewsNavEffect

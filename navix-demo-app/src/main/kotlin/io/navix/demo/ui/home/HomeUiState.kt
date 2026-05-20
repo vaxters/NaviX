@@ -17,11 +17,11 @@ package io.navix.demo.ui.home
 
 import io.navix.demo.data.model.Product
 
-data class HomeUiState(
-    val products: List<Product> = emptyList(),
-    val isLoading: Boolean = true,
-    val error: String? = null
-)
+sealed interface HomeUiState {
+    data object Loading : HomeUiState
+    data class Success(val products: List<Product>) : HomeUiState
+    data class Error(val message: String) : HomeUiState
+}
 
 sealed interface HomeNavEffect {
     data class OpenProductDetail(

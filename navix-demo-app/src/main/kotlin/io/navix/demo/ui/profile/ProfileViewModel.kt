@@ -18,60 +18,37 @@ package io.navix.demo.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.navix.demo.domain.usecase.GetCurrentUserUseCase
+import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val getCurrentUser: GetCurrentUserUseCase
+    getCurrentUser: GetCurrentUserUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileUiState())
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<ProfileUiState> = viewModelScope.loadUiState(
+        initial = ProfileUiState.Loading,
+        load = { getCurrentUser() },
+        onSuccess = { ProfileUiState.Success(it) },
+        onFailure = { ProfileUiState.Error(it.message ?: "Failed to load profile") },
+    )
 
     private val _navEffect = Channel<ProfileNavEffect>(Channel.BUFFERED)
     val navEffect = _navEffect.receiveAsFlow()
 
-    init {
-        loadUser()
-    }
-
-    private fun loadUser() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            getCurrentUser()
-                .onSuccess { user ->
-                    _uiState.update { it.copy(user = user, isLoading = false) }
-                }.onFailure { error ->
-                    _uiState.update { it.copy(isLoading = false, error = error.message) }
-                }
-        }
-    }
-
     fun onOpenSettings() {
-        viewModelScope.launch {
-            _navEffect.send(ProfileNavEffect.OpenSettings)
-        }
+        _navEffect.trySend(ProfileNavEffect.OpenSettings)
     }
 
     fun onSignOut() {
-        viewModelScope.launch {
-            _navEffect.send(ProfileNavEffect.SignOut)
-        }
+        _navEffect.trySend(ProfileNavEffect.SignOut)
     }
 
     fun onResetToHome() {
-        viewModelScope.launch {
-            _navEffect.send(ProfileNavEffect.ResetToHome)
-        }
+        _navEffect.trySend(ProfileNavEffect.ResetToHome)
     }
 
     fun onBack() {
-        viewModelScope.launch {
-            _navEffect.send(ProfileNavEffect.NavigateBack)
-        }
+        _navEffect.trySend(ProfileNavEffect.NavigateBack)
     }
 }

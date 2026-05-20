@@ -48,8 +48,6 @@ class AuthViewModel : ViewModel() {
     }
 
     fun onCreateAccount() {
-        viewModelScope.launch {
-            _navEffect.send(AuthNavEffect.NavigateToRegister)
-        }
+        _navEffect.trySend(AuthNavEffect.NavigateToRegister)
     }
 }
