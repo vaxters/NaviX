@@ -61,16 +61,23 @@ import kotlinx.coroutines.launch
  * val navigator = rememberNavigator(root = Home, telemetry = telemetry)
  * ```
  *
- * The pipeline processes events in FIFO order. Exporter exceptions are caught and
- * printed; the event is still delivered to all remaining exporters.
+ * The pipeline processes events in FIFO order. Exporter exceptions are caught and forwarded
+ * to [onExporterError]; the event is still delivered to all remaining exporters.
  *
  * ### Telemetry contract
  * [onEvent] is non-blocking — it enqueues the event and returns immediately, satisfying
  * [Navigator][io.navix.runtime.Navigator]'s requirement that telemetry never stalls navigation.
+ *
+ * @param exporters Ordered list of sinks that receive each [NavEvent].
+ * @param dispatcher Background dispatcher for the exporter actor. Defaults to [Dispatchers.Default].
+ * @param onExporterError Called when an exporter throws. Receives the failing exporter, the event
+ *   that triggered the error, and the throwable. Defaults to a no-op so errors are silent; provide
+ *   your own handler (e.g. `Timber.w`) to surface them in your logging infrastructure.
  */
 class NavixTelemetryPipeline(
     private val exporters: List<NavEventExporter>,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val onExporterError: (exporter: NavEventExporter, event: NavEvent, error: Throwable) -> Unit = { _, _, _ -> }
 ) : NavixTelemetry {
     private val scope = CoroutineScope(SupervisorJob() + dispatcher)
     private val channel =
@@ -113,7 +120,7 @@ class NavixTelemetryPipeline(
                     try {
                         exporter.export(event)
                     } catch (t: Throwable) {
-                        println("NavixTelemetry: exporter ${exporter::class.simpleName} threw: $t")
+                        onExporterError(exporter, event, t)
                     }
                 }
             }
@@ -124,11 +131,8 @@ class NavixTelemetryPipeline(
         val result = channel.trySend(event)
         if (result.isFailure) {
             // CAS-safe: MutableStateFlow.update is atomic across concurrent callers.
+            // Observe droppedEventCount to detect back-pressure in debug UIs or dashboards.
             _droppedEventCount.update { it + 1 }
-            println(
-                "NavixTelemetry: channel full, dropped event ${event.type}. " +
-                    "Total dropped: ${_droppedEventCount.value}"
-            )
         }
     }
 

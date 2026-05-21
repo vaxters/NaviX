@@ -45,6 +45,7 @@ internal class RouteRegistryGenerator(
             moduleName
                 .replaceFirstChar { it.uppercaseChar() }
                 .replace(Regex("[^a-zA-Z0-9]"), "")
+                .takeIf { it.isNotEmpty() } ?: "Module"
         val objectName = "${sanitized}NavixRouteRegistry"
         val packageName = "io.navix.generated"
 

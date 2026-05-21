@@ -15,6 +15,7 @@
  */
 package io.navix.compose
 
+import android.util.Log
 import io.navix.contracts.Route
 import io.navix.runtime.NavixRouteRegistry
 
@@ -66,7 +67,10 @@ fun NavGraphBuilder.validateAgainst(vararg registries: NavixRouteRegistry) {
                 runCatching {
                     @Suppress("UNCHECKED_CAST")
                     Class.forName(fqn).kotlin as kotlin.reflect.KClass<out Route>
-                }.getOrNull() ?: continue // skip if class can't be loaded (e.g., stripped by R8)
+                }.getOrElse { t ->
+                    Log.d("NaviX", "validateAgainst: skipping $fqn (class not loadable — likely stripped by R8: $t)")
+                    null
+                } ?: continue
 
             if (klass !in registeredClasses) {
                 missing += fqn

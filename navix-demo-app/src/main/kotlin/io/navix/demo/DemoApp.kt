@@ -49,6 +49,9 @@ class DemoApp : Application() {
      * In-memory event exporter shared with [DemoNavHost] so the TelemetryViewer screen
      * can display events emitted before it opened (unlike the hot [Navigator.events] SharedFlow,
      * the [InMemoryEventExporter.events] StateFlow retains history).
+     *
+     * 200 events is enough for a typical demo session while keeping memory bounded;
+     * the oldest event is dropped when the cap is reached.
      */
     val inMemoryExporter: InMemoryEventExporter by lazy {
         InMemoryEventExporter(maxEvents = 200)

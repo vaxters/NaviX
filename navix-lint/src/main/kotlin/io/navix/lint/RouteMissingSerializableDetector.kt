@@ -56,18 +56,14 @@ class RouteMissingSerializableDetector : Detector(), SourceCodeScanner {
             override fun visitClass(node: UClass) {
                 val hasRouteDestination =
                     node.uAnnotations.any { annotation ->
-                        val name =
-                            annotation.qualifiedName ?: annotation.attributeValues
-                                .firstOrNull()
-                                ?.name
-                        name == ROUTE_DESTINATION_FQN ||
+                        annotation.qualifiedName == ROUTE_DESTINATION_FQN ||
                             annotation.qualifiedName?.endsWith(".RouteDestination") == true
                     }
                 if (!hasRouteDestination) return
 
                 val hasSerializable =
                     node.uAnnotations.any { annotation ->
-                        annotation.qualifiedName?.endsWith(".Serializable") == true
+                        annotation.qualifiedName == "kotlinx.serialization.Serializable"
                     }
                 if (hasSerializable) return
 

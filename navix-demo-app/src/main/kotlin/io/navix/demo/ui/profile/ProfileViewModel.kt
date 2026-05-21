@@ -22,6 +22,7 @@ import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     getCurrentUser: GetCurrentUserUseCase
@@ -37,18 +38,18 @@ class ProfileViewModel(
     val navEffect = _navEffect.receiveAsFlow()
 
     fun onOpenSettings() {
-        _navEffect.trySend(ProfileNavEffect.OpenSettings)
+        viewModelScope.launch { _navEffect.send(ProfileNavEffect.OpenSettings) }
     }
 
     fun onSignOut() {
-        _navEffect.trySend(ProfileNavEffect.SignOut)
+        viewModelScope.launch { _navEffect.send(ProfileNavEffect.SignOut) }
     }
 
     fun onResetToHome() {
-        _navEffect.trySend(ProfileNavEffect.ResetToHome)
+        viewModelScope.launch { _navEffect.send(ProfileNavEffect.ResetToHome) }
     }
 
     fun onBack() {
-        _navEffect.trySend(ProfileNavEffect.NavigateBack)
+        viewModelScope.launch { _navEffect.send(ProfileNavEffect.NavigateBack) }
     }
 }

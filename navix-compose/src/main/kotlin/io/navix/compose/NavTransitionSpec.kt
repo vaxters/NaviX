@@ -72,14 +72,11 @@ interface NavTransitionSpec {
         swipeEdge: Int
     ): Modifier =
         Modifier.graphicsLayer {
-            // Scale down slightly as the user drags (max 8 % reduction at full progress).
-            val scale = 1f - progress * 0.08f
+            val scale = 1f - progress * PREDICTIVE_SCALE_REDUCTION
             scaleX = scale
             scaleY = scale
-            // Drift toward the swipe edge: left edge → drift right (+X), right edge → drift left (−X).
-            translationX = if (swipeEdge == SWIPE_EDGE_LEFT) progress * 72f else -progress * 72f
-            // Fade slightly to hint that the screen is leaving.
-            alpha = 1f - progress * 0.25f
+            translationX = if (swipeEdge == SWIPE_EDGE_LEFT) progress * PREDICTIVE_TRANSLATION_PX else -progress * PREDICTIVE_TRANSLATION_PX
+            alpha = 1f - progress * PREDICTIVE_ALPHA_REDUCTION
         }
 
     companion object {
@@ -88,6 +85,15 @@ interface NavTransitionSpec {
 
         /** Matches `BackEventCompat.EDGE_RIGHT`. Passed as [predictiveExit]'s [swipeEdge]. */
         const val SWIPE_EDGE_RIGHT = 1
+
+        /** Maximum scale reduction applied to the exiting screen at full gesture progress (8%). */
+        private const val PREDICTIVE_SCALE_REDUCTION = 0.08f
+
+        /** Maximum horizontal drift in pixels applied toward the swipe edge at full gesture progress. */
+        private const val PREDICTIVE_TRANSLATION_PX = 72f
+
+        /** Maximum alpha reduction applied to the exiting screen at full gesture progress (25%). */
+        private const val PREDICTIVE_ALPHA_REDUCTION = 0.25f
 
         /** Default spec: key-driven slide/scale/fade transitions + predictive back support. */
         val Default: NavTransitionSpec = NavTransitions.DefaultSpec

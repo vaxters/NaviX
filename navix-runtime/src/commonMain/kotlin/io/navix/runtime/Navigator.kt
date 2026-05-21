@@ -116,6 +116,9 @@ interface Navigator {
      * only the last value is delivered. Calling [setResult] without a following [pop] has no
      * immediate effect — the result is held in memory until the entry leaves the stack.
      *
+     * Must be called from the **main thread**, consistent with the general thread-safety
+     * contract of [Navigator]. Custom implementations may not be thread-safe.
+     *
      * @param value The value to deliver. Use a type that the caller knows to cast to [R].
      */
     fun setResult(value: Any?)

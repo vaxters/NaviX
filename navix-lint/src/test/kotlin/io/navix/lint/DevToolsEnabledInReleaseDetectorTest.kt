@@ -86,6 +86,25 @@ class DevToolsEnabledInReleaseDetectorTest : LintDetectorTest() {
             .expectClean()
     }
 
+    fun testOverlayEnabledViaVariableIsFlagged() {
+        lint()
+            .files(
+                kotlin(
+                    """
+                    package test
+                    import io.navix.devtools.NavixDevToolsOverlay
+                    fun Screen(navigator: Any) {
+                        val isEnabled = true
+                        NavixDevToolsOverlay(navigator = navigator, enabled = isEnabled)
+                    }
+                    """
+                ).indented(),
+                navixDevToolsStub()
+            ).allowMissingSdk()
+            .run()
+            .expectClean()
+    }
+
     fun testOverlayEnabledOmittedIsNotFlagged() {
         lint()
             .files(

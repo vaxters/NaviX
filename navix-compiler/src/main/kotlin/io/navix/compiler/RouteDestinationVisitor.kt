@@ -79,6 +79,34 @@ internal class RouteDestinationVisitor(
                 ConstructorParam(name = param.name?.asString() ?: "_", typeName = param.type.resolve().toKotlinTypeName())
             } ?: emptyList()
 
+        // Validate that every deep-link parameter name matches a constructor parameter.
+        val constructorParamNames = constructorParams.map { it.name }.toSet()
+        for (template in parsedTemplates) {
+            val unmatched = template.params.filter { it !in constructorParamNames }
+            if (unmatched.isNotEmpty()) {
+                logger.error(
+                    "Deep link template '${template.original}' on '$className' references " +
+                        "parameter(s) $unmatched that do not exist in the primary constructor. " +
+                        "Add the missing constructor parameter(s) or remove them from the template.",
+                    classDeclaration
+                )
+            }
+            // Warn when a deep-link param maps to a non-String constructor param: the
+            // generated handler passes a regex String group directly to the constructor,
+            // which will cause a type mismatch compile error in the generated code.
+            for (paramName in template.params) {
+                val param = constructorParams.firstOrNull { it.name == paramName }
+                if (param != null && param.typeName != "String") {
+                    logger.warn(
+                        "Deep link parameter '$paramName' on '$className' has type '${param.typeName}' " +
+                            "but deep link handlers extract String values from URIs. The generated " +
+                            "handler will fail to compile. Use String and convert manually in the route.",
+                        classDeclaration
+                    )
+                }
+            }
+        }
+
         descriptors.add(
             RouteDestinationDescriptor(
                 packageName = packageName,
@@ -100,13 +128,14 @@ internal class RouteDestinationVisitor(
  * prefix from built-in types so the generated code reads naturally (e.g. `String`, not
  * `kotlin.String`).
  */
-private fun KSType.toKotlinTypeName(): String {
+private fun KSType.toKotlinTypeName(depth: Int = 0): String {
+    if (depth > 5) return "*"
     val raw = declaration.qualifiedName?.asString() ?: declaration.simpleName.asString()
     val simplified = raw.removePrefix("kotlin.")
     val args = arguments
     return if (args.isEmpty()) {
         simplified
     } else {
-        "$simplified<${args.joinToString { it.type?.resolve()?.toKotlinTypeName() ?: "*" }}>"
+        "$simplified<${args.joinToString { it.type?.resolve()?.toKotlinTypeName(depth + 1) ?: "*" }}>"
     }
 }

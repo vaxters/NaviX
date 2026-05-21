@@ -42,12 +42,12 @@ class AuthViewModel : ViewModel() {
                 _uiState.update { it.copy(isLoading = false) }
                 _navEffect.send(AuthNavEffect.NavigateToHome)
             }.onFailure { cause ->
-                _uiState.update { it.copy(isLoading = false, error = cause.message ?: "Sign-in failed") }
+                _uiState.update { it.copy(isLoading = false, error = "${cause::class.simpleName}: ${cause.message ?: "Unknown error"}") }
             }
         }
     }
 
     fun onCreateAccount() {
-        _navEffect.trySend(AuthNavEffect.NavigateToRegister)
+        viewModelScope.launch { _navEffect.send(AuthNavEffect.NavigateToRegister) }
     }
 }

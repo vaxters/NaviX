@@ -213,6 +213,25 @@ class NavTransitionSpecPredictiveBackTest {
         )
     }
 
+    // ── Overlay invariant ─────────────────────────────────────────────────
+    //
+    // NavixHost disables PredictiveBackHandler when the active entry is a Dialog or
+    // BottomSheet (enabled = snapshot.canPop && !isOverlayActive). NavTransitionSpec
+    // itself is therefore never called in that state. The test below documents that
+    // predictiveExit is well-behaved if a caller ever invokes it at progress=0,
+    // which corresponds to a back gesture that has just started (or been cancelled).
+
+    @Test
+    fun predictiveExit_progressBoundaryZero_neverThrows() {
+        NavTransitionSpec.Default.predictiveExit(
+            from = fakeEntry("e1"),
+            to = fakeEntry("e2"),
+            key = NavTransitionKey.Default,
+            progress = 0f,
+            swipeEdge = NavTransitionSpec.SWIPE_EDGE_LEFT
+        )
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────
 
     private fun fakeEntry(id: String) =

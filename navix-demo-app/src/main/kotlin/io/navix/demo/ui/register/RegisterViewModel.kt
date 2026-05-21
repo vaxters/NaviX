@@ -48,6 +48,6 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun onBack() {
-        _navEffect.trySend(RegisterNavEffect.NavigateBack)
+        viewModelScope.launch { _navEffect.send(RegisterNavEffect.NavigateBack) }
     }
 }

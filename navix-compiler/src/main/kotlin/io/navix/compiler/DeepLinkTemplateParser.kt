@@ -27,6 +27,7 @@ package io.navix.compiler
 internal object DeepLinkTemplateParser {
     private val PARAM_REGEX = Regex("\\{([^}]+)}")
     private val VALID_SCHEME = Regex("^[a-zA-Z][a-zA-Z0-9+\\-.]*://.*")
+    private val VALID_IDENTIFIER = Regex("[a-zA-Z_][a-zA-Z0-9_]*")
 
     data class ParsedTemplate(val original: String, val params: List<String>, val matchingRegex: Regex)
 
@@ -40,6 +41,18 @@ internal object DeepLinkTemplateParser {
         }
 
         val params = PARAM_REGEX.findAll(template).map { it.groupValues[1] }.toList()
+
+        val invalidNames = params.filter { !VALID_IDENTIFIER.matches(it) }
+        if (invalidNames.isNotEmpty()) {
+            return Result.failure(
+                IllegalArgumentException(
+                    "Deep link template '$template' has invalid parameter name(s): $invalidNames. " +
+                        "Parameter names must be valid Kotlin identifiers (letters, digits, underscores; " +
+                        "must not start with a digit)."
+                )
+            )
+        }
+
         val duplicates =
             params
                 .groupingBy { it }

@@ -57,6 +57,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.navix.contracts.BackstackSnapshot
 import io.navix.contracts.NavLifecycleState
 import io.navix.contracts.NavTransitionKey
+import io.navix.demo.data.deeplink.DeepLinkUris
 import io.navix.demo.data.model.Product
 import io.navix.demo.routes.ProductDetail
 import io.navix.demo.routes.Profile
@@ -235,13 +236,13 @@ private fun ProductList(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedButton(
-                    onClick = { onDeepLink("navix://product/1") },
+                    onClick = { onDeepLink(DeepLinkUris.PRODUCT_1) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Deep Link → Product 1")
                 }
                 OutlinedButton(
-                    onClick = { onDeepLink("navix://profile") },
+                    onClick = { onDeepLink(DeepLinkUris.PROFILE) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Deep Link → Profile")

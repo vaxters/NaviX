@@ -22,6 +22,7 @@ import io.navix.contracts.NavixTelemetry
 import io.navix.contracts.Route
 import io.navix.runtime.DeepLinkHandler
 import io.navix.runtime.DefaultReducer
+import io.navix.runtime.NavixLogger
 import io.navix.runtime.Navigator
 import io.navix.runtime.Reducer
 import io.navix.runtime.createNavigator
@@ -54,7 +55,8 @@ fun rememberNavigator(
     root: Route,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer()
+    reducer: Reducer = DefaultReducer(),
+    logger: NavixLogger = NavixLogger.Default
 ): Navigator {
     val scope = rememberCoroutineScope()
     // No key — root changes after first composition are ignored intentionally.
@@ -65,7 +67,8 @@ fun rememberNavigator(
             scope = scope,
             reducer = reducer,
             telemetry = telemetry,
-            deepLinkHandlers = deepLinkHandlers
+            deepLinkHandlers = deepLinkHandlers,
+            logger = logger
         )
     }
 }

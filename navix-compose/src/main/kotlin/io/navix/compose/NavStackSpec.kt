@@ -27,4 +27,8 @@ import io.navix.contracts.Route
  *   differentiate tabs that share the same [root] type. Defaults to the simple class
  *   name of [root].
  */
-data class NavStackSpec(val root: Route, val key: String = root::class.simpleName ?: "tab")
+data class NavStackSpec(val root: Route, val key: String = root::class.simpleName ?: "tab") {
+    init {
+        require(key.isNotBlank()) { "NavStackSpec key must not be blank." }
+    }
+}

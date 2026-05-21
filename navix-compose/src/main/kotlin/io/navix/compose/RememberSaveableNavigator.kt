@@ -27,6 +27,7 @@ import io.navix.runtime.DeepLinkHandler
 import io.navix.runtime.DefaultEntryFactory
 import io.navix.runtime.DefaultReducer
 import io.navix.runtime.EntryFactory
+import io.navix.runtime.NavixLogger
 import io.navix.runtime.Navigator
 import io.navix.runtime.NavigatorSaver
 import io.navix.runtime.Reducer
@@ -86,7 +87,8 @@ fun rememberSaveableNavigator(
     reducer: Reducer = DefaultReducer(),
     entryFactory: EntryFactory = DefaultEntryFactory,
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    deepLinkHandlers: List<DeepLinkHandler> = emptyList()
+    deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
+    logger: NavixLogger = NavixLogger.Default
 ): Navigator {
     val scope = rememberCoroutineScope()
     val savedStateHolder = remember { NavixSavedStateHolder() }
@@ -105,7 +107,7 @@ fun rememberSaveableNavigator(
                         val blob = saved as? Bundle
                         val bytes = blob?.let { NavixPersistedState.unpackBackstack(it) }
                         if (blob == null || bytes == null) {
-                            createNavigator(root, scope, reducer, entryFactory, telemetry, deepLinkHandlers)
+                            createNavigator(root, scope, reducer, entryFactory, telemetry, deepLinkHandlers, logger)
                         } else {
                             savedStateHolder.restoreFrom(NavixPersistedState.unpackEntryStates(blob))
                             restoreNavigator(
@@ -115,7 +117,8 @@ fun rememberSaveableNavigator(
                                 saver = saver,
                                 reducer = reducer,
                                 telemetry = telemetry,
-                                deepLinkHandlers = deepLinkHandlers
+                                deepLinkHandlers = deepLinkHandlers,
+                                logger = logger
                             )
                         }
                     }
@@ -127,7 +130,8 @@ fun rememberSaveableNavigator(
                 reducer = reducer,
                 entryFactory = entryFactory,
                 telemetry = telemetry,
-                deepLinkHandlers = deepLinkHandlers
+                deepLinkHandlers = deepLinkHandlers,
+                logger = logger
             )
         }
 
