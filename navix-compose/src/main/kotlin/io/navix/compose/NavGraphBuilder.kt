@@ -139,6 +139,9 @@ internal class NavGraphBuilderImpl : NavGraphBuilder {
         content: @Composable (entry: RouteEntry, route: T) -> Unit
     ) {
         destinations[klass] = { entry, route ->
+            require(klass.isInstance(route)) {
+                "NavixHost: expected route of type ${klass.simpleName} but got ${route::class.simpleName} — this is a bug in NavixHost routing"
+            }
             @Suppress("UNCHECKED_CAST")
             content(entry, route as T)
         }

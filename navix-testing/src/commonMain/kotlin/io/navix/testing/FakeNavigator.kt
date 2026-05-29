@@ -209,12 +209,8 @@ class FakeNavigator(
         val deferred = CompletableDeferred<Any?>()
         pendingResults[pushedEntry.id] = deferred
 
-        return try {
-            val raw = deferred.await()
-            if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
-        } catch (_: Exception) {
-            NavResult.Cancelled
-        }
+        val raw = deferred.await()
+        return if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
     }
 
     override fun setResult(value: Any?) {

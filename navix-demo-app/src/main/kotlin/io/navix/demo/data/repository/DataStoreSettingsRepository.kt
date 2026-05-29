@@ -23,6 +23,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import io.navix.demo.data.model.SettingsData
 import io.navix.demo.data.model.TransitionStyle
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -55,7 +56,11 @@ class DataStoreSettingsRepository(
                     analyticsEnabled = prefs[Keys.ANALYTICS] ?: false,
                     transitionStyle =
                         prefs[Keys.TRANSITION_STYLE]
-                            ?.let { runCatching { TransitionStyle.valueOf(it) }.getOrNull() }
+                            ?.let { value ->
+                                runCatching { TransitionStyle.valueOf(value) }
+                                    .onFailure { Log.w("NaviX", "TransitionStyle '$value' not recognized, using default") }
+                                    .getOrNull()
+                            }
                             ?: TransitionStyle.Default
                 )
             }

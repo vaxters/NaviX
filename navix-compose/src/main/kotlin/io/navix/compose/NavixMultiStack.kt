@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.navix.contracts.NavixTelemetry
 import io.navix.runtime.DeepLinkHandler
 import io.navix.runtime.DefaultReducer
+import io.navix.runtime.NavixLogger
 import io.navix.runtime.Navigator
 import io.navix.runtime.NavigatorSaver
 import io.navix.runtime.Reducer
@@ -133,9 +134,14 @@ fun rememberNavixMultiStack(
     initialTabIndex: Int = 0,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer()
+    reducer: Reducer = DefaultReducer(),
+    logger: NavixLogger = NavixLogger.Default
 ): NavixMultiStack {
     require(specs.isNotEmpty()) { "rememberNavixMultiStack requires at least one NavStackSpec." }
+    val keys = specs.map { it.key }
+    require(keys.toSet().size == keys.size) {
+        "rememberNavixMultiStack requires unique NavStackSpec.key values; got $keys."
+    }
     val scope = rememberCoroutineScope()
     return remember {
         NavixMultiStack(
@@ -147,7 +153,8 @@ fun rememberNavixMultiStack(
                         scope = scope,
                         reducer = reducer,
                         telemetry = telemetry,
-                        deepLinkHandlers = deepLinkHandlers
+                        deepLinkHandlers = deepLinkHandlers,
+                        logger = logger
                     )
                 },
             initialTabIndex = initialTabIndex
@@ -195,7 +202,8 @@ fun rememberSaveableNavixMultiStack(
     initialTabIndex: Int = 0,
     deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
     telemetry: NavixTelemetry = NavixTelemetry.NoOp,
-    reducer: Reducer = DefaultReducer()
+    reducer: Reducer = DefaultReducer(),
+    logger: NavixLogger = NavixLogger.Default
 ): NavixMultiStack {
     require(specs.isNotEmpty()) {
         "rememberSaveableNavixMultiStack requires at least one NavStackSpec."
@@ -222,7 +230,8 @@ fun rememberSaveableNavixMultiStack(
                             scope = scope,
                             reducer = reducer,
                             telemetry = telemetry,
-                            deepLinkHandlers = deepLinkHandlers
+                            deepLinkHandlers = deepLinkHandlers,
+                            logger = logger
                         )
                     } else {
                         restoreNavigator(
@@ -232,7 +241,8 @@ fun rememberSaveableNavixMultiStack(
                             saver = saver,
                             reducer = reducer,
                             telemetry = telemetry,
-                            deepLinkHandlers = deepLinkHandlers
+                            deepLinkHandlers = deepLinkHandlers,
+                            logger = logger
                         )
                     }
                 NavixHolderRegistry.put(nav, sharedHolder)

@@ -28,7 +28,7 @@ class NavixIssueRegistry : IssueRegistry() {
 
     override val api: Int = CURRENT_API
 
-    override val minApi: Int = 8
+    override val minApi: Int = 14
 
     override val vendor =
         Vendor(

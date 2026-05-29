@@ -66,6 +66,6 @@ class SettingsViewModel(
     }
 
     fun onBack() {
-        _navEffect.trySend(SettingsNavEffect.NavigateBack)
+        viewModelScope.launch { _navEffect.send(SettingsNavEffect.NavigateBack) }
     }
 }

@@ -63,7 +63,8 @@ internal class NavigatorImpl(
     private val store: BackstackStore,
     private val telemetry: NavixTelemetry,
     private val deepLinkHandlers: List<DeepLinkHandler>,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    private val logger: NavixLogger = NavixLogger.Default
 ) : Navigator {
     internal constructor(
         root: Route,
@@ -73,7 +74,8 @@ internal class NavigatorImpl(
         telemetry: NavixTelemetry = NavixTelemetry.NoOp,
         deepLinkHandlers: List<DeepLinkHandler> = emptyList(),
         /** When non-null, the navigator resumes from this snapshot instead of a fresh root entry. */
-        initialSnapshot: BackstackSnapshot? = null
+        initialSnapshot: BackstackSnapshot? = null,
+        logger: NavixLogger = NavixLogger.Default
     ) : this(
         root = root,
         store =
@@ -86,7 +88,8 @@ internal class NavigatorImpl(
             ),
         telemetry = telemetry,
         deepLinkHandlers = deepLinkHandlers,
-        scope = scope
+        scope = scope,
+        logger = logger
     )
 
     override val backstack: StateFlow<BackstackSnapshot> = store.state
@@ -266,7 +269,7 @@ internal class NavigatorImpl(
         try {
             telemetry.onEvent(event)
         } catch (t: Throwable) {
-            println("[NaviX][WARN] telemetry.onEvent threw — navigation continues. $t")
+            logger.warn("telemetry.onEvent threw — navigation continues", t)
         }
     }
 

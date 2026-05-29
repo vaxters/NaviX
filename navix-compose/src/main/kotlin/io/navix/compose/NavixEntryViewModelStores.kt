@@ -45,6 +45,7 @@ internal class NavixEntryViewModelStores : ViewModel() {
     /** Clears and drops the store for [id]. Call only on a real pop (fires `onCleared`). */
     fun evict(id: String) {
         stores.remove(id)?.clear()
+            ?: Log.d("Navix", "evict($id): no store found, already evicted or never registered")
     }
 
     override fun onCleared() {

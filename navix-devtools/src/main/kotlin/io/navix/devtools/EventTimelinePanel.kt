@@ -68,7 +68,9 @@ internal fun EventTimelinePanel(navigator: Navigator, eventHistory: StateFlow<Li
         val displayEvents = remember(allEvents) { allEvents.reversed() }
 
         // Scroll to top whenever a new event arrives so the newest is always visible.
-        LaunchedEffect(displayEvents.size) {
+        // Key on allEvents (the StateFlow value) rather than size: two batches could arrive
+        // making size unchanged (one added, one removed), preventing scroll if keyed on size.
+        LaunchedEffect(allEvents) {
             if (displayEvents.isNotEmpty()) listState.animateScrollToItem(0)
         }
 
@@ -90,7 +92,7 @@ internal fun EventTimelinePanel(navigator: Navigator, eventHistory: StateFlow<Li
 
         LaunchedEffect(navigator) {
             navigator.events.collect { event ->
-                if (events.size >= MAX_EVENTS) events.removeAt(events.lastIndex)
+                if (events.size >= MAX_EVENTS) events.removeAt(events.lastIndex) // Remove oldest (tail) to stay within MAX_EVENTS
                 events.add(0, event)
             }
         }
@@ -103,7 +105,7 @@ internal fun EventTimelinePanel(navigator: Navigator, eventHistory: StateFlow<Li
         Column {
             EventTimelineHeader()
             LazyColumn(state = listState) {
-                items(events) { event ->
+                items(events, key = { it.timestampMs }) { event ->
                     EventRow(event)
                 }
             }

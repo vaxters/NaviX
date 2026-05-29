@@ -22,6 +22,7 @@ import io.navix.demo.ui.loadUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     getProducts: GetProductsUseCase
@@ -37,18 +38,18 @@ class HomeViewModel(
     val navEffect = _navEffect.receiveAsFlow()
 
     fun onProductClicked(productId: String) {
-        _navEffect.trySend(HomeNavEffect.OpenProductDetail(productId))
+        viewModelScope.launch { _navEffect.send(HomeNavEffect.OpenProductDetail(productId)) }
     }
 
     fun onOpenProfile() {
-        _navEffect.trySend(HomeNavEffect.OpenProfile)
+        viewModelScope.launch { _navEffect.send(HomeNavEffect.OpenProfile) }
     }
 
     fun onOpenTelemetry() {
-        _navEffect.trySend(HomeNavEffect.OpenTelemetry)
+        viewModelScope.launch { _navEffect.send(HomeNavEffect.OpenTelemetry) }
     }
 
     fun onDeepLink(uri: String) {
-        _navEffect.trySend(HomeNavEffect.HandleDeepLink(uri))
+        viewModelScope.launch { _navEffect.send(HomeNavEffect.HandleDeepLink(uri)) }
     }
 }

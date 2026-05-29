@@ -76,6 +76,66 @@ class RouteMissingSerializableDetectorTest : LintDetectorTest() {
             )
     }
 
+    fun testNestedRouteDestinationMissingSerializableIsFlagged() {
+        lint()
+            .files(
+                *stubs(),
+                kotlin(
+                    """
+                    package test
+                    import io.navix.annotations.RouteDestination
+                    import io.navix.contracts.Route
+                    class Outer {
+                        @RouteDestination
+                        data class Inner(val id: String) : Route
+                    }
+                    """
+                ).indented()
+            ).allowMissingSdk()
+            .run()
+            .expect(
+                """
+                src/test/Outer.kt:6: Error: Inner is annotated with @RouteDestination but is missing @Serializable. The Navix KSP processor requires both annotations to generate the route registry and SerializersModule. Add @Serializable from kotlinx.serialization. [RouteMissingSerializable]
+                    data class Inner(val id: String) : Route
+                               ~~~~~
+                1 errors, 0 warnings
+                """.trimIndent()
+            )
+    }
+
+    fun testWrongPackageSerializableIsFlagged() {
+        lint()
+            .files(
+                *stubs(),
+                kotlin(
+                    """
+                    package test
+                    import io.navix.annotations.RouteDestination
+                    import io.navix.contracts.Route
+                    import com.example.Serializable
+                    @Serializable
+                    @RouteDestination
+                    data class ProductDetail(val id: String) : Route
+                    """
+                ).indented(),
+                kotlin(
+                    """
+                    package com.example
+                    annotation class Serializable
+                    """
+                ).indented()
+            ).allowMissingSdk()
+            .run()
+            .expect(
+                """
+                src/test/ProductDetail.kt:7: Error: ProductDetail is annotated with @RouteDestination but is missing @Serializable. The Navix KSP processor requires both annotations to generate the route registry and SerializersModule. Add @Serializable from kotlinx.serialization. [RouteMissingSerializable]
+                data class ProductDetail(val id: String) : Route
+                           ~~~~~~~~~~~~~
+                1 errors, 0 warnings
+                """.trimIndent()
+            )
+    }
+
     // ── Clean cases ────────────────────────────────────────────────────────
 
     fun testRouteDestinationWithSerializableIsClean() {
