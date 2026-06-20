@@ -23,7 +23,7 @@ jobs:
         timeout-minutes: 30
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
 
             -   name: Setup JDK
                 uses: actions/setup-java@v5
@@ -49,7 +49,7 @@ jobs:
         needs: [ android-lint ]
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
 
             -   name: Setup JDK
                 uses: actions/setup-java@v5
@@ -73,7 +73,7 @@ jobs:
         needs: [ test ]
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
 
             -   name: Setup JDK
                 uses: actions/setup-java@v5
