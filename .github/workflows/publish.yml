@@ -41,7 +41,7 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
                 with:
                     fetch-depth: 0
 
@@ -71,7 +71,7 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
                 with:
                     fetch-depth: 0   # full history required by git-cliff
                     token: ${{ secrets.RELEASE_TOKEN || github.token }}
