@@ -82,4 +82,33 @@ class DeepLinkTemplateParserTest {
         assertEquals("electronics", params["category"])
         assertEquals("999", params["itemId"])
     }
+
+    // ── Anchoring regression: the matching regex must not match as a substring ─────
+
+    @Test
+    fun extractParams_uriEmbeddedInsideUnrelatedUri_returnsNull() {
+        val parsed = DeepLinkTemplateParser.parse("myapp://product/{productId}").getOrThrow()
+        // Without anchoring, containsMatchIn/find would locate "myapp://product/123"
+        // as a substring of this unrelated URI and resolve it as a legitimate deep link.
+        val params =
+            DeepLinkTemplateParser.extractParams(parsed, "https://evil.example/redirect?u=myapp://product/123")
+        assertNull(params)
+    }
+
+    @Test
+    fun extractParams_uriWithTrailingExtraSegments_returnsNull() {
+        val parsed = DeepLinkTemplateParser.parse("myapp://product/{productId}").getOrThrow()
+        val params = DeepLinkTemplateParser.extractParams(parsed, "myapp://product/123/extra/stuff")
+        assertNull(params)
+    }
+
+    @Test
+    fun handlerCanHandle_mirrorsAnchoredMatching_rejectsSubstringUri() {
+        // The generated handler uses containsMatchIn(uri) for canHandle — verify the
+        // anchored regex behaves the same way there, not just for find()/extractParams.
+        val parsed = DeepLinkTemplateParser.parse("myapp://product/{productId}").getOrThrow()
+        assertTrue(parsed.matchingRegex.containsMatchIn("myapp://product/123"))
+        assertTrue(!parsed.matchingRegex.containsMatchIn("https://evil.example/?u=myapp://product/123"))
+        assertTrue(!parsed.matchingRegex.containsMatchIn("myapp://product/123/extra"))
+    }
 }
