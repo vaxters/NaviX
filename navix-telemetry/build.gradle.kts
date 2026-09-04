@@ -42,7 +42,10 @@ kotlin {
 android {
     namespace = "io.navix.telemetry"
     compileSdk = 36
-    defaultConfig { minSdk = 24 }
+    defaultConfig {
+        minSdk = 24
+        consumerProguardFiles("consumer-rules.pro")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

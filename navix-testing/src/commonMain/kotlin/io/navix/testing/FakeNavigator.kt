@@ -204,12 +204,26 @@ class FakeNavigator(
         push(route, transition)
         val pushedEntry =
             _backstack.value.entries
-                .first { e -> snapshotBefore.entries.none { it.id == e.id } }
+                .firstOrNull { e -> snapshotBefore.entries.none { it.id == e.id } }
+
+        // Mirrors NavigatorImpl: a reducer that produces no new entry (e.g. a custom
+        // single-top reducer that pops-to instead of pushing) has nothing to await on —
+        // resolve as Cancelled rather than throwing NoSuchElementException.
+        if (pushedEntry == null) return NavResult.Cancelled
 
         val deferred = CompletableDeferred<Any?>()
         pendingResults[pushedEntry.id] = deferred
 
-        val raw = deferred.await()
+        val raw =
+            try {
+                deferred.await()
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // Avoid leaking the deferred/value if the caller's coroutine is cancelled
+                // before this entry is popped — mirrors NavigatorImpl's cleanup.
+                pendingResults.remove(pushedEntry.id)
+                pendingResultValues.remove(pushedEntry.id)
+                throw e
+            }
         return if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
     }
 
