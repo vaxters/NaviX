@@ -176,6 +176,13 @@ internal class NavigatorImpl(
     @Suppress("UNCHECKED_CAST")
     override suspend fun <R : Any> pushForResult(route: Route, transition: NavTransitionKey): NavResult<R> {
         val deferred = CompletableDeferred<Any?>()
+        // Set on the actor coroutine inside onApplied below; read from the caller after
+        // await() returns/throws. Safe without further synchronization: the cleanup Task
+        // sent from the catch block below is enqueued strictly after the Navigate message
+        // that sets this (same producer, same FIFO channel), so the actor always processes
+        // the registration before it processes the cleanup — see the comment there.
+        var pushedEntryId: String? = null
+
         // Register the pending deferred ON THE ACTOR via onApplied, keyed by the entry the
         // Push creates. Routing registration through the actor (instead of writing
         // pendingResults from the caller thread, as a previous version did) confines every
@@ -189,6 +196,7 @@ internal class NavigatorImpl(
                     val pushed = after.entries.lastOrNull { e -> before.entries.none { it.id == e.id } }
                     if (pushed != null) {
                         pendingResults[pushed.id] = deferred
+                        pushedEntryId = pushed.id
                     } else {
                         // Reducer produced no new entry (e.g. a custom single-top reducer):
                         // nothing to await on — resolve as Cancelled rather than hang.
@@ -198,11 +206,31 @@ internal class NavigatorImpl(
             )
         )
 
-        // await() only completes via deferred.complete(value) (never exceptionally), so a
-        // throw here means the caller's coroutine was cancelled. Let CancellationException
-        // propagate — swallowing it would break structured concurrency by resuming a
-        // cancelled caller. A failed `as R` cast is a real programming error, not Cancelled.
-        val raw = deferred.await()
+        val raw =
+            try {
+                // await() only completes via deferred.complete(value) (never exceptionally), so
+                // a throw here means the caller's coroutine was cancelled.
+                deferred.await()
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // If the caller was cancelled before the pushed entry was popped, pendingResults
+                // would otherwise retain this deferred (and any value staged for it) for as long
+                // as the entry stays on the stack — a leak on every cancelled pushForResult call
+                // whose screen the user never navigates away from. trySend is non-suspending, so
+                // it is safe to call here even though this coroutine is being cancelled. Let
+                // CancellationException propagate afterwards — swallowing it would break
+                // structured concurrency by resuming a cancelled caller.
+                actionChannel.trySend(
+                    ActorMessage.Task {
+                        val id = pushedEntryId ?: return@Task
+                        if (pendingResults[id] === deferred) {
+                            pendingResults.remove(id)
+                            pendingResultValues.remove(id)
+                        }
+                    }
+                )
+                throw e
+            }
+        // A failed `as R` cast here is a real programming error, not Cancelled.
         return if (raw == null) NavResult.Cancelled else NavResult.Success(raw as R)
     }
 
@@ -266,8 +294,12 @@ internal class NavigatorImpl(
         // Guard: a misbehaving telemetry implementation must never crash or stall
         // the actor coroutine — that would permanently halt all navigation. The catch
         // mirrors the defensive pattern in NavixTelemetryPipeline's exporter loop.
+        // CancellationException is deliberately not caught here — swallowing it would
+        // hide the actor scope's own cancellation instead of letting the coroutine stop.
         try {
             telemetry.onEvent(event)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (t: Throwable) {
             logger.warn("telemetry.onEvent threw — navigation continues", t)
         }

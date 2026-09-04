@@ -35,6 +35,15 @@ import kotlin.reflect.KClass
  *
  * ### Thread safety
  * All navigation methods are expected to be called from the main thread.
+ *
+ * ### Implementing this interface
+ * [Navigator] is implemented by Navix itself ([io.navix.runtime.NavigatorImpl], via
+ * [createNavigator]) and by [io.navix.testing.FakeNavigator] for tests. If you write your
+ * own implementation (e.g. a custom test double), be aware that Navix may add members to
+ * this interface in a future minor release — such an addition is source- and
+ * binary-compatible for callers, but is a source-breaking change for external
+ * implementers. Prefer wrapping/delegating to [io.navix.testing.FakeNavigator] over
+ * implementing [Navigator] from scratch where possible.
  */
 interface Navigator {
     val backstack: StateFlow<BackstackSnapshot>
