@@ -62,7 +62,6 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.foundation)
     implementation(libs.activity.compose)
-    implementation(libs.appcompat)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.viewmodel.compose)

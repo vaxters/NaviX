@@ -20,22 +20,35 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
+/**
+ * launchMode="singleTop" (see AndroidManifest.xml) keeps a single MainActivity instance
+ * alive across repeated VIEW deep-link intents, routing each one through [onNewIntent]
+ * instead of creating (and navigating away from) a new Activity/backstack every time.
+ */
 class MainActivity : ComponentActivity() {
+    private var deepLinkUri by mutableStateOf<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        deepLinkUri = intent?.data?.toString()
         setContent {
             NavixDemoTheme {
-                DemoNavHost(
-                    deepLinkUri = intent?.data?.toString()
-                )
+                // Reading the mutableStateOf here (not a one-shot constructor arg) means
+                // a later onNewIntent() update recomposes DemoNavHost with the new URI,
+                // whose LaunchedEffect(deepLinkUri) re-runs handleDeepLink for it.
+                DemoNavHost(deepLinkUri = deepLinkUri)
             }
         }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        // Re-handled by DemoNavHost via the navigator
+        setIntent(intent)
+        deepLinkUri = intent.data?.toString()
     }
 }
