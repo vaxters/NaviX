@@ -23,7 +23,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import io.navix.contracts.NavTransitionKey
 import io.navix.contracts.RouteEntry
 
@@ -38,6 +40,11 @@ import io.navix.contracts.RouteEntry
 object NavTransitions {
     private const val DURATION_MS = 300
 
+    // Shared-axis transitions travel a fraction of the full slide distance (Material's
+    // "shared axis" pattern is a smaller, fade-heavy translation, not a full off-screen
+    // slide like SlideLeft/SlideRight).
+    private const val SHARED_AXIS_FRACTION = 4
+
     internal val DefaultSpec: NavTransitionSpec =
         object : NavTransitionSpec {
             override fun enterTransition(from: RouteEntry?, to: RouteEntry, key: NavTransitionKey): EnterTransition {
@@ -46,6 +53,18 @@ object NavTransitions {
                     NavTransitionKey.SlideRight -> slideInHorizontally(tween(DURATION_MS)) { -it }
                     NavTransitionKey.Scale ->
                         scaleIn(tween(DURATION_MS), initialScale = 0.9f) +
+                            fadeIn(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisX ->
+                        slideInHorizontally(tween(DURATION_MS)) { it / SHARED_AXIS_FRACTION } +
+                            fadeIn(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisY ->
+                        slideInVertically(tween(DURATION_MS)) { it / SHARED_AXIS_FRACTION } +
+                            fadeIn(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisZ ->
+                        scaleIn(tween(DURATION_MS), initialScale = 0.92f) +
                             fadeIn(tween(DURATION_MS))
 
                     NavTransitionKey.None -> EnterTransition.None
@@ -59,6 +78,18 @@ object NavTransitions {
                     NavTransitionKey.SlideRight -> slideOutHorizontally(tween(DURATION_MS)) { it }
                     NavTransitionKey.Scale ->
                         scaleOut(tween(DURATION_MS), targetScale = 1.1f) +
+                            fadeOut(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisX ->
+                        slideOutHorizontally(tween(DURATION_MS)) { -it / SHARED_AXIS_FRACTION } +
+                            fadeOut(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisY ->
+                        slideOutVertically(tween(DURATION_MS)) { -it / SHARED_AXIS_FRACTION } +
+                            fadeOut(tween(DURATION_MS))
+
+                    NavTransitionKey.SharedAxisZ ->
+                        scaleOut(tween(DURATION_MS), targetScale = 1.08f) +
                             fadeOut(tween(DURATION_MS))
 
                     NavTransitionKey.None -> ExitTransition.None

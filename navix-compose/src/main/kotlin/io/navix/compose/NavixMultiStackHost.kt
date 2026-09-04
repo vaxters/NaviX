@@ -36,10 +36,11 @@ import androidx.compose.ui.Modifier
  * if composable state preservation is required.
  *
  * ### Back handling
- * [NavixHost] installs a [androidx.activity.compose.BackHandler] that pops the active
- * tab's stack when it has more than one entry. When the active tab is at its root, back
- * is not intercepted and propagates to the parent — typically the system back (Activity
- * finish) or an outer [NavixHost].
+ * [NavixHost] intercepts the predictive-back gesture (via
+ * [androidx.activity.compose.PredictiveBackHandler]) and pops the active tab's stack when
+ * it has more than one entry. When the active tab is at its root, back is not intercepted
+ * and propagates to the parent — typically the system back (Activity finish) or an outer
+ * [NavixHost].
  *
  * ### Routing graph
  * The [content] DSL is evaluated once on first composition and frozen (same contract as
