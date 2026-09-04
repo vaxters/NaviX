@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -119,6 +120,8 @@ class NavixTelemetryPipeline(
                 exporters.forEach { exporter ->
                     try {
                         exporter.export(event)
+                    } catch (e: kotlinx.coroutines.CancellationException) {
+                        throw e
                     } catch (t: Throwable) {
                         onExporterError(exporter, event, t)
                     }
@@ -134,6 +137,21 @@ class NavixTelemetryPipeline(
             // Observe droppedEventCount to detect back-pressure in debug UIs or dashboards.
             _droppedEventCount.update { it + 1 }
         }
+    }
+
+    /**
+     * Cancels the internal actor coroutine and closes the event channel.
+     *
+     * The pipeline creates its own [CoroutineScope] and never cancels it on its own —
+     * for an application-scoped pipeline (the common case) this is never needed. Call
+     * this if you create a [NavixTelemetryPipeline] with a shorter lifetime (per screen,
+     * per test, per feature module) to avoid leaking the actor coroutine and its
+     * dispatcher thread slot. Safe to call more than once; further [onEvent] calls after
+     * closing are silently dropped (same as any other back-pressure drop).
+     */
+    fun close() {
+        scope.cancel()
+        channel.close()
     }
 
     private companion object {

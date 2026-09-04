@@ -17,6 +17,7 @@ package io.navix.compiler
 
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -140,6 +141,32 @@ class DeepLinkHandlerGeneratorTest {
         // category is the 1st capture group → groups[1]; itemId is 2nd → groups[2]
         assertTrue(source.contains("groups[1]"), "First param must use groups[1].")
         assertTrue(source.contains("groups[2]"), "Second param must use groups[2].")
+    }
+
+    // Regression for a codegen bug where each per-param string carried its own trailing
+    // comma AND joinToString added a separator comma, producing "?: return null,," —
+    // an empty-argument syntax error in the generated constructor call. Multi-param
+    // deep links (2+) always triggered it; single-param templates happened to compile
+    // because a single trailing comma is legal Kotlin.
+    @Test
+    fun buildSource_withMultipleParams_generatedArgumentListHasNoEmptyArguments() {
+        val template = DeepLinkTemplateParser.parse("myapp://shop/{category}/{itemId}/{sku}").getOrThrow()
+        val descriptor = descriptor(fqn = "com.example.ShopRoute", templates = listOf(template))
+        val source = checkNotNull(buildDeepLinkHandlerSource(descriptor))
+
+        assertFalse(source.contains(",,"), "Generated argument list must not contain an empty argument (,,).")
+        assertFalse(source.contains(", ,"), "Generated argument list must not contain an empty argument (, ,).")
+
+        // Every non-blank line inside the constructor call must be a real assignment,
+        // not a bare comma / empty statement.
+        val callStart = source.indexOf("return com.example.ShopRoute(")
+        val callEnd = source.indexOf(")", callStart)
+        val argsBlock = source.substring(callStart, callEnd)
+        val argLines = argsBlock.lines().drop(1).map { it.trim() }.filter { it.isNotBlank() }
+        assertEquals(3, argLines.size, "Expected exactly 3 argument lines, got: $argLines")
+        argLines.forEach { line ->
+            assertTrue(line.startsWith("category") || line.startsWith("itemId") || line.startsWith("sku"), "Malformed argument line: '$line'")
+        }
     }
 
     @Test

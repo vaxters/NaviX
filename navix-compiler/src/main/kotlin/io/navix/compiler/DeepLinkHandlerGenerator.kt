@@ -111,8 +111,8 @@ internal fun buildDeepLinkHandlerSource(descriptor: RouteDestinationDescriptor):
                 // Android API 26, while groups[N] works on all API levels.
                 val paramAssignments =
                     template.params
-                        .mapIndexed { index, param ->
-                            "$param = match.groups[${index + 1}]?.value ?: return null,"
+                        .mapIndexed { paramIndex, param ->
+                            "$param = match.groups[${paramIndex + 1}]?.value ?: return null"
                         }.joinToString(",\n                ")
                 buildString {
                     appendLine("        template$index.find(uri)?.let { match ->")

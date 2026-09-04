@@ -65,7 +65,11 @@ class JsonNavigatorSaver(routesModule: SerializersModule, prettyPrint: Boolean =
         json.encodeToString(BackstackSnapshot.serializer(), snapshot).encodeToByteArray()
 
     override fun restore(bytes: ByteArray): BackstackSnapshot? =
-        runCatching {
+        try {
             json.decodeFromString(BackstackSnapshot.serializer(), bytes.decodeToString())
-        }.getOrNull()
+        } catch (e: kotlinx.serialization.SerializationException) {
+            null
+        } catch (e: IllegalArgumentException) {
+            null
+        }
 }

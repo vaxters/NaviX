@@ -71,11 +71,17 @@ internal object DeepLinkTemplateParser {
             ParsedTemplate(
                 original = template,
                 params = params,
+                // Anchored start-to-end: an unanchored pattern would also match the
+                // template as a substring of an unrelated URI (e.g. a query param
+                // embedding "navix://product/123" inside a completely different host),
+                // or an over-long path with trailing segments the template never declared.
                 matchingRegex =
                     Regex(
-                        PARAM_REGEX.replace(template) { match ->
-                            "(?<${match.groupValues[1]}>[^/?&]+)"
-                        }
+                        "^" +
+                            PARAM_REGEX.replace(template) { match ->
+                                "(?<${match.groupValues[1]}>[^/?&]+)"
+                            } +
+                            "$"
                     )
             )
         )

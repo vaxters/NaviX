@@ -8,7 +8,7 @@ and a KMP-portable core.
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.vaxters/navix-runtime?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.vaxters/navix-runtime)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.1.20-blueviolet.svg)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-blueviolet.svg)](https://kotlinlang.org)
 [![KMP](https://img.shields.io/badge/KMP-Android%20%7C%20JVM%20%7C%20iOS-orange.svg)]()
 
 ---

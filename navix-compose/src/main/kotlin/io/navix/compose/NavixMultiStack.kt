@@ -46,10 +46,11 @@ import kotlinx.coroutines.flow.asStateFlow
  * Create via [rememberNavixMultiStack].
  *
  * ### Back behavior
- * [NavixMultiStackHost] does not install its own [androidx.activity.compose.BackHandler];
- * the inner [NavixHost] handles back by popping the active tab's stack. When the active
- * tab is at its root (single entry), back falls through to the parent BackHandler —
- * typically finishing the Activity or navigating up in an outer stack.
+ * [NavixMultiStackHost] does not install its own back handling; the inner [NavixHost]
+ * intercepts the predictive-back gesture (via [androidx.activity.compose.PredictiveBackHandler])
+ * and pops the active tab's stack whenever it has more than one entry. When the active tab
+ * is at its root (single entry), back is not intercepted and falls through to the system —
+ * typically finishing the Activity or triggering an outer [NavixHost]'s own handling.
  *
  * To implement "return to first tab on back" semantics, install a [BackHandler] in the
  * call site that checks [activeTabIndex] and calls [selectTab] before yielding:

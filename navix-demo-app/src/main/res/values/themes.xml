@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Navix" parent="Theme.AppCompat.Light.NoActionBar" />
+    <!-- Content is 100% Jetpack Compose (edge-to-edge, Material3) — this theme only
+         needs to be a valid launch/splash theme, so it uses the platform theme
+         directly rather than pulling in AppCompat for a single unused style. -->
+    <style name="Theme.Navix" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

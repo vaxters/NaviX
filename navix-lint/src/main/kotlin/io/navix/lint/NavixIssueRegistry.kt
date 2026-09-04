@@ -28,12 +28,12 @@ class NavixIssueRegistry : IssueRegistry() {
 
     override val api: Int = CURRENT_API
 
-    override val minApi: Int = 14
+    override val minApi: Int = CURRENT_API - 2
 
     override val vendor =
         Vendor(
             vendorName = "Navix",
             identifier = "navix-lint",
-            feedbackUrl = "https://github.com/navix/navix/issues"
+            feedbackUrl = "https://github.com/vaxters/navix/issues"
         )
 }
