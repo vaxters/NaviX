@@ -187,7 +187,7 @@ jobs:
                 run: |
                     echo "## Published artifacts" >> $GITHUB_STEP_SUMMARY
                     echo "" >> $GITHUB_STEP_SUMMARY
-                    for artifact in navix-contracts navix-annotations navix-runtime navix-compiler navix-telemetry navix-devtools navix-testing; do
+                    for artifact in navix-contracts navix-annotations navix-runtime navix-compose navix-compiler navix-telemetry navix-devtools navix-testing; do
                       echo "- \`io.github.vaxters:${artifact}:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
                     done
 
